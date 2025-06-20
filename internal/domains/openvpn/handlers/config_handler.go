@@ -27,7 +27,7 @@ func NewConfigHandler(configUsecase usecases.ConfigUsecase) *ConfigHandler {
 // @Tags Configuration
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} dto.SuccessResponse{data=dto.ServerInfoResponse} "Server information retrieved successfully"
+// @Success 200 {object} response.SuccessResponse{data=dto.ServerInfoResponse} "Server information retrieved successfully"
 // @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
 // @Failure 500 {object} response.ErrorResponse "Internal server error - failed to retrieve server info"
 // @Router /api/openvpn/config/server/info [get]
@@ -70,7 +70,7 @@ func (h *ConfigHandler) GetServerInfo(c *gin.Context) {
 // @Tags Configuration
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} dto.SuccessResponse{data=dto.NetworkConfigResponse} "Network configuration retrieved successfully"
+// @Success 200 {object} response.SuccessResponse{data=dto.NetworkConfigResponse} "Network configuration retrieved successfully"
 // @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
 // @Failure 500 {object} response.ErrorResponse "Internal server error - failed to retrieve network config"
 // @Router /api/openvpn/config/network [get]

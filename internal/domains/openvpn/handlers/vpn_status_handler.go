@@ -28,7 +28,7 @@ func NewVPNStatusHandler(vpnStatusUsecase usecases.VPNStatusUsecase) *VPNStatusH
 // @Tags VPN Status
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} dto.SuccessResponse{data=dto.VPNStatusResponse} "Successful response with VPN status"
+// @Success 200 {object} response.SuccessResponse{data=dto.VPNStatusResponse} "Successful response with VPN status"
 // @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
 // @Failure 500 {object} response.ErrorResponse "Internal server error - failed to retrieve VPN status"
 // @Router /api/openvpn/vpn/status [get]

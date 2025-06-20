@@ -33,7 +33,7 @@ func NewDisconnectHandler(disconnectUsecase usecases.DisconnectUsecase) *Disconn
 // @Accept json
 // @Produce json
 // @Param request body dto.BulkDisconnectUsersRequest true "Bulk disconnect users request"
-// @Success 200 {object} dto.SuccessResponse{data=dto.DisconnectResponse} "Users disconnected successfully"
+// @Success 200 {object} response.SuccessResponse{data=dto.DisconnectResponse} "Users disconnected successfully"
 // @Failure 400 {object} response.ErrorResponse "Bad request - validation error or no valid users"
 // @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
 // @Failure 500 {object} response.ErrorResponse "Internal server error - failed to disconnect users"
@@ -101,7 +101,7 @@ func (h *DisconnectHandler) BulkDisconnectUsers(c *gin.Context) {
 // @Produce json
 // @Param username path string true "Username to disconnect"
 // @Param request body dto.DisconnectUserRequest true "Disconnect user request"
-// @Success 200 {object} dto.SuccessResponse{data=dto.DisconnectResponse} "User disconnected successfully"
+// @Success 200 {object} response.SuccessResponse{data=dto.DisconnectResponse} "User disconnected successfully"
 // @Failure 400 {object} response.ErrorResponse "Bad request - user not found or not connected"
 // @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
 // @Failure 404 {object} response.ErrorResponse "User not found in system"

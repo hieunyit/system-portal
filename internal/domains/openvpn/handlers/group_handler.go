@@ -127,7 +127,7 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param groupName path string true "Group name"
-// @Success 200 {object} dto.SuccessResponse{data=dto.GroupResponse}
+// @Success 200 {object} response.SuccessResponse{data=dto.GroupResponse}
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [get]
 func (h *GroupHandler) GetGroup(c *gin.Context) {
@@ -291,7 +291,7 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param filter query dto.GroupFilter false "Filter parameters"
-// @Success 200 {object} dto.SuccessResponse{data=dto.GroupListResponse}
+// @Success 200 {object} response.SuccessResponse{data=dto.GroupListResponse}
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/groups [get]
 func (h *GroupHandler) ListGroups(c *gin.Context) {
