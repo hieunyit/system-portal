@@ -6,7 +6,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"system-portal/internal/domains/openvpn/dto"
+	openvpndto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/entities"
 	"system-portal/internal/domains/openvpn/repositories"
 	"system-portal/internal/shared/errors"
@@ -73,7 +73,7 @@ func NewBulkUsecase(userRepo repositories.UserRepository, groupRepo repositories
 
 // =================== BULK USER OPERATIONS ===================
 
-func (u *bulkUsecaseImpl) BulkCreateUsers(ctx context.Context, req *dto.BulkCreateUsersRequest) (*dto.BulkCreateUsersResponse, error) {
+func (u *bulkUsecaseImpl) BulkCreateUsers(ctx context.Context, req *openvpndto.BulkCreateUsersRequest) (*openvpndto.BulkCreateUsersResponse, error) {
 	operationId := uuid.New().String()
 	logger.Log.WithField("operationId", operationId).WithField("userCount", len(req.Users)).Info("Starting bulk user creation")
 
@@ -90,17 +90,17 @@ func (u *bulkUsecaseImpl) BulkCreateUsers(ctx context.Context, req *dto.BulkCrea
 	u.operationStatus[operationId] = status
 	u.mu.Unlock()
 
-	response := &dto.BulkCreateUsersResponse{
+	response := &openvpndto.BulkCreateUsersResponse{
 		Total:   len(req.Users),
 		Success: 0,
 		Failed:  0,
-		Results: make([]dto.BulkUserOperationResult, 0, len(req.Users)),
+		Results: make([]openvpndto.BulkUserOperationResult, 0, len(req.Users)),
 	}
 
 	// Process users concurrently with worker pool
 	const maxWorkers = 5
-	userChan := make(chan dto.CreateUserRequest, len(req.Users))
-	resultChan := make(chan dto.BulkUserOperationResult, len(req.Users))
+	userChan := make(chan openvpndto.CreateUserRequest, len(req.Users))
+	resultChan := make(chan openvpndto.BulkUserOperationResult, len(req.Users))
 
 	// Start workers
 	var wg sync.WaitGroup
@@ -180,11 +180,11 @@ func (u *bulkUsecaseImpl) BulkCreateUsers(ctx context.Context, req *dto.BulkCrea
 	return response, nil
 }
 
-func (u *bulkUsecaseImpl) createUserWorker(ctx context.Context, userChan <-chan dto.CreateUserRequest, resultChan chan<- dto.BulkUserOperationResult, wg *sync.WaitGroup) {
+func (u *bulkUsecaseImpl) createUserWorker(ctx context.Context, userChan <-chan openvpndto.CreateUserRequest, resultChan chan<- openvpndto.BulkUserOperationResult, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for userReq := range userChan {
-		result := dto.BulkUserOperationResult{
+		result := openvpndto.BulkUserOperationResult{
 			Username: userReq.Username,
 		}
 
@@ -343,22 +343,22 @@ func (u *bulkUsecaseImpl) createUserWorker(ctx context.Context, userChan <-chan 
 	}
 }
 
-func (u *bulkUsecaseImpl) BulkUserActions(ctx context.Context, req *dto.BulkUserActionsRequest) (*dto.BulkActionResponse, error) {
+func (u *bulkUsecaseImpl) BulkUserActions(ctx context.Context, req *openvpndto.BulkUserActionsRequest) (*openvpndto.BulkActionResponse, error) {
 	operationId := uuid.New().String()
 	logger.Log.WithField("operationId", operationId).
 		WithField("userCount", len(req.Usernames)).
 		WithField("action", req.Action).
 		Info("Starting bulk user actions")
 
-	response := &dto.BulkActionResponse{
+	response := &openvpndto.BulkActionResponse{
 		Total:   len(req.Usernames),
 		Success: 0,
 		Failed:  0,
-		Results: make([]dto.BulkUserOperationResult, 0, len(req.Usernames)),
+		Results: make([]openvpndto.BulkUserOperationResult, 0, len(req.Usernames)),
 	}
 
 	for _, username := range req.Usernames {
-		result := dto.BulkUserOperationResult{
+		result := openvpndto.BulkUserOperationResult{
 			Username: username,
 		}
 
@@ -408,22 +408,22 @@ func (u *bulkUsecaseImpl) BulkUserActions(ctx context.Context, req *dto.BulkUser
 	return response, nil
 }
 
-func (u *bulkUsecaseImpl) BulkExtendUsers(ctx context.Context, req *dto.BulkUserExtendRequest) (*dto.BulkActionResponse, error) {
+func (u *bulkUsecaseImpl) BulkExtendUsers(ctx context.Context, req *openvpndto.BulkUserExtendRequest) (*openvpndto.BulkActionResponse, error) {
 	operationId := uuid.New().String()
 	logger.Log.WithField("operationId", operationId).
 		WithField("userCount", len(req.Usernames)).
 		WithField("newExpiration", req.NewExpiration).
 		Info("Starting bulk user extension")
 
-	response := &dto.BulkActionResponse{
+	response := &openvpndto.BulkActionResponse{
 		Total:   len(req.Usernames),
 		Success: 0,
 		Failed:  0,
-		Results: make([]dto.BulkUserOperationResult, 0, len(req.Usernames)),
+		Results: make([]openvpndto.BulkUserOperationResult, 0, len(req.Usernames)),
 	}
 
 	for _, username := range req.Usernames {
-		result := dto.BulkUserOperationResult{
+		result := openvpndto.BulkUserOperationResult{
 			Username: username,
 		}
 
@@ -464,7 +464,7 @@ func (u *bulkUsecaseImpl) BulkExtendUsers(ctx context.Context, req *dto.BulkUser
 	return response, nil
 }
 
-func (u *bulkUsecaseImpl) ImportUsers(ctx context.Context, req *dto.ImportUsersRequest) (*dto.ImportResponse, error) {
+func (u *bulkUsecaseImpl) ImportUsers(ctx context.Context, req *openvpndto.ImportUsersRequest) (*openvpndto.ImportResponse, error) {
 	logger.Log.WithField("filename", req.File.Filename).
 		WithField("format", req.Format).
 		WithField("dryRun", req.DryRun).
@@ -488,12 +488,12 @@ func (u *bulkUsecaseImpl) ImportUsers(ctx context.Context, req *dto.ImportUsersR
 		return nil, errors.BadRequest("Failed to parse file", err)
 	}
 
-	userRequests, ok := users.([]dto.CreateUserRequest)
+	userRequests, ok := users.([]openvpndto.CreateUserRequest)
 	if !ok {
 		return nil, errors.InternalServerError("Invalid user data format", nil)
 	}
 
-	response := &dto.ImportResponse{
+	response := &openvpndto.ImportResponse{
 		Total:            len(userRequests),
 		ValidRecords:     len(userRequests) - len(validationErrors),
 		InvalidRecords:   len(validationErrors),
@@ -511,7 +511,7 @@ func (u *bulkUsecaseImpl) ImportUsers(ctx context.Context, req *dto.ImportUsersR
 
 	// Process valid users
 	if response.ValidRecords > 0 {
-		bulkReq := &dto.BulkCreateUsersRequest{
+		bulkReq := &openvpndto.BulkCreateUsersRequest{
 			Users: userRequests,
 		}
 
@@ -536,19 +536,19 @@ func (u *bulkUsecaseImpl) ImportUsers(ctx context.Context, req *dto.ImportUsersR
 
 // =================== BULK GROUP OPERATIONS ===================
 
-func (u *bulkUsecaseImpl) BulkCreateGroups(ctx context.Context, req *dto.BulkCreateGroupsRequest) (*dto.BulkCreateGroupsResponse, error) {
+func (u *bulkUsecaseImpl) BulkCreateGroups(ctx context.Context, req *openvpndto.BulkCreateGroupsRequest) (*openvpndto.BulkCreateGroupsResponse, error) {
 	operationId := uuid.New().String()
 	logger.Log.WithField("operationId", operationId).WithField("groupCount", len(req.Groups)).Info("Starting bulk group creation")
 
-	response := &dto.BulkCreateGroupsResponse{
+	response := &openvpndto.BulkCreateGroupsResponse{
 		Total:   len(req.Groups),
 		Success: 0,
 		Failed:  0,
-		Results: make([]dto.BulkGroupOperationResult, 0, len(req.Groups)),
+		Results: make([]openvpndto.BulkGroupOperationResult, 0, len(req.Groups)),
 	}
 
 	for _, groupReq := range req.Groups {
-		result := dto.BulkGroupOperationResult{
+		result := openvpndto.BulkGroupOperationResult{
 			GroupName: groupReq.GroupName,
 		}
 
@@ -647,22 +647,22 @@ func (u *bulkUsecaseImpl) BulkCreateGroups(ctx context.Context, req *dto.BulkCre
 	return response, nil
 }
 
-func (u *bulkUsecaseImpl) BulkGroupActions(ctx context.Context, req *dto.BulkGroupActionsRequest) (*dto.BulkGroupActionResponse, error) {
+func (u *bulkUsecaseImpl) BulkGroupActions(ctx context.Context, req *openvpndto.BulkGroupActionsRequest) (*openvpndto.BulkGroupActionResponse, error) {
 	operationId := uuid.New().String()
 	logger.Log.WithField("operationId", operationId).
 		WithField("groupCount", len(req.GroupNames)).
 		WithField("action", req.Action).
 		Info("Starting bulk group actions")
 
-	response := &dto.BulkGroupActionResponse{
+	response := &openvpndto.BulkGroupActionResponse{
 		Total:   len(req.GroupNames),
 		Success: 0,
 		Failed:  0,
-		Results: make([]dto.BulkGroupOperationResult, 0, len(req.GroupNames)),
+		Results: make([]openvpndto.BulkGroupOperationResult, 0, len(req.GroupNames)),
 	}
 
 	for _, groupName := range req.GroupNames {
-		result := dto.BulkGroupOperationResult{
+		result := openvpndto.BulkGroupOperationResult{
 			GroupName: groupName,
 		}
 
@@ -718,7 +718,7 @@ func (u *bulkUsecaseImpl) BulkGroupActions(ctx context.Context, req *dto.BulkGro
 	return response, nil
 }
 
-func (u *bulkUsecaseImpl) ImportGroups(ctx context.Context, req *dto.ImportGroupsRequest) (*dto.ImportResponse, error) {
+func (u *bulkUsecaseImpl) ImportGroups(ctx context.Context, req *openvpndto.ImportGroupsRequest) (*openvpndto.ImportResponse, error) {
 	logger.Log.WithField("filename", req.File.Filename).
 		WithField("format", req.Format).
 		WithField("dryRun", req.DryRun).
@@ -742,12 +742,12 @@ func (u *bulkUsecaseImpl) ImportGroups(ctx context.Context, req *dto.ImportGroup
 		return nil, errors.BadRequest("Failed to parse file", err)
 	}
 
-	groupRequests, ok := groups.([]dto.CreateGroupRequest)
+	groupRequests, ok := groups.([]openvpndto.CreateGroupRequest)
 	if !ok {
 		return nil, errors.InternalServerError("Invalid group data format", nil)
 	}
 
-	response := &dto.ImportResponse{
+	response := &openvpndto.ImportResponse{
 		Total:            len(groupRequests),
 		ValidRecords:     len(groupRequests) - len(validationErrors),
 		InvalidRecords:   len(validationErrors),
@@ -765,7 +765,7 @@ func (u *bulkUsecaseImpl) ImportGroups(ctx context.Context, req *dto.ImportGroup
 
 	// Process valid groups
 	if response.ValidRecords > 0 {
-		bulkReq := &dto.BulkCreateGroupsRequest{
+		bulkReq := &openvpndto.BulkCreateGroupsRequest{
 			Groups: groupRequests,
 		}
 
@@ -959,7 +959,7 @@ func (u *bulkUsecaseImpl) generateGroupXLSXTemplate() (string, []byte, error) {
 
 // =================== FILE PARSING ===================
 
-func (u *bulkUsecaseImpl) ParseImportFile(filename string, content []byte, format string, entityType string) (interface{}, []dto.ImportValidationError, error) {
+func (u *bulkUsecaseImpl) ParseImportFile(filename string, content []byte, format string, entityType string) (interface{}, []openvpndto.ImportValidationError, error) {
 	switch format {
 	case "csv":
 		return u.parseCSVFile(content, entityType)
@@ -972,7 +972,7 @@ func (u *bulkUsecaseImpl) ParseImportFile(filename string, content []byte, forma
 	}
 }
 
-func (u *bulkUsecaseImpl) parseCSVFile(content []byte, entityType string) (interface{}, []dto.ImportValidationError, error) {
+func (u *bulkUsecaseImpl) parseCSVFile(content []byte, entityType string) (interface{}, []openvpndto.ImportValidationError, error) {
 	reader := csv.NewReader(bytes.NewReader(content))
 	records, err := reader.ReadAll()
 	if err != nil {
@@ -984,7 +984,7 @@ func (u *bulkUsecaseImpl) parseCSVFile(content []byte, entityType string) (inter
 	}
 
 	headers := records[0]
-	var validationErrors []dto.ImportValidationError
+	var validationErrors []openvpndto.ImportValidationError
 
 	switch entityType {
 	case "groups":
@@ -996,8 +996,8 @@ func (u *bulkUsecaseImpl) parseCSVFile(content []byte, entityType string) (inter
 	}
 }
 
-func (u *bulkUsecaseImpl) parseGroupsFromCSV(headers []string, records [][]string, validationErrors *[]dto.ImportValidationError) ([]dto.CreateGroupRequest, []dto.ImportValidationError, error) {
-	var groups []dto.CreateGroupRequest
+func (u *bulkUsecaseImpl) parseGroupsFromCSV(headers []string, records [][]string, validationErrors *[]openvpndto.ImportValidationError) ([]openvpndto.CreateGroupRequest, []openvpndto.ImportValidationError, error) {
+	var groups []openvpndto.CreateGroupRequest
 
 	// Create header index map for flexible column ordering
 	headerMap := make(map[string]int)
@@ -1006,14 +1006,14 @@ func (u *bulkUsecaseImpl) parseGroupsFromCSV(headers []string, records [][]strin
 	}
 
 	for rowIdx, record := range records {
-		group := dto.CreateGroupRequest{}
+		group := openvpndto.CreateGroupRequest{}
 
 		// Required field: group_name
 		if idx, exists := headerMap["group_name"]; exists && idx < len(record) {
 			group.GroupName = strings.TrimSpace(record[idx])
 		}
 		if group.GroupName == "" {
-			*validationErrors = append(*validationErrors, dto.ImportValidationError{
+			*validationErrors = append(*validationErrors, openvpndto.ImportValidationError{
 				Row:     rowIdx + 2, // +2 because we start from header row
 				Field:   "group_name",
 				Value:   "",
@@ -1082,7 +1082,7 @@ func (u *bulkUsecaseImpl) parseGroupsFromCSV(headers []string, records [][]strin
 
 		// Validate individual group
 		if err := validator.Validate(&group); err != nil {
-			*validationErrors = append(*validationErrors, dto.ImportValidationError{
+			*validationErrors = append(*validationErrors, openvpndto.ImportValidationError{
 				Row:     rowIdx + 2,
 				Field:   "group",
 				Value:   group.GroupName,
@@ -1097,8 +1097,8 @@ func (u *bulkUsecaseImpl) parseGroupsFromCSV(headers []string, records [][]strin
 	return groups, *validationErrors, nil
 }
 
-func (u *bulkUsecaseImpl) parseUsersFromCSV(headers []string, records [][]string, validationErrors *[]dto.ImportValidationError) ([]dto.CreateUserRequest, []dto.ImportValidationError, error) {
-	var users []dto.CreateUserRequest
+func (u *bulkUsecaseImpl) parseUsersFromCSV(headers []string, records [][]string, validationErrors *[]openvpndto.ImportValidationError) ([]openvpndto.CreateUserRequest, []openvpndto.ImportValidationError, error) {
+	var users []openvpndto.CreateUserRequest
 
 	// Create header index map
 	headerMap := make(map[string]int)
@@ -1107,14 +1107,14 @@ func (u *bulkUsecaseImpl) parseUsersFromCSV(headers []string, records [][]string
 	}
 
 	for rowIdx, record := range records {
-		user := dto.CreateUserRequest{}
+		user := openvpndto.CreateUserRequest{}
 
 		// Required field: username
 		if idx, exists := headerMap["username"]; exists && idx < len(record) {
 			user.Username = strings.TrimSpace(record[idx])
 		}
 		if user.Username == "" {
-			*validationErrors = append(*validationErrors, dto.ImportValidationError{
+			*validationErrors = append(*validationErrors, openvpndto.ImportValidationError{
 				Row:     rowIdx + 2,
 				Field:   "username",
 				Value:   "",
@@ -1170,7 +1170,7 @@ func (u *bulkUsecaseImpl) parseUsersFromCSV(headers []string, records [][]string
 
 		// Validate individual user
 		if err := validator.Validate(&user); err != nil {
-			*validationErrors = append(*validationErrors, dto.ImportValidationError{
+			*validationErrors = append(*validationErrors, openvpndto.ImportValidationError{
 				Row:     rowIdx + 2,
 				Field:   "user",
 				Value:   user.Username,
@@ -1185,20 +1185,20 @@ func (u *bulkUsecaseImpl) parseUsersFromCSV(headers []string, records [][]string
 	return users, *validationErrors, nil
 }
 
-func (u *bulkUsecaseImpl) parseJSONFile(content []byte, entityType string) (interface{}, []dto.ImportValidationError, error) {
-	var validationErrors []dto.ImportValidationError
+func (u *bulkUsecaseImpl) parseJSONFile(content []byte, entityType string) (interface{}, []openvpndto.ImportValidationError, error) {
+	var validationErrors []openvpndto.ImportValidationError
 
 	if entityType == "users" {
-		var users []dto.CreateUserRequest
+		var users []openvpndto.CreateUserRequest
 		if err := json.Unmarshal(content, &users); err != nil {
 			return nil, nil, err
 		}
 
 		// Validate each user
-		validUsers := make([]dto.CreateUserRequest, 0)
+		validUsers := make([]openvpndto.CreateUserRequest, 0)
 		for i, user := range users {
 			if err := validator.Validate(&user); err != nil {
-				validationErrors = append(validationErrors, dto.ImportValidationError{
+				validationErrors = append(validationErrors, openvpndto.ImportValidationError{
 					Row:     i + 1,
 					Field:   "validation",
 					Value:   user.Username,
@@ -1211,16 +1211,16 @@ func (u *bulkUsecaseImpl) parseJSONFile(content []byte, entityType string) (inte
 
 		return validUsers, validationErrors, nil
 	} else if entityType == "groups" {
-		var groups []dto.CreateGroupRequest
+		var groups []openvpndto.CreateGroupRequest
 		if err := json.Unmarshal(content, &groups); err != nil {
 			return nil, nil, err
 		}
 
 		// Validate each group
-		validGroups := make([]dto.CreateGroupRequest, 0)
+		validGroups := make([]openvpndto.CreateGroupRequest, 0)
 		for i, group := range groups {
 			if err := validator.Validate(&group); err != nil {
-				validationErrors = append(validationErrors, dto.ImportValidationError{
+				validationErrors = append(validationErrors, openvpndto.ImportValidationError{
 					Row:     i + 1,
 					Field:   "validation",
 					Value:   group.GroupName,
@@ -1237,7 +1237,7 @@ func (u *bulkUsecaseImpl) parseJSONFile(content []byte, entityType string) (inte
 	return nil, nil, fmt.Errorf("unsupported entity type: %s", entityType)
 }
 
-func (u *bulkUsecaseImpl) parseXLSXFile(content []byte, entityType string) (interface{}, []dto.ImportValidationError, error) {
+func (u *bulkUsecaseImpl) parseXLSXFile(content []byte, entityType string) (interface{}, []openvpndto.ImportValidationError, error) {
 	// Similar to CSV parsing but using XLSX library
 	// Implementation would parse XLSX format and return appropriate structures
 	return nil, nil, fmt.Errorf("XLSX parsing not implemented yet")
@@ -1337,13 +1337,13 @@ func (u *bulkUsecaseImpl) GetBulkOperationStatus(ctx context.Context, operationI
 	}, nil
 }
 
-func (u *bulkUsecaseImpl) ValidateGroupBatch(groups []dto.CreateGroupRequest) ([]dto.CreateGroupRequest, []dto.ImportValidationError, error) {
-	var validGroups []dto.CreateGroupRequest
-	var validationErrors []dto.ImportValidationError
+func (u *bulkUsecaseImpl) ValidateGroupBatch(groups []openvpndto.CreateGroupRequest) ([]openvpndto.CreateGroupRequest, []openvpndto.ImportValidationError, error) {
+	var validGroups []openvpndto.CreateGroupRequest
+	var validationErrors []openvpndto.ImportValidationError
 
 	for i, group := range groups {
 		if err := validator.Validate(&group); err != nil {
-			validationErrors = append(validationErrors, dto.ImportValidationError{
+			validationErrors = append(validationErrors, openvpndto.ImportValidationError{
 				Row:     i + 1,
 				Field:   "validation",
 				Value:   group.GroupName,
@@ -1358,13 +1358,13 @@ func (u *bulkUsecaseImpl) ValidateGroupBatch(groups []dto.CreateGroupRequest) ([
 	return validGroups, validationErrors, nil
 }
 
-func (u *bulkUsecaseImpl) ValidateUserBatch(users []dto.CreateUserRequest) ([]dto.CreateUserRequest, []dto.ImportValidationError, error) {
-	var validUsers []dto.CreateUserRequest
-	var validationErrors []dto.ImportValidationError
+func (u *bulkUsecaseImpl) ValidateUserBatch(users []openvpndto.CreateUserRequest) ([]openvpndto.CreateUserRequest, []openvpndto.ImportValidationError, error) {
+	var validUsers []openvpndto.CreateUserRequest
+	var validationErrors []openvpndto.ImportValidationError
 
 	for i, user := range users {
 		if err := validator.Validate(&user); err != nil {
-			validationErrors = append(validationErrors, dto.ImportValidationError{
+			validationErrors = append(validationErrors, openvpndto.ImportValidationError{
 				Row:     i + 1,
 				Field:   "validation",
 				Value:   user.Username,
@@ -1374,7 +1374,7 @@ func (u *bulkUsecaseImpl) ValidateUserBatch(users []dto.CreateUserRequest) ([]dt
 		}
 
 		if err := user.ValidateAuthSpecific(); err != nil {
-			validationErrors = append(validationErrors, dto.ImportValidationError{
+			validationErrors = append(validationErrors, openvpndto.ImportValidationError{
 				Row:     i + 1,
 				Field:   "auth_validation",
 				Value:   user.Username,

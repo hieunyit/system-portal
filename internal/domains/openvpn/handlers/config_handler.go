@@ -2,7 +2,7 @@ package handlers
 
 import (
 	nethttp "net/http"
-	"system-portal/internal/domains/openvpn/dto"
+	openvpndto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/shared/errors"
 	http "system-portal/internal/shared/response"
@@ -27,7 +27,7 @@ func NewConfigHandler(configUsecase usecases.ConfigUsecase) *ConfigHandler {
 // @Tags Configuration
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} response.SuccessResponse{data=dto.ServerInfoResponse} "Server information retrieved successfully"
+// @Success 200 {object} response.SuccessResponse{data=openvpndto.ServerInfoResponse} "Server information retrieved successfully"
 // @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
 // @Failure 500 {object} response.ErrorResponse "Internal server error - failed to retrieve server info"
 // @Router /api/openvpn/config/server/info [get]
@@ -43,7 +43,7 @@ func (h *ConfigHandler) GetServerInfo(c *gin.Context) {
 	}
 
 	// Convert usecase result to DTO
-	response := dto.ServerInfoResponse{
+	response := openvpndto.ServerInfoResponse{
 		NodeType:        result.ServerInfo.NodeType,
 		WebServerName:   result.ServerInfo.WebServerName,
 		AdminPort:       result.ServerInfo.AdminPort,
@@ -70,7 +70,7 @@ func (h *ConfigHandler) GetServerInfo(c *gin.Context) {
 // @Tags Configuration
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} response.SuccessResponse{data=dto.NetworkConfigResponse} "Network configuration retrieved successfully"
+// @Success 200 {object} response.SuccessResponse{data=openvpndto.NetworkConfigResponse} "Network configuration retrieved successfully"
 // @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
 // @Failure 500 {object} response.ErrorResponse "Internal server error - failed to retrieve network config"
 // @Router /api/openvpn/config/network [get]
@@ -86,7 +86,7 @@ func (h *ConfigHandler) GetNetworkConfig(c *gin.Context) {
 	}
 
 	// Convert usecase result to DTO
-	response := dto.NetworkConfigResponse{
+	response := openvpndto.NetworkConfigResponse{
 		// Client Network Settings
 		ClientNetwork:     result.NetworkConfig.ClientNetwork,
 		ClientNetmaskBits: result.NetworkConfig.ClientNetmaskBits,

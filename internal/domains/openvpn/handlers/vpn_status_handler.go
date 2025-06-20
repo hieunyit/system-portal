@@ -3,7 +3,7 @@ package handlers
 
 import (
 	nethttp "net/http"
-	"system-portal/internal/domains/openvpn/dto"
+	openvpndto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/shared/errors"
 	http "system-portal/internal/shared/response"
@@ -28,7 +28,7 @@ func NewVPNStatusHandler(vpnStatusUsecase usecases.VPNStatusUsecase) *VPNStatusH
 // @Tags VPN Status
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} response.SuccessResponse{data=dto.VPNStatusResponse} "Successful response with VPN status"
+// @Success 200 {object} response.SuccessResponse{data=openvpndto.VPNStatusResponse} "Successful response with VPN status"
 // @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
 // @Failure 500 {object} response.ErrorResponse "Internal server error - failed to retrieve VPN status"
 // @Router /api/openvpn/vpn/status [get]
@@ -44,9 +44,9 @@ func (h *VPNStatusHandler) GetVPNStatus(c *gin.Context) {
 	}
 
 	// Convert usecase result to DTO
-	var connectedUsers []dto.ConnectedUserResponse
+	var connectedUsers []openvpndto.ConnectedUserResponse
 	for _, user := range result.ConnectedUsers {
-		connectedUsers = append(connectedUsers, dto.ConnectedUserResponse{
+		connectedUsers = append(connectedUsers, openvpndto.ConnectedUserResponse{
 			CommonName:         user.CommonName,
 			RealAddress:        user.RealAddress,
 			VirtualAddress:     user.VirtualAddress,
@@ -64,7 +64,7 @@ func (h *VPNStatusHandler) GetVPNStatus(c *gin.Context) {
 		})
 	}
 
-	response := dto.VPNStatusResponse{
+	response := openvpndto.VPNStatusResponse{
 		TotalConnectedUsers: result.TotalConnectedUsers,
 		ConnectedUsers:      connectedUsers,
 		Timestamp:           result.Timestamp,

@@ -2,7 +2,7 @@ package usecases
 
 import (
 	"context"
-	"system-portal/internal/domains/openvpn/dto"
+	openvpndto "system-portal/internal/domains/openvpn/dto"
 )
 
 // BulkUsecase defines operations for bulk processing of users and groups
@@ -11,18 +11,18 @@ type BulkUsecase interface {
 
 	// BulkCreateUsers creates multiple users in a single operation
 	// Returns detailed results for each user creation attempt
-	BulkCreateUsers(ctx context.Context, req *dto.BulkCreateUsersRequest) (*dto.BulkCreateUsersResponse, error)
+	BulkCreateUsers(ctx context.Context, req *openvpndto.BulkCreateUsersRequest) (*openvpndto.BulkCreateUsersResponse, error)
 
 	// BulkUserActions performs the same action on multiple users
 	// Supported actions: enable, disable, reset-otp
-	BulkUserActions(ctx context.Context, req *dto.BulkUserActionsRequest) (*dto.BulkActionResponse, error)
+	BulkUserActions(ctx context.Context, req *openvpndto.BulkUserActionsRequest) (*openvpndto.BulkActionResponse, error)
 
 	// BulkExtendUsers extends expiration date for multiple users
-	BulkExtendUsers(ctx context.Context, req *dto.BulkUserExtendRequest) (*dto.BulkActionResponse, error)
+	BulkExtendUsers(ctx context.Context, req *openvpndto.BulkUserExtendRequest) (*openvpndto.BulkActionResponse, error)
 
 	// ImportUsers imports users from uploaded file (CSV, JSON, XLSX)
 	// Supports dry-run mode for validation only
-	ImportUsers(ctx context.Context, req *dto.ImportUsersRequest) (*dto.ImportResponse, error)
+	ImportUsers(ctx context.Context, req *openvpndto.ImportUsersRequest) (*openvpndto.ImportResponse, error)
 
 	// GenerateUserTemplate generates template file for user import
 	// Returns filename and file content for download
@@ -32,15 +32,15 @@ type BulkUsecase interface {
 
 	// BulkCreateGroups creates multiple groups in a single operation
 	// Returns detailed results for each group creation attempt
-	BulkCreateGroups(ctx context.Context, req *dto.BulkCreateGroupsRequest) (*dto.BulkCreateGroupsResponse, error)
+	BulkCreateGroups(ctx context.Context, req *openvpndto.BulkCreateGroupsRequest) (*openvpndto.BulkCreateGroupsResponse, error)
 
 	// BulkGroupActions performs the same action on multiple groups
 	// Supported actions: enable, disable
-	BulkGroupActions(ctx context.Context, req *dto.BulkGroupActionsRequest) (*dto.BulkGroupActionResponse, error)
+	BulkGroupActions(ctx context.Context, req *openvpndto.BulkGroupActionsRequest) (*openvpndto.BulkGroupActionResponse, error)
 
 	// ImportGroups imports groups from uploaded file (CSV, JSON, XLSX)
 	// Supports dry-run mode for validation only
-	ImportGroups(ctx context.Context, req *dto.ImportGroupsRequest) (*dto.ImportResponse, error)
+	ImportGroups(ctx context.Context, req *openvpndto.ImportGroupsRequest) (*openvpndto.ImportResponse, error)
 
 	// GenerateGroupTemplate generates template file for group import
 	// Returns filename and file content for download
@@ -50,15 +50,15 @@ type BulkUsecase interface {
 
 	// ValidateUserBatch validates a batch of users before processing
 	// Returns validation errors and cleaned data
-	ValidateUserBatch(users []dto.CreateUserRequest) (valid []dto.CreateUserRequest, errors []dto.ImportValidationError, err error)
+	ValidateUserBatch(users []openvpndto.CreateUserRequest) (valid []openvpndto.CreateUserRequest, errors []openvpndto.ImportValidationError, err error)
 
 	// ValidateGroupBatch validates a batch of groups before processing
 	// Returns validation errors and cleaned data
-	ValidateGroupBatch(groups []dto.CreateGroupRequest) (valid []dto.CreateGroupRequest, errors []dto.ImportValidationError, err error)
+	ValidateGroupBatch(groups []openvpndto.CreateGroupRequest) (valid []openvpndto.CreateGroupRequest, errors []openvpndto.ImportValidationError, err error)
 
 	// ParseImportFile parses uploaded file and returns structured data
 	// Supports multiple file formats and validates content
-	ParseImportFile(filename string, content []byte, format string, entityType string) (interface{}, []dto.ImportValidationError, error)
+	ParseImportFile(filename string, content []byte, format string, entityType string) (interface{}, []openvpndto.ImportValidationError, error)
 
 	// =================== BATCH REPORTING ===================
 
