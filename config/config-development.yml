@@ -1,0 +1,114 @@
+server:
+  port: "8080"
+  mode: "debug"
+  timeout: 30
+
+openvpn:
+  host: "localhost"
+  username: "openvpn"
+  password: "Asim#2023"
+  port: 943
+
+ldap:
+  host: "localhost"
+  port: 389
+  bindDN: "cn=admin,dc=hieuny,dc=com"
+  bindPassword: "Jisai@11?22"
+  baseDN: "ou=Users,dc=hieuny,dc=com"
+
+logger:
+  level: "debug"
+  format: "json"
+  filePath: "./logs/app.log"
+
+jwt:
+  # RSA Configuration (Recommended for production)
+  useRSA: true
+  accessTokenExpireDuration: "1h"
+  refreshTokenExpireDuration: "24h"
+  
+  # RSA Private Keys (Base64 encoded PEM format)
+  # Leave empty to auto-generate keys on startup
+  # For production, generate your own keys and store securely
+  accessPrivateKey: ""
+  refreshPrivateKey: ""
+  
+  # Legacy HMAC Configuration (Deprecated - only for backward compatibility)
+  # Only used when useRSA: false
+  secret: "AsimGroup-RSA-Migration-Change-This-Secret"
+  refreshSecret: "AsimGroupRefresh-RSA-Migration-Change-This-Secret"
+
+# Redis Configuration
+redis:
+  enabled: true           # ✅ CHANGED FROM false TO true
+  host: "localhost"
+  port: 6379
+  password: ""            # Leave empty if no password
+  database: 0             # Database 0 for development
+  poolSize: 50
+  ttl: "10m"     
+# Security Settings
+security:
+  # Enable additional security headers
+  enableSecurityHeaders: true
+  
+  # CORS Configuration - CẬP NHẬT QUAN TRỌNG
+  cors:
+    allowedOrigins: 
+      - "*"  # Cho phép tất cả origins trong development
+      - "http://localhost:3000"
+      - "http://localhost:8080"
+      - "http://127.0.0.1:3000"
+      - "http://127.0.0.1:8080"
+      - "https://localhost:3000"
+      - "https://localhost:8080"
+    allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+    allowedHeaders: 
+      - "Origin"
+      - "Content-Type"
+      - "Accept"
+      - "Authorization"
+      - "X-Requested-With"
+      - "X-Request-ID"
+      - "Access-Control-Allow-Origin"
+      - "Access-Control-Allow-Headers"
+      - "Access-Control-Allow-Methods"
+    allowCredentials: true
+    
+  # Rate Limiting (requests per minute)
+  rateLimit:
+    enabled: false  # Tắt trong development để tránh conflict
+    requestsPerMinute: 1000  # Tăng limit
+    
+# Validation Settings
+validation:
+  # MAC Address formats accepted
+  macAddressFormats: ["XX:XX:XX:XX:XX:XX", "XX-XX-XX-XX-XX-XX", "XXXXXXXXXXXX"]
+  
+  # Password requirements for local users
+  password:
+    minLength: 8
+    requireUppercase: false
+    requireLowercase: false 
+    requireNumbers: false
+    requireSpecialChars: false
+    
+# Feature Flags
+features:
+  # Enable advanced user filtering
+  enableAdvancedFiltering: true
+  
+  # Enable user expiration notifications
+  enableExpirationNotifications: true
+  
+  # Enable audit logging
+  enableAuditLogging: true
+  
+  # NEW: Enable Redis caching features
+  enableRedisCaching: true
+  
+  # Enable cache warming on startup
+  enableCacheWarmup: true
+  
+  # Enable cache statistics endpoint
+  enableCacheStats: true
