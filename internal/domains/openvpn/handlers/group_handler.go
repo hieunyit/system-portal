@@ -39,7 +39,7 @@ func NewGroupHandler(groupUsecase usecases.GroupUsecase, configUsecase usecases.
 // @Accept json
 // @Produce json
 // @Param request body dto.CreateGroupRequest true "Group creation data"
-// @Success 201 {object} dto.MessageResponse
+// @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 409 {object} response.ErrorResponse
 // @Router /api/openvpn/groups [post]
@@ -171,7 +171,7 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 // @Produce json
 // @Param groupName path string true "Group name"
 // @Param request body dto.UpdateGroupRequest true "Group update data"
-// @Success 200 {object} dto.MessageResponse
+// @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [put]
@@ -255,7 +255,7 @@ func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param groupName path string true "Group name"
-// @Success 200 {object} dto.MessageResponse
+// @Success 200 {object} response.SuccessResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [delete]
 func (h *GroupHandler) DeleteGroup(c *gin.Context) {
@@ -363,7 +363,7 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 // @Produce json
 // @Param groupName path string true "Group name"
 // @Param action path string true "Action (enable/disable)"
-// @Success 200 {object} dto.MessageResponse
+// @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName}/{action} [put]

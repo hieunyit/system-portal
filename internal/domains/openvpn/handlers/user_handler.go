@@ -40,7 +40,7 @@ func NewUserHandler(userUsecase usecases.UserUsecase, xmlrpcClient *xmlrpc.Clien
 // @Accept json
 // @Produce json
 // @Param request body dto.CreateUserRequest true "User creation data"
-// @Success 201 {object} dto.MessageResponse
+// @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 409 {object} response.ErrorResponse
 // @Router /api/openvpn/users [post]
@@ -152,7 +152,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Produce json
 // @Param username path string true "Username"
 // @Param request body dto.UpdateUserRequest true "User update data"
-// @Success 200 {object} dto.MessageResponse
+// @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username} [put]
@@ -231,7 +231,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 // @Tags Users
 // @Security BearerAuth
 // @Param username path string true "Username"
-// @Success 200 {object} dto.MessageResponse
+// @Success 200 {object} response.SuccessResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username} [delete]
 func (h *UserHandler) DeleteUser(c *gin.Context) {
@@ -268,7 +268,7 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 // @Param username path string true "Username"
 // @Param action path string true "Action" Enums(enable, disable, reset-otp, change-password)
 // @Param request body dto.ChangePasswordRequest false "Required only for change-password action"
-// @Success 200 {object} dto.MessageResponse
+// @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username}/{action} [put]
 func (h *UserHandler) UserAction(c *gin.Context) {
