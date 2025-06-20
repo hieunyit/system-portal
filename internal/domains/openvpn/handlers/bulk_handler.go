@@ -37,8 +37,8 @@ func NewBulkHandler(bulkUsecase usecases.BulkUsecase, xmlrpcClient *xmlrpc.Clien
 // @Produce json
 // @Param request body dto.BulkCreateUsersRequest true "Bulk user creation data"
 // @Success 201 {object} dto.BulkCreateUsersResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 413 {object} dto.ErrorResponse "Request too large"
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 413 {object} response.ErrorResponse "Request too large"
 // @Router /api/openvpn/bulk/users/create [post]
 func (h *BulkHandler) BulkCreateUsers(c *gin.Context) {
 	var req dto.BulkCreateUsersRequest
@@ -91,7 +91,7 @@ func (h *BulkHandler) BulkCreateUsers(c *gin.Context) {
 // @Produce json
 // @Param request body dto.BulkUserActionsRequest true "Bulk user actions data"
 // @Success 200 {object} dto.BulkActionResponse
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/users/actions [post]
 func (h *BulkHandler) BulkUserActions(c *gin.Context) {
 	var req dto.BulkUserActionsRequest
@@ -147,7 +147,7 @@ func (h *BulkHandler) BulkUserActions(c *gin.Context) {
 // @Produce json
 // @Param request body dto.BulkUserExtendRequest true "Bulk user extension data"
 // @Success 200 {object} dto.BulkActionResponse
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/users/extend [post]
 func (h *BulkHandler) BulkExtendUsers(c *gin.Context) {
 	var req dto.BulkUserExtendRequest
@@ -205,8 +205,8 @@ func (h *BulkHandler) BulkExtendUsers(c *gin.Context) {
 // @Param dryRun formData boolean false "Dry run mode (validate only)"
 // @Param override formData boolean false "Override existing users"
 // @Success 200 {object} dto.ImportResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 413 {object} dto.ErrorResponse "File too large"
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 413 {object} response.ErrorResponse "File too large"
 // @Router /api/openvpn/bulk/users/import [post]
 func (h *BulkHandler) ImportUsers(c *gin.Context) {
 	// Parse multipart form
@@ -285,7 +285,7 @@ func (h *BulkHandler) ImportUsers(c *gin.Context) {
 // @Produce json
 // @Param request body dto.BulkCreateGroupsRequest true "Bulk group creation data"
 // @Success 201 {object} dto.BulkCreateGroupsResponse
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/create [post]
 func (h *BulkHandler) BulkCreateGroups(c *gin.Context) {
 	var req dto.BulkCreateGroupsRequest
@@ -338,7 +338,7 @@ func (h *BulkHandler) BulkCreateGroups(c *gin.Context) {
 // @Produce json
 // @Param request body dto.BulkGroupActionsRequest true "Bulk group actions data"
 // @Success 200 {object} dto.BulkGroupActionResponse
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/actions [post]
 func (h *BulkHandler) BulkGroupActions(c *gin.Context) {
 	var req dto.BulkGroupActionsRequest
@@ -397,7 +397,7 @@ func (h *BulkHandler) BulkGroupActions(c *gin.Context) {
 // @Param dryRun formData boolean false "Dry run mode (validate only)"
 // @Param override formData boolean false "Override existing groups"
 // @Success 200 {object} dto.ImportResponse
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/import [post]
 func (h *BulkHandler) ImportGroups(c *gin.Context) {
 	// Parse multipart form

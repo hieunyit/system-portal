@@ -40,8 +40,8 @@ func NewGroupHandler(groupUsecase usecases.GroupUsecase, configUsecase usecases.
 // @Produce json
 // @Param request body dto.CreateGroupRequest true "Group creation data"
 // @Success 201 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 409 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 409 {object} response.ErrorResponse
 // @Router /api/openvpn/groups [post]
 func (h *GroupHandler) CreateGroup(c *gin.Context) {
 	var req dto.CreateGroupRequest
@@ -128,7 +128,7 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 // @Produce json
 // @Param groupName path string true "Group name"
 // @Success 200 {object} dto.SuccessResponse{data=dto.GroupResponse}
-// @Failure 404 {object} dto.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [get]
 func (h *GroupHandler) GetGroup(c *gin.Context) {
 	groupName := c.Param("groupName")
@@ -172,8 +172,8 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 // @Param groupName path string true "Group name"
 // @Param request body dto.UpdateGroupRequest true "Group update data"
 // @Success 200 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [put]
 func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 	groupName := c.Param("groupName")
@@ -256,7 +256,7 @@ func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 // @Produce json
 // @Param groupName path string true "Group name"
 // @Success 200 {object} dto.MessageResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [delete]
 func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 	groupName := c.Param("groupName")
@@ -292,7 +292,7 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 // @Produce json
 // @Param filter query dto.GroupFilter false "Filter parameters"
 // @Success 200 {object} dto.SuccessResponse{data=dto.GroupListResponse}
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/groups [get]
 func (h *GroupHandler) ListGroups(c *gin.Context) {
 	var filter dto.GroupFilter
@@ -364,8 +364,8 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 // @Param groupName path string true "Group name"
 // @Param action path string true "Action (enable/disable)"
 // @Success 200 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName}/{action} [put]
 func (h *GroupHandler) GroupAction(c *gin.Context) {
 	groupName := c.Param("groupName")

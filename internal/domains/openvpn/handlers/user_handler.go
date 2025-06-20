@@ -41,8 +41,8 @@ func NewUserHandler(userUsecase usecases.UserUsecase, xmlrpcClient *xmlrpc.Clien
 // @Produce json
 // @Param request body dto.CreateUserRequest true "User creation data"
 // @Success 201 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 409 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 409 {object} response.ErrorResponse
 // @Router /api/openvpn/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req dto.CreateUserRequest
@@ -118,7 +118,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Produce json
 // @Param username path string true "Username"
 // @Success 200 {object} dto.UserResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username} [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	username := c.Param("username")
@@ -153,8 +153,8 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Param username path string true "Username"
 // @Param request body dto.UpdateUserRequest true "User update data"
 // @Success 200 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username} [put]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	username := c.Param("username")
@@ -232,7 +232,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 // @Security BearerAuth
 // @Param username path string true "Username"
 // @Success 200 {object} dto.MessageResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username} [delete]
 func (h *UserHandler) DeleteUser(c *gin.Context) {
 	username := c.Param("username")
@@ -269,7 +269,7 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 // @Param action path string true "Action" Enums(enable, disable, reset-otp, change-password)
 // @Param request body dto.ChangePasswordRequest false "Required only for change-password action"
 // @Success 200 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username}/{action} [put]
 func (h *UserHandler) UserAction(c *gin.Context) {
 	username := c.Param("username")
@@ -411,7 +411,7 @@ func (h *UserHandler) UserAction(c *gin.Context) {
 // @Param exactMatch query boolean false "Use exact matching instead of partial" default(false)
 // @Param caseSensitive query boolean false "Case sensitive search" default(false)
 // @Success 200 {object} dto.UserListResponse
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/users [get]
 func (h *UserHandler) ListUsers(c *gin.Context) {
 	var filter dto.UserFilter
@@ -483,7 +483,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 // @Param days query int false "Number of days to check for expiration" default(7)
 // @Param includeExpired query bool false "Include already expired users" default(false)
 // @Success 200 {object} dto.UserExpirationsResponse
-// @Failure 400 {object} dto.ErrorResponse
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/users/expirations [get]
 func (h *UserHandler) GetUserExpirations(c *gin.Context) {
 	daysStr := c.DefaultQuery("days", "7")

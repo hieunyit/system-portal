@@ -34,9 +34,9 @@ func NewDisconnectHandler(disconnectUsecase usecases.DisconnectUsecase) *Disconn
 // @Produce json
 // @Param request body dto.BulkDisconnectUsersRequest true "Bulk disconnect users request"
 // @Success 200 {object} dto.SuccessResponse{data=dto.DisconnectResponse} "Users disconnected successfully"
-// @Failure 400 {object} dto.ErrorResponse "Bad request - validation error or no valid users"
-// @Failure 401 {object} dto.ErrorResponse "Unauthorized - invalid or missing authentication"
-// @Failure 500 {object} dto.ErrorResponse "Internal server error - failed to disconnect users"
+// @Failure 400 {object} response.ErrorResponse "Bad request - validation error or no valid users"
+// @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
+// @Failure 500 {object} response.ErrorResponse "Internal server error - failed to disconnect users"
 // @Router /api/openvpn/bulk/users/disconnect [post]
 func (h *DisconnectHandler) BulkDisconnectUsers(c *gin.Context) {
 	var req dto.BulkDisconnectUsersRequest
@@ -102,10 +102,10 @@ func (h *DisconnectHandler) BulkDisconnectUsers(c *gin.Context) {
 // @Param username path string true "Username to disconnect"
 // @Param request body dto.DisconnectUserRequest true "Disconnect user request"
 // @Success 200 {object} dto.SuccessResponse{data=dto.DisconnectResponse} "User disconnected successfully"
-// @Failure 400 {object} dto.ErrorResponse "Bad request - user not found or not connected"
-// @Failure 401 {object} dto.ErrorResponse "Unauthorized - invalid or missing authentication"
-// @Failure 404 {object} dto.ErrorResponse "User not found in system"
-// @Failure 500 {object} dto.ErrorResponse "Internal server error - failed to disconnect user"
+// @Failure 400 {object} response.ErrorResponse "Bad request - user not found or not connected"
+// @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
+// @Failure 404 {object} response.ErrorResponse "User not found in system"
+// @Failure 500 {object} response.ErrorResponse "Internal server error - failed to disconnect user"
 // @Router /api/openvpn/users/{username}/disconnect [post]
 func (h *DisconnectHandler) DisconnectUser(c *gin.Context) {
 	username := c.Param("username")
