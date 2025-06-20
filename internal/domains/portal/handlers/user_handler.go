@@ -18,6 +18,14 @@ type UserHandler struct {
 
 func NewUserHandler(u usecases.UserUsecase) *UserHandler { return &UserHandler{uc: u} }
 
+// ListUsers godoc
+// @Summary List portal users
+// @Description Retrieve all portal users
+// @Tags Portal Users
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {array} dto.UserResponse
+// @Router /api/portal/users [get]
 func (h *UserHandler) ListUsers(c *gin.Context) {
 	users, _ := h.uc.List(c.Request.Context())
 	resp := make([]dto.UserResponse, 0, len(users))
@@ -34,6 +42,17 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 	http.RespondWithSuccess(c, nethttp.StatusOK, resp)
 }
 
+// CreateUser godoc
+// @Summary Create portal user
+// @Description Create a new portal user
+// @Tags Portal Users
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body dto.UserRequest true "User data"
+// @Success 201 {string} string "created"
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req dto.UserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -55,6 +74,17 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	http.RespondWithMessage(c, nethttp.StatusCreated, "created")
 }
 
+// GetUser godoc
+// @Summary Get portal user
+// @Description Get portal user by ID
+// @Tags Portal Users
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} dto.UserResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/portal/users/{id} [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -76,6 +106,18 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	})
 }
 
+// UpdateUser godoc
+// @Summary Update portal user
+// @Description Update information for a portal user
+// @Tags Portal Users
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Param request body dto.UserRequest true "User data"
+// @Success 200 {string} string "updated"
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/users/{id} [put]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -101,6 +143,16 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 	http.RespondWithMessage(c, nethttp.StatusOK, "updated")
 }
 
+// DeleteUser godoc
+// @Summary Delete portal user
+// @Description Remove a portal user
+// @Tags Portal Users
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {string} string "deleted"
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/users/{id} [delete]
 func (h *UserHandler) DeleteUser(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -111,6 +163,32 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 	http.RespondWithMessage(c, nethttp.StatusOK, "deleted")
 }
 
-func (h *UserHandler) ActivateUser(c *gin.Context)   { http.RespondWithMessage(c, 200, "ok") }
+// ActivateUser godoc
+// @Summary Activate portal user
+// @Tags Portal Users
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {string} string "ok"
+// @Router /api/portal/users/{id}/activate [put]
+func (h *UserHandler) ActivateUser(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }
+
+// DeactivateUser godoc
+// @Summary Deactivate portal user
+// @Tags Portal Users
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {string} string "ok"
+// @Router /api/portal/users/{id}/deactivate [put]
 func (h *UserHandler) DeactivateUser(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }
-func (h *UserHandler) ResetPassword(c *gin.Context)  { http.RespondWithMessage(c, 200, "ok") }
+
+// ResetPassword godoc
+// @Summary Reset portal user password
+// @Tags Portal Users
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {string} string "ok"
+// @Router /api/portal/users/{id}/reset-password [put]
+func (h *UserHandler) ResetPassword(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }

@@ -15,11 +15,28 @@ type GroupHandler struct{ uc usecases.GroupUsecase }
 
 func NewGroupHandler(u usecases.GroupUsecase) *GroupHandler { return &GroupHandler{uc: u} }
 
+// ListGroups godoc
+// @Summary List portal groups
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {array} entities.Group
+// @Router /api/portal/groups [get]
 func (h *GroupHandler) ListGroups(c *gin.Context) {
 	groups, _ := h.uc.List(c.Request.Context())
 	http.RespondWithSuccess(c, nethttp.StatusOK, groups)
 }
 
+// GetGroup godoc
+// @Summary Get portal group
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "Group ID"
+// @Success 200 {object} entities.Group
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/portal/groups/{id} [get]
 func (h *GroupHandler) GetGroup(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -34,6 +51,16 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 	http.RespondWithSuccess(c, nethttp.StatusOK, g)
 }
 
+// CreateGroup godoc
+// @Summary Create portal group
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body entities.Group true "Group data"
+// @Success 201 {string} string "created"
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/groups [post]
 func (h *GroupHandler) CreateGroup(c *gin.Context) {
 	var g entities.Group
 	if err := c.ShouldBindJSON(&g); err != nil {
