@@ -9,7 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// Response structures
+// SuccessResponse defines a standard JSON payload for successful operations
 type SuccessResponse struct {
 	Success struct {
 		Status  int         `json:"status"`
@@ -18,6 +18,7 @@ type SuccessResponse struct {
 	} `json:"success"`
 }
 
+// ErrorResponse defines the structure returned when an error occurs
 type ErrorResponse struct {
 	Error struct {
 		Code    string      `json:"code"`
@@ -27,6 +28,7 @@ type ErrorResponse struct {
 	} `json:"error"`
 }
 
+// ValidationErrorResponse represents validation failure details
 type ValidationErrorResponse struct {
 	Error struct {
 		Code    string            `json:"code"`
