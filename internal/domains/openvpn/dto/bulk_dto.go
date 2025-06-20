@@ -7,11 +7,13 @@ import (
 // =================== BULK USER OPERATIONS ===================
 
 // BulkCreateUsersRequest for creating multiple users at once
+// swagger:model
 type BulkCreateUsersRequest struct {
 	Users []CreateUserRequest `json:"users" validate:"required,min=1,max=100,dive"`
 }
 
 // BulkCreateUsersResponse with detailed results for each user
+// swagger:model
 type BulkCreateUsersResponse struct {
 	Total   int                       `json:"total" example:"10"`
 	Success int                       `json:"success" example:"8"`
@@ -20,18 +22,21 @@ type BulkCreateUsersResponse struct {
 }
 
 // BulkUserActionsRequest for bulk enable/disable operations
+// swagger:model
 type BulkUserActionsRequest struct {
 	Usernames []string `json:"usernames" validate:"required,min=1,max=100,dive,min=3,max=30"`
 	Action    string   `json:"action" validate:"required,oneof=enable disable reset-otp"`
 }
 
 // BulkUserExtendRequest for bulk expiration extension
+// swagger:model
 type BulkUserExtendRequest struct {
 	Usernames     []string `json:"usernames" validate:"required,min=1,max=100,dive,min=3,max=30"`
 	NewExpiration string   `json:"newExpiration" validate:"required,date"`
 }
 
 // BulkUserOperationResult represents result for individual user operation
+// swagger:model
 type BulkUserOperationResult struct {
 	Username string `json:"username" example:"testuser"`
 	Success  bool   `json:"success" example:"true"`
@@ -40,6 +45,7 @@ type BulkUserOperationResult struct {
 }
 
 // BulkActionResponse for bulk operations response
+// swagger:model
 type BulkActionResponse struct {
 	Total   int                       `json:"total" example:"10"`
 	Success int                       `json:"success" example:"8"`
@@ -50,11 +56,13 @@ type BulkActionResponse struct {
 // =================== BULK GROUP OPERATIONS ===================
 
 // BulkCreateGroupsRequest for creating multiple groups at once
+// swagger:model
 type BulkCreateGroupsRequest struct {
 	Groups []CreateGroupRequest `json:"groups" validate:"required,min=1,max=50,dive"`
 }
 
 // BulkCreateGroupsResponse with detailed results for each group
+// swagger:model
 type BulkCreateGroupsResponse struct {
 	Total   int                        `json:"total" example:"5"`
 	Success int                        `json:"success" example:"4"`
@@ -63,12 +71,14 @@ type BulkCreateGroupsResponse struct {
 }
 
 // BulkGroupActionsRequest for bulk group enable/disable operations
+// swagger:model
 type BulkGroupActionsRequest struct {
 	GroupNames []string `json:"groupNames" validate:"required,min=1,max=50,dive,min=3,max=50"`
 	Action     string   `json:"action" validate:"required,oneof=enable disable"`
 }
 
 // BulkGroupOperationResult represents result for individual group operation
+// swagger:model
 type BulkGroupOperationResult struct {
 	GroupName string `json:"groupName" example:"TEST_GROUP"`
 	Success   bool   `json:"success" example:"true"`
@@ -77,6 +87,7 @@ type BulkGroupOperationResult struct {
 }
 
 // BulkGroupActionResponse for bulk group operations response
+// swagger:model
 type BulkGroupActionResponse struct {
 	Total   int                        `json:"total" example:"5"`
 	Success int                        `json:"success" example:"4"`
@@ -87,6 +98,7 @@ type BulkGroupActionResponse struct {
 // =================== FILE IMPORT OPERATIONS ===================
 
 // ImportUsersRequest for importing users from file
+// swagger:model
 type ImportUsersRequest struct {
 	File     *multipart.FileHeader `form:"file" binding:"required"`
 	DryRun   bool                  `form:"dryRun" example:"false"`
@@ -95,6 +107,7 @@ type ImportUsersRequest struct {
 }
 
 // ImportGroupsRequest for importing groups from file
+// swagger:model
 type ImportGroupsRequest struct {
 	File     *multipart.FileHeader `form:"file" binding:"required"`
 	DryRun   bool                  `form:"dryRun" example:"false"`
@@ -103,6 +116,7 @@ type ImportGroupsRequest struct {
 }
 
 // ImportValidationError represents validation error during import
+// swagger:model
 type ImportValidationError struct {
 	Row     int    `json:"row" example:"3"`
 	Field   string `json:"field" example:"email"`
@@ -111,6 +125,7 @@ type ImportValidationError struct {
 }
 
 // ImportResponse for file import operations
+// swagger:model
 type ImportResponse struct {
 	Total            int                     `json:"total" example:"100"`
 	ValidRecords     int                     `json:"validRecords" example:"95"`
@@ -126,6 +141,7 @@ type ImportResponse struct {
 // =================== CSV TEMPLATES ===================
 
 // UserCSVRecord represents a user record in CSV format
+// swagger:model
 type UserCSVRecord struct {
 	Username       string `csv:"username" example:"testuser"`
 	Email          string `csv:"email" example:"test@example.com"`
@@ -140,6 +156,7 @@ type UserCSVRecord struct {
 }
 
 // GroupCSVRecord represents a group record in CSV format - UPDATED with new fields
+// swagger:model
 type GroupCSVRecord struct {
 	GroupName     string `csv:"group_name" example:"TEST_GROUP"`
 	AuthMethod    string `csv:"auth_method" example:"local"`
