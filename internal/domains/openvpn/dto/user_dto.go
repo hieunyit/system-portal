@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// CreateUserRequest defines payload for creating a new VPN user
 type CreateUserRequest struct {
 	Username       string   `json:"username" validate:"required,min=3,max=30,username" example:"testuser"`
 	Email          string   `json:"email" validate:"required,email" example:"testuser@example.com"`
@@ -18,6 +19,7 @@ type CreateUserRequest struct {
 	IPAssignMode   string   `json:"ipAssignMode" validate:"required,oneof=dynamic static" example:"static"`
 }
 
+// UpdateUserRequest defines payload for updating an existing VPN user
 type UpdateUserRequest struct {
 	UserExpiration string   `json:"userExpiration,omitempty" validate:"omitempty,date" example:"31/12/2025"`
 	DenyAccess     *bool    `json:"denyAccess,omitempty" example:"false"`
@@ -28,7 +30,7 @@ type UpdateUserRequest struct {
 	IPAssignMode   string   `json:"ipAssignMode,omitempty" validate:"omitempty,oneof=dynamic static" example:"static"`
 }
 
-// Enhanced UserResponse with computed fields
+// UserResponse represents detailed information about a VPN user
 type UserResponse struct {
 	Username       string   `json:"username" example:"testuser"`
 	Email          string   `json:"email" example:"testuser@example.com"`
@@ -48,7 +50,7 @@ type UserResponse struct {
 	DaysUntilExp int  `json:"daysUntilExpiration" example:"30"` // Days until expiration (-1 if expired)
 }
 
-// Enhanced UserFilter with comprehensive filtering options
+// UserFilter contains available filtering options when listing VPN users
 type UserFilter struct {
 	// Basic filters (existing)
 	Username   string `form:"username" example:"testuser"`
@@ -101,7 +103,7 @@ func (f *UserFilter) SetDefaults() {
 	}
 }
 
-// NEW: Filter metadata for response
+// FilterMetadata provides information about applied filters in list responses
 type FilterMetadata struct {
 	AppliedFilters []string `json:"appliedFilters" example:"username,authMethod,isEnabled"` // List of applied filters
 	SortedBy       string   `json:"sortedBy" example:"username"`                            // Current sort field
@@ -109,7 +111,7 @@ type FilterMetadata struct {
 	FilterCount    int      `json:"filterCount" example:"3"`                                // Number of active filters
 }
 
-// Enhanced UserListResponse with metadata
+// UserListResponse wraps a list of users along with filter metadata
 type UserListResponse struct {
 	Users      []UserResponse `json:"users"`
 	Total      int            `json:"total" example:"50"`
@@ -120,26 +122,31 @@ type UserListResponse struct {
 	Metadata   FilterMetadata `json:"metadata"`               // NEW: Filter metadata
 }
 
+// UserActionRequest represents an action to perform on a user
 type UserActionRequest struct {
 	Action string `json:"action" validate:"required,oneof=enable disable reset-otp change-password" example:"enable"`
 }
 
+// ChangePasswordRequest is used when changing a user's password
 type ChangePasswordRequest struct {
 	Password string `json:"password" validate:"required,min=8" example:"NewSecurePass123!"`
 }
 
+// UserExpirationResponse returns emails that are about to expire
 type UserExpirationResponse struct {
 	Emails []string `json:"emails" example:"user1@example.com,user2@example.com"`
 	Count  int      `json:"count" example:"2"`
 	Days   int      `json:"days" example:"7"`
 }
 
+// UserExpirationsResponse holds a list of user expirations
 type UserExpirationsResponse struct {
 	Users []UserExpirationInfo `json:"users"`
 	Count int                  `json:"count"`
 	Days  int                  `json:"days"`
 }
 
+// UserExpirationInfo describes expiration information for a single user
 type UserExpirationInfo struct {
 	Username         string   `json:"username"`
 	Email            string   `json:"email"`

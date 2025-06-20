@@ -1,5 +1,6 @@
 package dto
 
+// CreateGroupRequest defines payload for creating a new group
 type CreateGroupRequest struct {
 	GroupName     string   `json:"groupName" validate:"required,min=3,max=50"`
 	AuthMethod    string   `json:"authMethod" validate:"required,oneof=ldap local"`
@@ -10,6 +11,7 @@ type CreateGroupRequest struct {
 	GroupRange    []string `json:"groupRange,omitempty" validate:"omitempty,dive,ip_range"`
 }
 
+// UpdateGroupRequest defines payload for updating group information
 type UpdateGroupRequest struct {
 	AccessControl []string `json:"accessControl,omitempty" validate:"omitempty,dive,ipv4|cidrv4|ipv4_protocol"`
 	MFA           *bool    `json:"mfa,omitempty"`
@@ -19,6 +21,7 @@ type UpdateGroupRequest struct {
 	GroupRange    []string `json:"groupRange,omitempty" validate:"omitempty,dive,ip_range"`
 }
 
+// GroupResponse represents details of an OpenVPN group
 type GroupResponse struct {
 	GroupName     string   `json:"groupName"`
 	AuthMethod    string   `json:"authMethod"`
@@ -30,6 +33,7 @@ type GroupResponse struct {
 	GroupRange    []string `json:"groupRange"`
 }
 
+// GroupListResponse wraps a list of groups for pagination
 type GroupListResponse struct {
 	Groups []GroupResponse `json:"groups"`
 	Total  int             `json:"total"`
@@ -37,10 +41,12 @@ type GroupListResponse struct {
 	Limit  int             `json:"limit"`
 }
 
+// GroupActionRequest represents an action to perform on a group
 type GroupActionRequest struct {
 	Action string `json:"action" validate:"required,oneof=enable disable"`
 }
 
+// GroupFilter allows filtering of groups when listing
 type GroupFilter struct {
 	GroupName  string `form:"groupName"`
 	AuthMethod string `form:"authMethod"`
