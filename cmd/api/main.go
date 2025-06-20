@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -53,13 +54,22 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Initialize infrastructure clients
+	xmlrpcClient := xmlrpc.NewClient(cfg.OpenVPN)
+	ldapClient := ldap.NewClient(cfg.LDAP)
+
+	// Verify external service connections
+	if err := checkConnections(db, ldapClient, xmlrpcClient); err != nil {
+		log.Fatal("connectivity check failed:", err)
+	}
+
 	// Initialize middleware
 	authMiddleware := middleware.NewAuthMiddleware(jwtService)
 	corsMiddleware := middleware.NewCorsMiddleware(cfg.Security.CORS)
 	validationMiddleware := middleware.NewValidationMiddleware()
 
 	// Initialize domain handlers and routes
-	initializeDomainRoutes(cfg, db, jwtService)
+	initializeDomainRoutes(cfg, db, jwtService, xmlrpcClient, ldapClient)
 
 	// Create router configuration
 	routerConfig := &serverHttp.RouterConfig{
@@ -85,7 +95,7 @@ func main() {
 	}
 }
 
-func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService) {
+func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) {
 	// Auth domain
 	authUsecase := authUsecases.NewAuthUsecase(jwtSvc)
 	authHandler := authHandlers.NewAuthHandler(authUsecase)
@@ -108,8 +118,6 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 	portalRoutes.Initialize(userHandler, groupHandler, auditHandler, dashboardHandler)
 
 	// OpenVPN domain initialization
-	xmlrpcClient := xmlrpc.NewClient(cfg.OpenVPN)
-	ldapClient := ldap.NewClient(cfg.LDAP)
 
 	userRepoOV := openvpnRepo.NewUserRepository(xmlrpcClient)
 	groupRepoOV := openvpnRepo.NewGroupRepository(xmlrpcClient)
@@ -139,4 +147,26 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 		vpnStatusHandlerOV,
 		disconnectHandlerOV,
 	)
+}
+
+// checkConnections verifies connectivity to PostgreSQL, LDAP and OpenVPN XML-RPC services.
+func checkConnections(db *database.Postgres, ldapClient *ldap.Client, xmlClient *xmlrpc.Client) error {
+	// Verify PostgreSQL connection
+	if err := db.DB.Ping(); err != nil {
+		return fmt.Errorf("postgres connection failed: %w", err)
+	}
+
+	// Verify LDAP connection
+	conn, err := ldapClient.Connect()
+	if err != nil {
+		return fmt.Errorf("ldap connection failed: %w", err)
+	}
+	conn.Close()
+
+	// Verify OpenVPN XML-RPC endpoint
+	if err := xmlClient.Ping(); err != nil {
+		return fmt.Errorf("openvpn connection failed: %w", err)
+	}
+
+	return nil
 }
