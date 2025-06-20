@@ -8,12 +8,14 @@ import (
 )
 
 type Config struct {
-	Server  ServerConfig  `mapstructure:"server"`
-	OpenVPN OpenVPNConfig `mapstructure:"openvpn"`
-	LDAP    LDAPConfig    `mapstructure:"ldap"`
-	Logger  LoggerConfig  `mapstructure:"logger"`
-	JWT     JWTConfig     `mapstructure:"jwt"`
-	Redis   RedisConfig   `mapstructure:"redis"` // NEW: Redis configuration
+	Server   ServerConfig   `mapstructure:"server"`
+	OpenVPN  OpenVPNConfig  `mapstructure:"openvpn"`
+	LDAP     LDAPConfig     `mapstructure:"ldap"`
+	Database DatabaseConfig `mapstructure:"database"`
+	Logger   LoggerConfig   `mapstructure:"logger"`
+	JWT      JWTConfig      `mapstructure:"jwt"`
+	Redis    RedisConfig    `mapstructure:"redis"` // NEW: Redis configuration
+	Security SecurityConfig `mapstructure:"security"`
 }
 
 type ServerConfig struct {
@@ -35,6 +37,11 @@ type LDAPConfig struct {
 	BindDN       string `mapstructure:"bindDN"`
 	BindPassword string `mapstructure:"bindPassword"`
 	BaseDN       string `mapstructure:"baseDN"`
+}
+
+// Database connection settings
+type DatabaseConfig struct {
+	DSN string `mapstructure:"dsn"`
 }
 
 type LoggerConfig struct {
@@ -65,6 +72,19 @@ type RedisConfig struct {
 	Database int           `mapstructure:"database"`
 	PoolSize int           `mapstructure:"poolSize"`
 	TTL      time.Duration `mapstructure:"ttl"`
+}
+
+// Security configuration including CORS settings
+type SecurityConfig struct {
+	EnableSecurityHeaders bool       `mapstructure:"enableSecurityHeaders"`
+	CORS                  CORSConfig `mapstructure:"cors"`
+}
+
+type CORSConfig struct {
+	AllowedOrigins   []string `mapstructure:"allowedOrigins"`
+	AllowedMethods   []string `mapstructure:"allowedMethods"`
+	AllowedHeaders   []string `mapstructure:"allowedHeaders"`
+	AllowCredentials bool     `mapstructure:"allowCredentials"`
 }
 
 func Load() (*Config, error) {
@@ -136,4 +156,14 @@ func setDefaults() {
 	viper.SetDefault("redis.database", 0)
 	viper.SetDefault("redis.poolSize", 10)
 	viper.SetDefault("redis.ttl", 10*time.Minute)
+
+	// Database defaults
+	viper.SetDefault("database.dsn", "postgres://user:pass@localhost:5432/system_portal?sslmode=disable")
+
+	// Security defaults
+	viper.SetDefault("security.enableSecurityHeaders", true)
+	viper.SetDefault("security.cors.allowedOrigins", []string{"*"})
+	viper.SetDefault("security.cors.allowedMethods", []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"})
+	viper.SetDefault("security.cors.allowedHeaders", []string{"Authorization", "Content-Type"})
+	viper.SetDefault("security.cors.allowCredentials", true)
 }

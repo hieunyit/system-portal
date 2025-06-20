@@ -8,7 +8,7 @@ import (
 	"system-portal/internal/domains/openvpn/entities"
 	"system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/shared/errors"
-	"system-portal/internal/shared/infrastructure/http"
+	http "system-portal/internal/shared/response"
 	"system-portal/pkg/logger"
 	"system-portal/pkg/validator"
 

@@ -1,4 +1,4 @@
-// internal/shared/infrastructure/http/router.go
+// internal/shared/response/router.go
 package http
 
 import (
@@ -19,6 +19,7 @@ import (
 	openvpnRoutes "system-portal/internal/domains/openvpn/routes"
 	portalRoutes "system-portal/internal/domains/portal/routes"
 	"system-portal/internal/shared/middleware"
+	response "system-portal/internal/shared/response"
 )
 
 type RouterConfig struct {
@@ -246,11 +247,11 @@ func (r *Router) healthCheck(c *gin.Context) {
 		},
 	}
 
-	RespondWithSuccess(c, 200, health)
+	response.RespondWithSuccess(c, 200, health)
 }
 
 func (r *Router) apiInfo(c *gin.Context) {
-	RespondWithSuccess(c, 200, gin.H{
+	response.RespondWithSuccess(c, 200, gin.H{
 		"service":     "System Portal API",
 		"version":     "2.0.0",
 		"description": "Domain-driven OpenVPN Access Server Management API with PostgreSQL Authentication",
