@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -142,7 +143,7 @@ func (r *Router) StartServerWithTLS(certFile, keyFile string) error {
 
 // ✅ NEW: logStartupInfo logs server startup information
 func (r *Router) logStartupInfo() {
-	log.Println("=" * 60)
+	log.Println(strings.Repeat("=", 60))
 	log.Printf("🏢 Service: System Portal API")
 	log.Printf("📊 Version: 2.0.0")
 	log.Printf("🏗️  Architecture: Domain-Driven Design")
@@ -153,12 +154,12 @@ func (r *Router) logStartupInfo() {
 	log.Printf("⏱️  Request Timeout: %v", r.config.TimeoutDuration)
 	log.Printf("📖 Read Timeout: %v", r.config.ReadTimeout)
 	log.Printf("✍️  Write Timeout: %v", r.config.WriteTimeout)
-	log.Println("=" * 60)
+	log.Println(strings.Repeat("=", 60))
 	log.Printf("🎯 Domains Available:")
 	log.Printf("   🔐 Auth: /auth/*")
 	log.Printf("   🏢 Portal: /api/portal/*")
 	log.Printf("   🔌 OpenVPN: /api/openvpn/*")
-	log.Println("=" * 60)
+	log.Println(strings.Repeat("=", 60))
 }
 
 // ✅ NEW: waitForShutdown handles graceful shutdown

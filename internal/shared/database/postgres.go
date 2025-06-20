@@ -2,8 +2,8 @@ package database
 
 import (
 	"database/sql"
-	"embed"
-	"io/fs"
+	"os"
+	"path/filepath"
 	"sort"
 
 	_ "github.com/lib/pq"
@@ -14,9 +14,6 @@ type Postgres struct {
 	DSN string
 	DB  *sql.DB
 }
-
-//go:embed ../../../migrations/*.sql
-var migrationsFS embed.FS
 
 // New opens a PostgreSQL connection.
 func New(dsn string) (*Postgres, error) {
@@ -40,7 +37,8 @@ func (p *Postgres) Close() error {
 
 // Migrate executes embedded SQL migration files in order.
 func (p *Postgres) Migrate() error {
-	entries, err := fs.ReadDir(migrationsFS, "../../../migrations")
+	dir := filepath.Join("migrations")
+	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return err
 	}
@@ -49,7 +47,7 @@ func (p *Postgres) Migrate() error {
 		if e.IsDir() {
 			continue
 		}
-		data, err := migrationsFS.ReadFile("../../../migrations/" + e.Name())
+		data, err := os.ReadFile(filepath.Join(dir, e.Name()))
 		if err != nil {
 			return err
 		}

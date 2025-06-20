@@ -18,6 +18,7 @@ import (
 	portalUsecases "system-portal/internal/domains/portal/usecases"
 	"system-portal/internal/shared/config"
 	"system-portal/internal/shared/database"
+	serverHttp "system-portal/internal/shared/infrastructure/http"
 	"system-portal/internal/shared/infrastructure/ldap"
 	"system-portal/internal/shared/infrastructure/xmlrpc"
 	"system-portal/internal/shared/middleware"
@@ -61,7 +62,7 @@ func main() {
 	initializeDomainRoutes(cfg, db, jwtService)
 
 	// Create router configuration
-	routerConfig := &http.RouterConfig{
+	routerConfig := &serverHttp.RouterConfig{
 		Port:            cfg.Server.Port,
 		Mode:            cfg.Server.Mode,
 		TimeoutDuration: time.Duration(cfg.Server.Timeout) * time.Second,
@@ -70,7 +71,7 @@ func main() {
 	}
 
 	// Create router
-	router := http.NewRouter(
+	router := serverHttp.NewRouter(
 		routerConfig,
 		authMiddleware,
 		corsMiddleware,

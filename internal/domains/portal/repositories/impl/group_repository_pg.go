@@ -3,7 +3,6 @@ package impl
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	"github.com/google/uuid"
 	"system-portal/internal/domains/portal/entities"

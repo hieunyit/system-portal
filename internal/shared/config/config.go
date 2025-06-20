@@ -5,6 +5,10 @@ import (
 	"time"
 
 	"github.com/spf13/viper"
+
+	ldapCfg "system-portal/internal/shared/infrastructure/ldap"
+	xmlrpcCfg "system-portal/internal/shared/infrastructure/xmlrpc"
+	"system-portal/pkg/logger"
 )
 
 type Config struct {
@@ -24,31 +28,16 @@ type ServerConfig struct {
 	Timeout int    `mapstructure:"timeout"`
 }
 
-type OpenVPNConfig struct {
-	Host     string `mapstructure:"host"`
-	Username string `mapstructure:"username"`
-	Password string `mapstructure:"password"`
-	Port     int    `mapstructure:"port"`
-}
+type OpenVPNConfig = xmlrpcCfg.Config
 
-type LDAPConfig struct {
-	Host         string `mapstructure:"host"`
-	Port         int    `mapstructure:"port"`
-	BindDN       string `mapstructure:"bindDN"`
-	BindPassword string `mapstructure:"bindPassword"`
-	BaseDN       string `mapstructure:"baseDN"`
-}
+type LDAPConfig = ldapCfg.Config
 
 // Database connection settings
 type DatabaseConfig struct {
 	DSN string `mapstructure:"dsn"`
 }
 
-type LoggerConfig struct {
-	Level    string `mapstructure:"level"`
-	Format   string `mapstructure:"format"`
-	FilePath string `mapstructure:"filePath"`
-}
+type LoggerConfig = logger.LoggerConfig
 
 type JWTConfig struct {
 	// Legacy HMAC configuration (deprecated)
