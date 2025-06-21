@@ -4,6 +4,7 @@ import (
 	"system-portal/internal/domains/auth/dto"
 	"system-portal/internal/domains/auth/usecases"
 	http "system-portal/internal/shared/response"
+	"system-portal/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,14 +31,17 @@ func NewAuthHandler(u usecases.AuthUsecase) *AuthHandler { return &AuthHandler{u
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req dto.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
+		logger.Log.WithError(err).Error("failed to bind login request")
 		http.RespondWithBadRequest(c, "invalid request")
 		return
 	}
 	access, refresh, err := h.usecase.Login(c.Request.Context(), req.Username, req.Password)
 	if err != nil {
+		logger.Log.WithError(err).WithField("username", req.Username).Error("login failed")
 		http.RespondWithUnauthorized(c, "login failed")
 		return
 	}
+	logger.Log.WithField("username", req.Username).Info("user logged in")
 	http.RespondWithSuccess(c, 200, dto.TokenResponse{AccessToken: access, RefreshToken: refresh})
 }
 
@@ -55,14 +59,17 @@ func (h *AuthHandler) Login(c *gin.Context) {
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	var req dto.RefreshRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
+		logger.Log.WithError(err).Error("failed to bind refresh token request")
 		http.RespondWithBadRequest(c, "invalid request")
 		return
 	}
 	access, refresh, err := h.usecase.Refresh(c.Request.Context(), req.RefreshToken)
 	if err != nil {
+		logger.Log.WithError(err).Error("refresh token failed")
 		http.RespondWithUnauthorized(c, "refresh failed")
 		return
 	}
+	logger.Log.Info("refresh token issued")
 	http.RespondWithSuccess(c, 200, dto.TokenResponse{AccessToken: access, RefreshToken: refresh})
 }
 
@@ -79,13 +86,16 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 func (h *AuthHandler) ValidateToken(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	if token == "" {
+		logger.Log.Warn("missing authorization header")
 		http.RespondWithBadRequest(c, "missing token")
 		return
 	}
 	if err := h.usecase.Validate(c.Request.Context(), token[7:]); err != nil {
+		logger.Log.WithError(err).Warn("invalid token")
 		http.RespondWithUnauthorized(c, "invalid token")
 		return
 	}
+	logger.Log.Info("token validated")
 	http.RespondWithMessage(c, 200, "token valid")
 }
 
@@ -99,6 +109,9 @@ func (h *AuthHandler) ValidateToken(c *gin.Context) {
 // @Router /auth/logout [post]
 func (h *AuthHandler) Logout(c *gin.Context) {
 	token := c.GetHeader("Authorization")
-	h.usecase.Logout(c.Request.Context(), token)
+	if err := h.usecase.Logout(c.Request.Context(), token); err != nil {
+		logger.Log.WithError(err).Warn("logout failed")
+	}
+	logger.Log.Info("user logged out")
 	http.RespondWithMessage(c, 200, "logged out")
 }

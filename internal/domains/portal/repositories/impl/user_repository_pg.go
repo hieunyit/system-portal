@@ -76,8 +76,8 @@ func (r *pgUserRepo) List(ctx context.Context) ([]*entities.User, error) {
 func (r *pgUserRepo) Update(ctx context.Context, u *entities.User) error {
 	u.UpdatedAt = time.Now()
 	_, err := r.db.ExecContext(ctx,
-		`UPDATE users SET username=$2, email=$3, full_name=$4, group_id=$5, is_active=$6, updated_at=$7 WHERE id=$1`,
-		u.ID, u.Username, u.Email, u.FullName, u.GroupID, u.IsActive, u.UpdatedAt,
+		`UPDATE users SET username=$2, email=$3, password_hash=$4, full_name=$5, group_id=$6, is_active=$7, updated_at=$8 WHERE id=$1`,
+		u.ID, u.Username, u.Email, u.Password, u.FullName, u.GroupID, u.IsActive, u.UpdatedAt,
 	)
 	return err
 }
