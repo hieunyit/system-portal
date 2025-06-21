@@ -9,7 +9,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"system-portal/internal/domains/auth/entities"
 	"system-portal/internal/domains/auth/repositories"
-	repoimpl "system-portal/internal/domains/auth/repositories/impl"
 	portalrepos "system-portal/internal/domains/portal/repositories"
 	"system-portal/pkg/jwt"
 )
@@ -63,6 +62,18 @@ func (u *authUsecaseImpl) Validate(ctx context.Context, token string) error {
 }
 
 func (u *authUsecaseImpl) Logout(ctx context.Context, token string) error {
-	// In-memory implementation simply ignores logout
-	return nil
+	if token == "" {
+		return nil
+	}
+	if _, err := u.jwt.ValidateAccessToken(token); err != nil {
+		return err
+	}
+	sess, err := u.sessions.GetByTokenHash(ctx, token)
+	if err != nil {
+		return err
+	}
+	if sess == nil {
+		return nil
+	}
+	return u.sessions.Deactivate(ctx, sess.ID)
 }

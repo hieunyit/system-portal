@@ -1238,9 +1238,40 @@ func (u *bulkUsecaseImpl) parseJSONFile(content []byte, entityType string) (inte
 }
 
 func (u *bulkUsecaseImpl) parseXLSXFile(content []byte, entityType string) (interface{}, []openvpndto.ImportValidationError, error) {
-	// Similar to CSV parsing but using XLSX library
-	// Implementation would parse XLSX format and return appropriate structures
-	return nil, nil, fmt.Errorf("XLSX parsing not implemented yet")
+	wb, err := xlsx.OpenBinary(content)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to read XLSX: %v", err)
+	}
+	if len(wb.Sheets) == 0 {
+		return nil, nil, fmt.Errorf("XLSX file has no sheets")
+	}
+	sheet := wb.Sheets[0]
+	var records [][]string
+	err = sheet.ForEachRow(func(r *xlsx.Row) error {
+		var row []string
+		r.ForEachCell(func(c *xlsx.Cell) error {
+			row = append(row, c.String())
+			return nil
+		})
+		records = append(records, row)
+		return nil
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to read XLSX: %v", err)
+	}
+	if len(records) < 2 {
+		return nil, nil, fmt.Errorf("XLSX file must contain headers and at least one data row")
+	}
+	headers := records[0]
+	var validationErrors []openvpndto.ImportValidationError
+	switch entityType {
+	case "groups":
+		return u.parseGroupsFromCSV(headers, records[1:], &validationErrors)
+	case "users":
+		return u.parseUsersFromCSV(headers, records[1:], &validationErrors)
+	default:
+		return nil, nil, fmt.Errorf("unsupported entity type: %s", entityType)
+	}
 }
 
 // =================== HELPER FUNCTIONS ===================
