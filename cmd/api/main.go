@@ -114,7 +114,7 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 	auditRepo := portalRepoImpl.NewAuditRepositoryPG(db.DB)
 
 	// Auth domain
-	sessionRepo := sessionRepoimpl.NewSessionRepository()
+	sessionRepo := sessionRepoimpl.NewSessionRepositoryPG(db.DB)
 	authUsecase := authUsecases.NewAuthUsecase(sessionRepo, userRepo, jwtSvc)
 	authHandler := authHandlers.NewAuthHandler(authUsecase)
 	authRoutes.Initialize(authHandler)
