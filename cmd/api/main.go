@@ -51,10 +51,12 @@ func main() {
 	}
 	defer db.Close()
 
-	logger.Log.Info("checking database connectivity")
+	logger.Log.WithField("dsn", cfg.Database.DSN).Info("checking database connectivity")
 	if err := waitForPostgres(db.DB, 5, time.Second); err != nil {
 		log.Fatal("database unreachable:", err)
 	}
+
+	logDatabaseVersion(db.DB)
 
 	if err := db.Migrate(); err != nil {
 		log.Fatal("failed to migrate database:", err)
@@ -208,6 +210,7 @@ func logExistingUsers(db *sql.DB) {
 		logger.Log.WithError(err).Error("failed to list users")
 		return
 	}
+	logger.Log.WithField("total", len(users)).Info("users table loaded")
 	for _, u := range users {
 		logger.Log.WithFields(map[string]interface{}{
 			"id":       u.ID,
@@ -216,6 +219,16 @@ func logExistingUsers(db *sql.DB) {
 			"active":   u.IsActive,
 		}).Info("db user")
 	}
+}
+
+// logDatabaseVersion queries and logs the PostgreSQL server version.
+func logDatabaseVersion(db *sql.DB) {
+	var version string
+	if err := db.QueryRow(`SELECT version()`).Scan(&version); err != nil {
+		logger.Log.WithError(err).Warn("failed to retrieve postgres version")
+		return
+	}
+	logger.Log.WithField("version", version).Info("postgres version")
 }
 
 // seedDemoData populates in-memory repositories with a default admin and support user.
