@@ -60,6 +60,8 @@ func main() {
 		log.Fatal("failed to migrate database:", err)
 	}
 
+	logExistingUsers(db.DB)
+
 	// Initialize JWT service
 	jwtService, err := jwt.NewRSAService(cfg.JWT.AccessTokenExpireDuration, cfg.JWT.RefreshTokenExpireDuration)
 	if err != nil {
@@ -196,6 +198,24 @@ func checkConnections(db *database.Postgres, ldapClient *ldap.Client, xmlClient 
 	}
 
 	return nil
+}
+
+// logExistingUsers outputs all records from the users table for debugging.
+func logExistingUsers(db *sql.DB) {
+	repo := portalRepoImpl.NewUserRepositoryPG(db)
+	users, err := repo.List(context.Background())
+	if err != nil {
+		logger.Log.WithError(err).Error("failed to list users")
+		return
+	}
+	for _, u := range users {
+		logger.Log.WithFields(map[string]interface{}{
+			"id":       u.ID,
+			"username": u.Username,
+			"email":    u.Email,
+			"active":   u.IsActive,
+		}).Info("db user")
+	}
 }
 
 // seedDemoData populates in-memory repositories with a default admin and support user.
