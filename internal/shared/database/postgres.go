@@ -26,6 +26,7 @@ func New(cfg config.DatabaseConfig) (*Postgres, error) {
 		"user":    cfg.User,
 		"db":      cfg.Name,
 		"sslmode": cfg.SSLMode,
+		"dsn":     dsn,
 	}).Info("connecting to postgres")
 
 	db, err := sql.Open("pgx", dsn)
@@ -35,7 +36,7 @@ func New(cfg config.DatabaseConfig) (*Postgres, error) {
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
-	logger.Log.Info("postgres connection established")
+	logger.Log.WithField("dsn", dsn).Info("postgres connection established")
 	return &Postgres{DSN: dsn, DB: db}, nil
 }
 
@@ -55,6 +56,12 @@ func (p *Postgres) Migrate() error {
 		return err
 	}
 	sort.Slice(entries, func(i, j int) bool { return entries[i].Name() < entries[j].Name() })
+
+	if len(entries) == 0 {
+		logger.Log.WithField("dir", dir).Warn("no migration files found")
+		return nil
+	}
+
 	for _, e := range entries {
 		if e.IsDir() {
 			continue
@@ -68,6 +75,7 @@ func (p *Postgres) Migrate() error {
 			logger.Log.WithError(err).WithField("file", e.Name()).Error("migration failed")
 			return err
 		}
+		logger.Log.WithField("file", e.Name()).Info("migration applied")
 	}
 	logger.Log.Info("database migrations complete")
 	return nil

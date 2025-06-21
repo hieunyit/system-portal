@@ -17,6 +17,7 @@ func main() {
 		log.Fatalf("database connection error: %v", err)
 	}
 	defer pg.Close()
+	log.Printf("connected to %s", pg.DSN)
 	if err := pg.Migrate(); err != nil {
 		log.Fatalf("migration failed: %v", err)
 	}

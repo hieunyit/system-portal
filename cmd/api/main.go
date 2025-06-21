@@ -52,6 +52,7 @@ func main() {
 		"host": cfg.Database.Host,
 		"port": cfg.Database.Port,
 		"db":   cfg.Database.Name,
+		"dsn":  db.DSN,
 	}).Info("checking database connectivity")
 	if err := waitForPostgres(db.DB, 5, time.Second); err != nil {
 		log.Fatal("database unreachable:", err)
