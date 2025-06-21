@@ -7,6 +7,7 @@ import (
 	"system-portal/pkg/logger"
 
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 // AuthHandler exposes authentication endpoints.
@@ -108,7 +109,7 @@ func (h *AuthHandler) ValidateToken(c *gin.Context) {
 // @Success 200 {string} string "logged out"
 // @Router /auth/logout [post]
 func (h *AuthHandler) Logout(c *gin.Context) {
-	token := c.GetHeader("Authorization")
+	token := strings.TrimSpace(strings.TrimPrefix(c.GetHeader("Authorization"), "Bearer "))
 	if err := h.usecase.Logout(c.Request.Context(), token); err != nil {
 		logger.Log.WithError(err).Warn("logout failed")
 	}

@@ -67,7 +67,36 @@ func (u *authUsecaseImpl) Refresh(ctx context.Context, refreshToken string) (str
 		return "", "", err
 	}
 	logger.Log.WithField("username", claims.Username).Info("refresh token validated")
-	return u.Login(ctx, claims.Username, "")
+
+	usr, err := u.users.GetByUsername(ctx, claims.Username)
+	if err != nil {
+		logger.Log.WithError(err).Error("failed to fetch user for refresh")
+		return "", "", err
+	}
+	if usr == nil || !usr.IsActive {
+		logger.Log.WithField("username", claims.Username).Warn("user not found or inactive")
+		return "", "", errors.New("invalid credentials")
+	}
+
+	role := "support"
+	if claims.Username == "admin" {
+		role = "admin"
+	}
+	access, _ := u.jwt.GenerateAccessToken(claims.Username, role)
+	refreshNew, _ := u.jwt.GenerateRefreshToken(claims.Username, role)
+	s := &entities.Session{
+		ID:               uuid.New(),
+		UserID:           usr.ID,
+		TokenHash:        access,
+		RefreshTokenHash: refreshNew,
+		ExpiresAt:        time.Now().Add(time.Hour),
+		RefreshExpiresAt: time.Now().Add(24 * time.Hour),
+		IsActive:         true,
+		CreatedAt:        time.Now(),
+	}
+	u.sessions.Create(ctx, s)
+	logger.Log.WithField("username", claims.Username).Info("session refreshed")
+	return access, refreshNew, nil
 }
 
 func (u *authUsecaseImpl) Validate(ctx context.Context, token string) error {
