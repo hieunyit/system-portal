@@ -5,7 +5,7 @@ import (
 	"fmt"
 	nethttp "net/http"
 	"strings"
-	openvpndto "system-portal/internal/domains/openvpn/dto"
+	dto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/entities"
 	"system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/shared/errors"
@@ -38,13 +38,13 @@ func NewGroupHandler(groupUsecase usecases.GroupUsecase, configUsecase usecases.
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body openvpndto.CreateGroupRequest true "Group creation data"
+// @Param request body dto.CreateGroupRequest true "Group creation data"
 // @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 409 {object} response.ErrorResponse
 // @Router /api/openvpn/groups [post]
 func (h *GroupHandler) CreateGroup(c *gin.Context) {
-	var req openvpndto.CreateGroupRequest
+	var req dto.CreateGroupRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind create group request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -127,7 +127,7 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param groupName path string true "Group name"
-// @Success 200 {object} response.SuccessResponse{data=openvpndto.GroupResponse}
+// @Success 200 {object} response.SuccessResponse{data=dto.GroupResponse}
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [get]
 func (h *GroupHandler) GetGroup(c *gin.Context) {
@@ -148,7 +148,7 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 	}
 
 	// Convert entity to DTO
-	response := openvpndto.GroupResponse{
+	response := dto.GroupResponse{
 		GroupName:     group.GroupName,
 		AuthMethod:    group.AuthMethod,
 		MFA:           group.MFA == "true",
@@ -170,7 +170,7 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param groupName path string true "Group name"
-// @Param request body openvpndto.UpdateGroupRequest true "Group update data"
+// @Param request body dto.UpdateGroupRequest true "Group update data"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
@@ -188,7 +188,7 @@ func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 		return
 	}
 
-	var req openvpndto.UpdateGroupRequest
+	var req dto.UpdateGroupRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind update group request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -290,12 +290,12 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param filter query openvpndto.GroupFilter false "Filter parameters"
-// @Success 200 {object} response.SuccessResponse{data=openvpndto.GroupListResponse}
+// @Param filter query dto.GroupFilter false "Filter parameters"
+// @Success 200 {object} response.SuccessResponse{data=dto.GroupListResponse}
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/groups [get]
 func (h *GroupHandler) ListGroups(c *gin.Context) {
-	var filter openvpndto.GroupFilter
+	var filter dto.GroupFilter
 	if err := c.ShouldBindQuery(&filter); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind group filter")
 		http.RespondWithError(c, errors.BadRequest("Invalid filter parameters", err))
@@ -330,9 +330,9 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 	}
 
 	// Convert entities to DTOs
-	var groupResponses []openvpndto.GroupResponse
+	var groupResponses []dto.GroupResponse
 	for _, group := range groups {
-		groupResponses = append(groupResponses, openvpndto.GroupResponse{
+		groupResponses = append(groupResponses, dto.GroupResponse{
 			GroupName:     group.GroupName,
 			AuthMethod:    group.AuthMethod,
 			MFA:           group.MFA == "true",
@@ -344,7 +344,7 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 		})
 	}
 
-	response := openvpndto.GroupListResponse{
+	response := dto.GroupListResponse{
 		Groups: groupResponses,
 		Total:  totalCount,
 		Page:   filter.Page,

@@ -3,7 +3,7 @@ package handlers
 import (
 	nethttp "net/http"
 	"strconv"
-	openvpndto "system-portal/internal/domains/openvpn/dto"
+	dto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/shared/errors"
 	"system-portal/internal/shared/infrastructure/xmlrpc"
@@ -35,13 +35,13 @@ func NewBulkHandler(bulkUsecase usecases.BulkUsecase, xmlrpcClient *xmlrpc.Clien
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body openvpndto.BulkCreateUsersRequest true "Bulk user creation data"
-// @Success 201 {object} openvpndto.BulkCreateUsersResponse
+// @Param request body dto.BulkCreateUsersRequest true "Bulk user creation data"
+// @Success 201 {object} dto.BulkCreateUsersResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 413 {object} response.ErrorResponse "Request too large"
 // @Router /api/openvpn/bulk/users/create [post]
 func (h *BulkHandler) BulkCreateUsers(c *gin.Context) {
-	var req openvpndto.BulkCreateUsersRequest
+	var req dto.BulkCreateUsersRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk create users request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -89,12 +89,12 @@ func (h *BulkHandler) BulkCreateUsers(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body openvpndto.BulkUserActionsRequest true "Bulk user actions data"
-// @Success 200 {object} openvpndto.BulkActionResponse
+// @Param request body dto.BulkUserActionsRequest true "Bulk user actions data"
+// @Success 200 {object} dto.BulkActionResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/users/actions [post]
 func (h *BulkHandler) BulkUserActions(c *gin.Context) {
-	var req openvpndto.BulkUserActionsRequest
+	var req dto.BulkUserActionsRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk user actions request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -145,12 +145,12 @@ func (h *BulkHandler) BulkUserActions(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body openvpndto.BulkUserExtendRequest true "Bulk user extension data"
-// @Success 200 {object} openvpndto.BulkActionResponse
+// @Param request body dto.BulkUserExtendRequest true "Bulk user extension data"
+// @Success 200 {object} dto.BulkActionResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/users/extend [post]
 func (h *BulkHandler) BulkExtendUsers(c *gin.Context) {
-	var req openvpndto.BulkUserExtendRequest
+	var req dto.BulkUserExtendRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk extend users request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -204,7 +204,7 @@ func (h *BulkHandler) BulkExtendUsers(c *gin.Context) {
 // @Param format formData string false "File format" Enums(csv, json, xlsx)
 // @Param dryRun formData boolean false "Dry run mode (validate only)"
 // @Param override formData boolean false "Override existing users"
-// @Success 200 {object} openvpndto.ImportResponse
+// @Success 200 {object} dto.ImportResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 413 {object} response.ErrorResponse "File too large"
 // @Router /api/openvpn/bulk/users/import [post]
@@ -216,7 +216,7 @@ func (h *BulkHandler) ImportUsers(c *gin.Context) {
 		return
 	}
 
-	var req openvpndto.ImportUsersRequest
+	var req dto.ImportUsersRequest
 	if err := c.ShouldBind(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind import users request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -283,12 +283,12 @@ func (h *BulkHandler) ImportUsers(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body openvpndto.BulkCreateGroupsRequest true "Bulk group creation data"
-// @Success 201 {object} openvpndto.BulkCreateGroupsResponse
+// @Param request body dto.BulkCreateGroupsRequest true "Bulk group creation data"
+// @Success 201 {object} dto.BulkCreateGroupsResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/create [post]
 func (h *BulkHandler) BulkCreateGroups(c *gin.Context) {
-	var req openvpndto.BulkCreateGroupsRequest
+	var req dto.BulkCreateGroupsRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk create groups request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -336,12 +336,12 @@ func (h *BulkHandler) BulkCreateGroups(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body openvpndto.BulkGroupActionsRequest true "Bulk group actions data"
-// @Success 200 {object} openvpndto.BulkGroupActionResponse
+// @Param request body dto.BulkGroupActionsRequest true "Bulk group actions data"
+// @Success 200 {object} dto.BulkGroupActionResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/actions [post]
 func (h *BulkHandler) BulkGroupActions(c *gin.Context) {
-	var req openvpndto.BulkGroupActionsRequest
+	var req dto.BulkGroupActionsRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk group actions request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -396,7 +396,7 @@ func (h *BulkHandler) BulkGroupActions(c *gin.Context) {
 // @Param format formData string false "File format" Enums(csv, json, xlsx)
 // @Param dryRun formData boolean false "Dry run mode (validate only)"
 // @Param override formData boolean false "Override existing groups"
-// @Success 200 {object} openvpndto.ImportResponse
+// @Success 200 {object} dto.ImportResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/import [post]
 func (h *BulkHandler) ImportGroups(c *gin.Context) {
@@ -407,7 +407,7 @@ func (h *BulkHandler) ImportGroups(c *gin.Context) {
 		return
 	}
 
-	var req openvpndto.ImportGroupsRequest
+	var req dto.ImportGroupsRequest
 	if err := c.ShouldBind(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind import groups request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
