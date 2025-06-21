@@ -102,12 +102,9 @@ func main() {
 
 func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) {
 	// Portal domain using PostgreSQL repositories
-	// Use in-memory repositories so the demo works without a real database
-	userRepo := portalRepoImpl.NewUserRepository()
-	groupRepo := portalRepoImpl.NewGroupRepository()
-	auditRepo := portalRepoImpl.NewAuditRepository()
-
-	seedDemoData(userRepo, groupRepo)
+	userRepo := portalRepoImpl.NewUserRepositoryPG(db.DB)
+	groupRepo := portalRepoImpl.NewGroupRepositoryPG(db.DB)
+	auditRepo := portalRepoImpl.NewAuditRepositoryPG(db.DB)
 
 	// Auth domain
 	sessionRepo := sessionRepoimpl.NewSessionRepository()
