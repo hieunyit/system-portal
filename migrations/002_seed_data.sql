@@ -35,3 +35,14 @@ VALUES (
     (SELECT id FROM groups WHERE name = 'admin')
 )
 ON CONFLICT (username) DO NOTHING;
+
+-- Create initial support user
+INSERT INTO users (username, email, password_hash, full_name, group_id)
+VALUES (
+    'support',
+    'support@company.com',
+    '$2a$14$8K1p/a0dL2LkzCKXNP7rVufDhZLCYLWJwONWtdVBXvhX7nVHsP.5K',
+    'Support Staff',
+    (SELECT id FROM groups WHERE name = 'support')
+)
+ON CONFLICT (username) DO NOTHING;

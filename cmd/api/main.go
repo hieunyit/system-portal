@@ -7,6 +7,7 @@ import (
 	"time"
 
 	authHandlers "system-portal/internal/domains/auth/handlers"
+	sessionRepoimpl "system-portal/internal/domains/auth/repositories/impl"
 	authRoutes "system-portal/internal/domains/auth/routes"
 	authUsecases "system-portal/internal/domains/auth/usecases"
 	openvpnHandlers "system-portal/internal/domains/openvpn/handlers"
@@ -96,15 +97,16 @@ func main() {
 }
 
 func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) {
-	// Auth domain
-	authUsecase := authUsecases.NewAuthUsecase(jwtSvc)
-	authHandler := authHandlers.NewAuthHandler(authUsecase)
-	authRoutes.Initialize(authHandler)
-
 	// Portal domain using PostgreSQL repositories
 	userRepo := portalRepo.NewUserRepositoryPG(db.DB)
 	groupRepo := portalRepo.NewGroupRepositoryPG(db.DB)
 	auditRepo := portalRepo.NewAuditRepositoryPG(db.DB)
+
+	// Auth domain
+	sessionRepo := sessionRepoimpl.NewSessionRepository()
+	authUsecase := authUsecases.NewAuthUsecase(sessionRepo, userRepo, jwtSvc)
+	authHandler := authHandlers.NewAuthHandler(authUsecase)
+	authRoutes.Initialize(authHandler)
 
 	userUC := portalUsecases.NewUserUsecase(userRepo)
 	groupUC := portalUsecases.NewGroupUsecase(groupRepo)

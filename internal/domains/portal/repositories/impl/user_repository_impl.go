@@ -31,6 +31,17 @@ func (r *inMemoryUserRepo) GetByID(ctx context.Context, id uuid.UUID) (*entities
 	return r.users[id], nil
 }
 
+func (r *inMemoryUserRepo) GetByUsername(ctx context.Context, username string) (*entities.User, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	for _, u := range r.users {
+		if u.Username == username {
+			return u, nil
+		}
+	}
+	return nil, nil
+}
+
 func (r *inMemoryUserRepo) List(ctx context.Context) ([]*entities.User, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()

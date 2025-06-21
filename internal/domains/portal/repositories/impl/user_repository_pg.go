@@ -40,6 +40,21 @@ func (r *pgUserRepo) GetByID(ctx context.Context, id uuid.UUID) (*entities.User,
 	return &u, nil
 }
 
+func (r *pgUserRepo) GetByUsername(ctx context.Context, username string) (*entities.User, error) {
+	row := r.db.QueryRowContext(ctx,
+		`SELECT id, username, email, password_hash, full_name, group_id, is_active, created_at, updated_at
+         FROM users WHERE username=$1`, username)
+	var u entities.User
+	err := row.Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.FullName, &u.GroupID, &u.IsActive, &u.CreatedAt, &u.UpdatedAt)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &u, nil
+}
+
 func (r *pgUserRepo) List(ctx context.Context) ([]*entities.User, error) {
 	rows, err := r.db.QueryContext(ctx,
 		`SELECT id, username, email, full_name, group_id, is_active, created_at, updated_at FROM users`)
