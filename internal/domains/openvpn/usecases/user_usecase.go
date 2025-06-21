@@ -2,7 +2,7 @@ package usecases
 
 import (
 	"context"
-	"system-portal/internal/domains/openvpn/dto"
+	openvpndto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/entities"
 )
 
@@ -23,5 +23,5 @@ type UserUsecase interface {
 
 	// Expiration operations
 	GetExpiringUsers(ctx context.Context, days int) ([]string, error)
-	GetUserExpirations(ctx context.Context, days int) (*dto.UserExpirationsResponse, error)
+	GetUserExpirations(ctx context.Context, days int) (*openvpndto.UserExpirationsResponse, error)
 }

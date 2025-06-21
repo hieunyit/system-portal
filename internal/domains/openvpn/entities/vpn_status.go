@@ -3,7 +3,7 @@ package entities
 import "time"
 
 // VPNStatus - thông tin status của VPN server
-type VPNStatus struct {
+type VpnStatus struct {
 	ServerName          string           `json:"server_name"`
 	ServerTitle         string           `json:"server_title"`
 	ServerTime          time.Time        `json:"server_time"`
@@ -13,7 +13,7 @@ type VPNStatus struct {
 }
 
 // ConnectedUser - thông tin user đang kết nối VPN
-type ConnectedUser struct {
+type VpnConnectedUser struct {
 	CommonName         string    `json:"common_name"`
 	RealAddress        string    `json:"real_address"`    // IP public của user
 	VirtualAddress     string    `json:"virtual_address"` // IP VPN được cấp
@@ -31,14 +31,20 @@ type ConnectedUser struct {
 }
 
 // GlobalStats - thống kê global của VPN server
-type GlobalStats struct {
+type VpnGlobalStats struct {
 	MaxBcastMcastQueueLength string `json:"max_bcast_mcast_queue_length"`
 	DCOEnabled               bool   `json:"dco_enabled"`
 }
 
 // VPNStatusSummary - tóm tắt tổng quan VPN status
-type VPNStatusSummary struct {
+type VpnStatusSummary struct {
 	TotalConnectedUsers int              `json:"total_connected_users"`
 	ConnectedUsers      []*ConnectedUser `json:"connected_users"`
 	Timestamp           time.Time        `json:"timestamp"`
 }
+
+// Backward compatibility aliases
+type VPNStatus = VpnStatus
+type ConnectedUser = VpnConnectedUser
+type GlobalStats = VpnGlobalStats
+type VPNStatusSummary = VpnStatusSummary

@@ -3,10 +3,10 @@ package handlers
 
 import (
 	nethttp "net/http"
-	"system-portal/internal/domains/openvpn/dto"
+	dto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/shared/errors"
-	"system-portal/internal/shared/infrastructure/http"
+	http "system-portal/internal/shared/response"
 	"system-portal/pkg/logger"
 
 	"github.com/gin-gonic/gin"
@@ -28,9 +28,9 @@ func NewVPNStatusHandler(vpnStatusUsecase usecases.VPNStatusUsecase) *VPNStatusH
 // @Tags VPN Status
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} dto.SuccessResponse{data=dto.VPNStatusResponse} "Successful response with VPN status"
-// @Failure 401 {object} dto.ErrorResponse "Unauthorized - invalid or missing authentication"
-// @Failure 500 {object} dto.ErrorResponse "Internal server error - failed to retrieve VPN status"
+// @Success 200 {object} response.SuccessResponse{data=dto.VpnStatusResponse} "Successful response with VPN status"
+// @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
+// @Failure 500 {object} response.ErrorResponse "Internal server error - failed to retrieve VPN status"
 // @Router /api/openvpn/vpn/status [get]
 func (h *VPNStatusHandler) GetVPNStatus(c *gin.Context) {
 	logger.Log.Info("Getting comprehensive VPN status")
@@ -44,9 +44,9 @@ func (h *VPNStatusHandler) GetVPNStatus(c *gin.Context) {
 	}
 
 	// Convert usecase result to DTO
-	var connectedUsers []dto.ConnectedUserResponse
+	var connectedUsers []dto.VpnConnectedUserResponse
 	for _, user := range result.ConnectedUsers {
-		connectedUsers = append(connectedUsers, dto.ConnectedUserResponse{
+		connectedUsers = append(connectedUsers, dto.VpnConnectedUserResponse{
 			CommonName:         user.CommonName,
 			RealAddress:        user.RealAddress,
 			VirtualAddress:     user.VirtualAddress,
@@ -64,7 +64,7 @@ func (h *VPNStatusHandler) GetVPNStatus(c *gin.Context) {
 		})
 	}
 
-	response := dto.VPNStatusResponse{
+	response := dto.VpnStatusResponse{
 		TotalConnectedUsers: result.TotalConnectedUsers,
 		ConnectedUsers:      connectedUsers,
 		Timestamp:           result.Timestamp,

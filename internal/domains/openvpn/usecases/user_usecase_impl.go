@@ -6,7 +6,7 @@ import (
 	"net"
 	"sort"
 	"strings"
-	"system-portal/internal/domains/openvpn/dto"
+	openvpndto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/entities"
 	"system-portal/internal/domains/openvpn/repositories"
 	"system-portal/internal/shared/errors"
@@ -274,7 +274,7 @@ func (u *userUsecaseImpl) UpdateUser(ctx context.Context, user *entities.User) e
 	return nil
 }
 
-func (u *userUsecaseImpl) GetUserExpirations(ctx context.Context, days int) (*dto.UserExpirationsResponse, error) {
+func (u *userUsecaseImpl) GetUserExpirations(ctx context.Context, days int) (*openvpndto.UserExpirationsResponse, error) {
 	logger.Log.WithField("days", days).Info("Getting user expirations with full info")
 
 	if days < 0 || days > 365 {
@@ -290,7 +290,7 @@ func (u *userUsecaseImpl) GetUserExpirations(ctx context.Context, days int) (*dt
 		return nil, errors.InternalServerError("Failed to get users", err)
 	}
 
-	var expiringUsers []dto.UserExpirationInfo
+	var expiringUsers []openvpndto.UserExpirationInfo
 	currentTime := time.Now()
 	targetDate := currentTime.AddDate(0, 0, days)
 
@@ -349,7 +349,7 @@ func (u *userUsecaseImpl) GetUserExpirations(ctx context.Context, days int) (*dt
 			accessControl = user.AccessControl
 		}
 
-		expiringUser := dto.UserExpirationInfo{
+		expiringUser := openvpndto.UserExpirationInfo{
 			Username:         user.Username,
 			Email:            user.Email,
 			UserExpiration:   user.UserExpiration,
@@ -372,7 +372,7 @@ func (u *userUsecaseImpl) GetUserExpirations(ctx context.Context, days int) (*dt
 		return expiringUsers[i].DaysUntilExpiry < expiringUsers[j].DaysUntilExpiry
 	})
 
-	response := &dto.UserExpirationsResponse{
+	response := &openvpndto.UserExpirationsResponse{
 		Users: expiringUsers,
 		Count: len(expiringUsers),
 		Days:  days,

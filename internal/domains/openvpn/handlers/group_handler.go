@@ -1,16 +1,15 @@
 package handlers
 
 import (
-	"context"
 	"fmt"
 	nethttp "net/http"
 	"strings"
-	"system-portal/internal/domains/openvpn/dto"
+	dto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/entities"
 	"system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/shared/errors"
-	"system-portal/internal/shared/infrastructure/http"
 	"system-portal/internal/shared/infrastructure/xmlrpc"
+	http "system-portal/internal/shared/response"
 	"system-portal/pkg/logger"
 	"system-portal/pkg/validator"
 
@@ -38,13 +37,13 @@ func NewGroupHandler(groupUsecase usecases.GroupUsecase, configUsecase usecases.
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.CreateGroupRequest true "Group creation data"
-// @Success 201 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 409 {object} dto.ErrorResponse
+// @Param request body dto.VpnCreateGroupRequest true "Group creation data"
+// @Success 201 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 409 {object} response.ErrorResponse
 // @Router /api/openvpn/groups [post]
 func (h *GroupHandler) CreateGroup(c *gin.Context) {
-	var req dto.CreateGroupRequest
+	var req dto.VpnCreateGroupRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind create group request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -89,7 +88,7 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 		effectiveGroupRange = []string{}
 	}
 
-	if err := h.validateGroupSubnetAndRange(c.Request.Context(), effectiveGroupSubnet, effectiveGroupRange); err != nil {
+	if err := h.validateGroupSubnetAndRange(effectiveGroupSubnet, effectiveGroupRange); err != nil {
 		http.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
@@ -127,8 +126,8 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param groupName path string true "Group name"
-// @Success 200 {object} dto.SuccessResponse{data=dto.GroupResponse}
-// @Failure 404 {object} dto.ErrorResponse
+// @Success 200 {object} response.SuccessResponse{data=dto.VpnGroupResponse}
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [get]
 func (h *GroupHandler) GetGroup(c *gin.Context) {
 	groupName := c.Param("groupName")
@@ -148,7 +147,7 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 	}
 
 	// Convert entity to DTO
-	response := dto.GroupResponse{
+	response := dto.VpnGroupResponse{
 		GroupName:     group.GroupName,
 		AuthMethod:    group.AuthMethod,
 		MFA:           group.MFA == "true",
@@ -170,10 +169,10 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param groupName path string true "Group name"
-// @Param request body dto.UpdateGroupRequest true "Group update data"
-// @Success 200 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Param request body dto.VpnUpdateGroupRequest true "Group update data"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [put]
 func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 	groupName := c.Param("groupName")
@@ -188,7 +187,7 @@ func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 		return
 	}
 
-	var req dto.UpdateGroupRequest
+	var req dto.VpnUpdateGroupRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind update group request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -255,8 +254,8 @@ func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param groupName path string true "Group name"
-// @Success 200 {object} dto.MessageResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Success 200 {object} response.SuccessResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName} [delete]
 func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 	groupName := c.Param("groupName")
@@ -290,12 +289,12 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param filter query dto.GroupFilter false "Filter parameters"
-// @Success 200 {object} dto.SuccessResponse{data=dto.GroupListResponse}
-// @Failure 400 {object} dto.ErrorResponse
+// @Param filter query dto.VpnGroupFilter false "Filter parameters"
+// @Success 200 {object} response.SuccessResponse{data=dto.VpnGroupListResponse}
+// @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/groups [get]
 func (h *GroupHandler) ListGroups(c *gin.Context) {
-	var filter dto.GroupFilter
+	var filter dto.VpnGroupFilter
 	if err := c.ShouldBindQuery(&filter); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind group filter")
 		http.RespondWithError(c, errors.BadRequest("Invalid filter parameters", err))
@@ -330,9 +329,9 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 	}
 
 	// Convert entities to DTOs
-	var groupResponses []dto.GroupResponse
+	var groupResponses []dto.VpnGroupResponse
 	for _, group := range groups {
-		groupResponses = append(groupResponses, dto.GroupResponse{
+		groupResponses = append(groupResponses, dto.VpnGroupResponse{
 			GroupName:     group.GroupName,
 			AuthMethod:    group.AuthMethod,
 			MFA:           group.MFA == "true",
@@ -344,7 +343,7 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 		})
 	}
 
-	response := dto.GroupListResponse{
+	response := dto.VpnGroupListResponse{
 		Groups: groupResponses,
 		Total:  totalCount,
 		Page:   filter.Page,
@@ -363,9 +362,9 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 // @Produce json
 // @Param groupName path string true "Group name"
 // @Param action path string true "Action (enable/disable)"
-// @Success 200 {object} dto.MessageResponse
-// @Failure 400 {object} dto.ErrorResponse
-// @Failure 404 {object} dto.ErrorResponse
+// @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/groups/{groupName}/{action} [put]
 func (h *GroupHandler) GroupAction(c *gin.Context) {
 	groupName := c.Param("groupName")
@@ -446,7 +445,7 @@ func (h *GroupHandler) GroupAction(c *gin.Context) {
 // validateGroupSubnetAndRange validates GroupSubnet and GroupRange according to business rules
 // NOTE: This function is now moved to usecase layer for better separation of concerns
 // and to include comprehensive conflict checking with existing groups
-func (h *GroupHandler) validateGroupSubnetAndRange(ctx context.Context, groupSubnets, groupRanges []string) error {
+func (h *GroupHandler) validateGroupSubnetAndRange(groupSubnets, groupRanges []string) error {
 	// Basic validation can be done here, but comprehensive validation
 	// including conflict checking is now handled in usecase layer
 	if len(groupSubnets) == 0 && len(groupRanges) > 0 {

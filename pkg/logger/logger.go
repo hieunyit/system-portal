@@ -2,6 +2,7 @@ package logger
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/sirupsen/logrus"
 )
@@ -35,6 +36,12 @@ func Init(cfg LoggerConfig) {
 
 	// Set output
 	if cfg.FilePath != "" {
+		if dir := filepath.Dir(cfg.FilePath); dir != "." && dir != "" {
+			if err := os.MkdirAll(dir, 0755); err != nil {
+				Log.Warnf("could not create log directory %s: %v", dir, err)
+			}
+		}
+
 		file, err := os.OpenFile(cfg.FilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err == nil {
 			Log.SetOutput(file)

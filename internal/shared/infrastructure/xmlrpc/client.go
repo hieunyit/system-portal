@@ -24,6 +24,30 @@ type Client struct {
 	httpClient *http.Client
 }
 
+// Ping performs a simple request to verify connectivity to the XML-RPC server.
+// It sends a HEAD request to the RPC endpoint using basic authentication.
+// If the server responds with a status code < 400, the connection is
+// considered successful.
+func (c *Client) Ping() error {
+	req, err := http.NewRequest("HEAD", c.url, nil)
+	if err != nil {
+		return fmt.Errorf("failed to create ping request: %w", err)
+	}
+	req.SetBasicAuth(c.username, c.password)
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to reach XML-RPC endpoint: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= http.StatusBadRequest {
+		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
 func NewClient(config Config) *Client {
 	url := fmt.Sprintf("https://%s:%d/RPC2/", config.Host, config.Port)
 

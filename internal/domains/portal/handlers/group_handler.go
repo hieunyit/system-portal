@@ -1,0 +1,75 @@
+package handlers
+
+import (
+	nethttp "net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"system-portal/internal/domains/portal/entities"
+	"system-portal/internal/domains/portal/usecases"
+	http "system-portal/internal/shared/response"
+)
+
+type GroupHandler struct{ uc usecases.GroupUsecase }
+
+func NewGroupHandler(u usecases.GroupUsecase) *GroupHandler { return &GroupHandler{uc: u} }
+
+// ListGroups godoc
+// @Summary List portal groups
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {array} entities.PortalGroup
+// @Router /api/portal/groups [get]
+func (h *GroupHandler) ListGroups(c *gin.Context) {
+	groups, _ := h.uc.List(c.Request.Context())
+	http.RespondWithSuccess(c, nethttp.StatusOK, groups)
+}
+
+// GetGroup godoc
+// @Summary Get portal group
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "Group ID"
+// @Success 200 {object} entities.PortalGroup
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/portal/groups/{id} [get]
+func (h *GroupHandler) GetGroup(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		http.RespondWithBadRequest(c, "invalid id")
+		return
+	}
+	g, _ := h.uc.Get(c.Request.Context(), id)
+	if g == nil {
+		http.RespondWithNotFound(c, "not found")
+		return
+	}
+	http.RespondWithSuccess(c, nethttp.StatusOK, g)
+}
+
+// CreateGroup godoc
+// @Summary Create portal group
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body entities.PortalGroup true "Group data"
+// @Success 201 {string} string "created"
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/groups [post]
+func (h *GroupHandler) CreateGroup(c *gin.Context) {
+	var g entities.PortalGroup
+	if err := c.ShouldBindJSON(&g); err != nil {
+		http.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+	g.ID = uuid.New()
+	g.CreatedAt = time.Now()
+	g.UpdatedAt = time.Now()
+	h.uc.Create(c.Request.Context(), &g)
+	http.RespondWithMessage(c, nethttp.StatusCreated, "created")
+}

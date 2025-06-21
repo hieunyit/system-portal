@@ -1,19 +1,26 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"time"
 
 	"github.com/spf13/viper"
+
+	ldapCfg "system-portal/internal/shared/infrastructure/ldap"
+	xmlrpcCfg "system-portal/internal/shared/infrastructure/xmlrpc"
+	"system-portal/pkg/logger"
 )
 
 type Config struct {
-	Server  ServerConfig  `mapstructure:"server"`
-	OpenVPN OpenVPNConfig `mapstructure:"openvpn"`
-	LDAP    LDAPConfig    `mapstructure:"ldap"`
-	Logger  LoggerConfig  `mapstructure:"logger"`
-	JWT     JWTConfig     `mapstructure:"jwt"`
-	Redis   RedisConfig   `mapstructure:"redis"` // NEW: Redis configuration
+	Server   ServerConfig   `mapstructure:"server"`
+	OpenVPN  OpenVPNConfig  `mapstructure:"openvpn"`
+	LDAP     LDAPConfig     `mapstructure:"ldap"`
+	Database DatabaseConfig `mapstructure:"database"`
+	Logger   LoggerConfig   `mapstructure:"logger"`
+	JWT      JWTConfig      `mapstructure:"jwt"`
+	Redis    RedisConfig    `mapstructure:"redis"` // NEW: Redis configuration
+	Security SecurityConfig `mapstructure:"security"`
 }
 
 type ServerConfig struct {
@@ -22,26 +29,27 @@ type ServerConfig struct {
 	Timeout int    `mapstructure:"timeout"`
 }
 
-type OpenVPNConfig struct {
+type OpenVPNConfig = xmlrpcCfg.Config
+
+type LDAPConfig = ldapCfg.Config
+
+// Database connection settings
+type DatabaseConfig struct {
 	Host     string `mapstructure:"host"`
-	Username string `mapstructure:"username"`
-	Password string `mapstructure:"password"`
 	Port     int    `mapstructure:"port"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
+	Name     string `mapstructure:"name"`
+	SSLMode  string `mapstructure:"sslmode"`
 }
 
-type LDAPConfig struct {
-	Host         string `mapstructure:"host"`
-	Port         int    `mapstructure:"port"`
-	BindDN       string `mapstructure:"bindDN"`
-	BindPassword string `mapstructure:"bindPassword"`
-	BaseDN       string `mapstructure:"baseDN"`
+// DSN builds a PostgreSQL connection string from the database config.
+func (d DatabaseConfig) DSN() string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s",
+		d.User, d.Password, d.Host, d.Port, d.Name, d.SSLMode)
 }
 
-type LoggerConfig struct {
-	Level    string `mapstructure:"level"`
-	Format   string `mapstructure:"format"`
-	FilePath string `mapstructure:"filePath"`
-}
+type LoggerConfig = logger.LoggerConfig
 
 type JWTConfig struct {
 	// Legacy HMAC configuration (deprecated)
@@ -65,6 +73,19 @@ type RedisConfig struct {
 	Database int           `mapstructure:"database"`
 	PoolSize int           `mapstructure:"poolSize"`
 	TTL      time.Duration `mapstructure:"ttl"`
+}
+
+// Security configuration including CORS settings
+type SecurityConfig struct {
+	EnableSecurityHeaders bool       `mapstructure:"enableSecurityHeaders"`
+	CORS                  CORSConfig `mapstructure:"cors"`
+}
+
+type CORSConfig struct {
+	AllowedOrigins   []string `mapstructure:"allowedOrigins"`
+	AllowedMethods   []string `mapstructure:"allowedMethods"`
+	AllowedHeaders   []string `mapstructure:"allowedHeaders"`
+	AllowCredentials bool     `mapstructure:"allowCredentials"`
 }
 
 func Load() (*Config, error) {
@@ -136,4 +157,19 @@ func setDefaults() {
 	viper.SetDefault("redis.database", 0)
 	viper.SetDefault("redis.poolSize", 10)
 	viper.SetDefault("redis.ttl", 10*time.Minute)
+
+	// Database defaults
+	viper.SetDefault("database.host", "localhost")
+	viper.SetDefault("database.port", 5432)
+	viper.SetDefault("database.user", "user")
+	viper.SetDefault("database.password", "pass")
+	viper.SetDefault("database.name", "system_portal")
+	viper.SetDefault("database.sslmode", "disable")
+
+	// Security defaults
+	viper.SetDefault("security.enableSecurityHeaders", true)
+	viper.SetDefault("security.cors.allowedOrigins", []string{"*"})
+	viper.SetDefault("security.cors.allowedMethods", []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"})
+	viper.SetDefault("security.cors.allowedHeaders", []string{"Authorization", "Content-Type"})
+	viper.SetDefault("security.cors.allowCredentials", true)
 }

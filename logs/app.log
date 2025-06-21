@@ -1,0 +1,313 @@
+{"db":"system_portal","host":"localhost","level":"info","msg":"connecting to postgres","port":5432,"sslmode":"disable","time":"2025-06-21T14:03:27Z","user":"portal_user"}
+{"level":"info","msg":"postgres version retrieved","time":"2025-06-21T14:03:27Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:03:27Z"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"checking database connectivity","port":5432,"time":"2025-06-21T14:03:27Z"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:03:27Z"}
+{"level":"info","msg":"postgres version","time":"2025-06-21T14:03:27Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"cwd":"/home/rose/system-portal","level":"info","msg":"working directory","time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":6,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":6,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":7,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":7,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":8,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":8,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":9,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":9,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":10,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":10,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":11,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":11,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":12,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":12,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":13,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":13,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":14,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":14,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":15,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":15,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":16,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":16,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":17,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":17,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":18,"time":"2025-06-21T14:03:27Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":18,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:03:27Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:03:27Z"}
+{"level":"info","msg":"database migrations complete","time":"2025-06-21T14:03:27Z"}
+{"level":"info","msg":"users table loaded","time":"2025-06-21T14:03:27Z","total":2}
+{"active":true,"email":"support@company.com","id":"5ff90a1d-dffd-437d-8639-65c04fb3023c","level":"info","msg":"db user","time":"2025-06-21T14:03:27Z","username":"support"}
+{"active":true,"email":"admin@company.com","id":"1db2e5de-7b78-48d9-a8e4-a501dbc95d7f","level":"info","msg":"db user","time":"2025-06-21T14:03:27Z","username":"admin"}
+{"level":"info","msg":"login attempt","time":"2025-06-21T14:04:19Z","username":"admin"}
+{"level":"debug","msg":"user retrieved","time":"2025-06-21T14:04:19Z","username":"admin"}
+{"error":"pq: value too long for type character varying(255)","level":"error","msg":"create session failed","time":"2025-06-21T14:04:20Z"}
+{"level":"info","msg":"session created","time":"2025-06-21T14:04:20Z","username":"admin"}
+{"level":"info","msg":"user logged in","time":"2025-06-21T14:04:20Z","username":"admin"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"connecting to postgres","port":5432,"sslmode":"disable","time":"2025-06-21T14:07:01Z","user":"portal_user"}
+{"level":"info","msg":"postgres version retrieved","time":"2025-06-21T14:07:01Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:07:01Z"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"checking database connectivity","port":5432,"time":"2025-06-21T14:07:01Z"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:07:01Z"}
+{"level":"info","msg":"postgres version","time":"2025-06-21T14:07:01Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"cwd":"/home/rose/system-portal","level":"info","msg":"working directory","time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":6,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":6,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":7,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":7,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":8,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":8,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":9,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":9,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":10,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":10,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":11,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":11,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":12,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":12,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":13,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":13,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":14,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":14,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":15,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":15,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":16,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":16,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":17,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":17,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":18,"time":"2025-06-21T14:07:01Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":18,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:07:01Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:07:01Z"}
+{"level":"info","msg":"database migrations complete","time":"2025-06-21T14:07:01Z"}
+{"level":"info","msg":"users table loaded","time":"2025-06-21T14:07:01Z","total":2}
+{"active":true,"email":"support@company.com","id":"5ff90a1d-dffd-437d-8639-65c04fb3023c","level":"info","msg":"db user","time":"2025-06-21T14:07:01Z","username":"support"}
+{"active":true,"email":"admin@company.com","id":"1db2e5de-7b78-48d9-a8e4-a501dbc95d7f","level":"info","msg":"db user","time":"2025-06-21T14:07:01Z","username":"admin"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"connecting to postgres","port":5432,"sslmode":"disable","time":"2025-06-21T14:08:02Z","user":"portal_user"}
+{"level":"info","msg":"postgres version retrieved","time":"2025-06-21T14:08:02Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:08:02Z"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"checking database connectivity","port":5432,"time":"2025-06-21T14:08:02Z"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:08:02Z"}
+{"level":"info","msg":"postgres version","time":"2025-06-21T14:08:02Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"cwd":"/home/rose/system-portal","level":"info","msg":"working directory","time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":6,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":6,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":7,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":7,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":8,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":8,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":9,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":9,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":10,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":10,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":11,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":11,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":12,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":12,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":13,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":13,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":14,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":14,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":15,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":15,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":16,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":16,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":17,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":17,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":18,"time":"2025-06-21T14:08:02Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":18,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:08:02Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:08:02Z"}
+{"level":"info","msg":"database migrations complete","time":"2025-06-21T14:08:02Z"}
+{"level":"info","msg":"users table loaded","time":"2025-06-21T14:08:02Z","total":2}
+{"active":true,"email":"support@company.com","id":"5ff90a1d-dffd-437d-8639-65c04fb3023c","level":"info","msg":"db user","time":"2025-06-21T14:08:02Z","username":"support"}
+{"active":true,"email":"admin@company.com","id":"1db2e5de-7b78-48d9-a8e4-a501dbc95d7f","level":"info","msg":"db user","time":"2025-06-21T14:08:02Z","username":"admin"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"connecting to postgres","port":5432,"sslmode":"disable","time":"2025-06-21T14:08:39Z","user":"portal_user"}
+{"level":"info","msg":"postgres version retrieved","time":"2025-06-21T14:08:39Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:08:39Z"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"checking database connectivity","port":5432,"time":"2025-06-21T14:08:39Z"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:08:39Z"}
+{"level":"info","msg":"postgres version","time":"2025-06-21T14:08:39Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"cwd":"/home/rose/system-portal","level":"info","msg":"working directory","time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":6,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":6,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":7,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":7,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":8,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":8,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":9,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":9,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":10,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":10,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":11,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":11,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":12,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":12,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":13,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":13,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":14,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":14,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":15,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":15,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":16,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":16,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":17,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":17,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":18,"time":"2025-06-21T14:08:39Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":18,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:08:39Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:08:39Z"}
+{"level":"info","msg":"database migrations complete","time":"2025-06-21T14:08:39Z"}
+{"level":"info","msg":"users table loaded","time":"2025-06-21T14:08:39Z","total":2}
+{"active":true,"email":"support@company.com","id":"5ff90a1d-dffd-437d-8639-65c04fb3023c","level":"info","msg":"db user","time":"2025-06-21T14:08:39Z","username":"support"}
+{"active":true,"email":"admin@company.com","id":"1db2e5de-7b78-48d9-a8e4-a501dbc95d7f","level":"info","msg":"db user","time":"2025-06-21T14:08:39Z","username":"admin"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"connecting to postgres","port":5432,"sslmode":"disable","time":"2025-06-21T14:10:20Z","user":"portal_user"}
+{"level":"info","msg":"postgres version retrieved","time":"2025-06-21T14:10:20Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:10:20Z"}
+{"db":"system_portal","host":"localhost","level":"info","msg":"checking database connectivity","port":5432,"time":"2025-06-21T14:10:20Z"}
+{"level":"info","msg":"postgres connection established","time":"2025-06-21T14:10:20Z"}
+{"level":"info","msg":"postgres version","time":"2025-06-21T14:10:20Z","version":"PostgreSQL 17.5 (Debian 17.5-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit"}
+{"cwd":"/home/rose/system-portal","level":"info","msg":"working directory","time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":6,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":6,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":7,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":7,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":8,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":8,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":9,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":9,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":10,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":10,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":11,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":11,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":12,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":12,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":13,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":13,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":14,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":14,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":15,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":15,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":16,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":16,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":17,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":17,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"applying SQL statement","statement_index":18,"time":"2025-06-21T14:10:20Z"}
+{"file":"001_create_tables.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":18,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":0,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":0,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":1,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":1,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":2,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":2,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":3,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":3,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":4,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":4,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"applying SQL statement","statement_index":5,"time":"2025-06-21T14:10:20Z"}
+{"file":"002_seed_data.sql","level":"info","msg":"statement executed","rows_affected":0,"statement_index":5,"time":"2025-06-21T14:10:20Z"}
+{"level":"info","msg":"database migrations complete","time":"2025-06-21T14:10:20Z"}
+{"level":"info","msg":"users table loaded","time":"2025-06-21T14:10:20Z","total":2}
+{"active":true,"email":"support@company.com","id":"5ff90a1d-dffd-437d-8639-65c04fb3023c","level":"info","msg":"db user","time":"2025-06-21T14:10:20Z","username":"support"}
+{"active":true,"email":"admin@company.com","id":"1db2e5de-7b78-48d9-a8e4-a501dbc95d7f","level":"info","msg":"db user","time":"2025-06-21T14:10:20Z","username":"admin"}
+{"level":"info","msg":"login attempt","time":"2025-06-21T14:10:37Z","username":"string"}
+{"level":"warning","msg":"user not found","time":"2025-06-21T14:10:37Z","username":"string"}
+{"error":"invalid credentials","level":"error","msg":"login failed","time":"2025-06-21T14:10:37Z","username":"string"}

@@ -16,6 +16,15 @@ ldap:
   bindPassword: "Jisai@11?22"
   baseDN: "ou=Users,dc=hieuny,dc=com"
 
+# PostgreSQL connection
+database:
+  host: "localhost"
+  port: 5432
+  user: "portal_user"
+  password: "portal_pass"
+  name: "system_portal"
+  sslmode: "disable"
+
 logger:
   level: "debug"
   format: "json"

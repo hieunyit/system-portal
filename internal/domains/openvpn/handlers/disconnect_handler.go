@@ -4,11 +4,11 @@ package handlers
 import (
 	nethttp "net/http"
 	"strings"
-	"system-portal/internal/domains/openvpn/dto"
+	dto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/entities"
 	"system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/shared/errors"
-	"system-portal/internal/shared/infrastructure/http"
+	http "system-portal/internal/shared/response"
 	"system-portal/pkg/logger"
 	"system-portal/pkg/validator"
 
@@ -32,14 +32,14 @@ func NewDisconnectHandler(disconnectUsecase usecases.DisconnectUsecase) *Disconn
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.BulkDisconnectUsersRequest true "Bulk disconnect users request"
-// @Success 200 {object} dto.SuccessResponse{data=dto.DisconnectResponse} "Users disconnected successfully"
-// @Failure 400 {object} dto.ErrorResponse "Bad request - validation error or no valid users"
-// @Failure 401 {object} dto.ErrorResponse "Unauthorized - invalid or missing authentication"
-// @Failure 500 {object} dto.ErrorResponse "Internal server error - failed to disconnect users"
+// @Param request body dto.VpnBulkDisconnectUsersRequest true "Bulk disconnect users request"
+// @Success 200 {object} response.SuccessResponse{data=dto.VpnDisconnectResponse} "Users disconnected successfully"
+// @Failure 400 {object} response.ErrorResponse "Bad request - validation error or no valid users"
+// @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
+// @Failure 500 {object} response.ErrorResponse "Internal server error - failed to disconnect users"
 // @Router /api/openvpn/bulk/users/disconnect [post]
 func (h *DisconnectHandler) BulkDisconnectUsers(c *gin.Context) {
-	var req dto.BulkDisconnectUsersRequest
+	var req dto.VpnBulkDisconnectUsersRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk disconnect users request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -100,12 +100,12 @@ func (h *DisconnectHandler) BulkDisconnectUsers(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param username path string true "Username to disconnect"
-// @Param request body dto.DisconnectUserRequest true "Disconnect user request"
-// @Success 200 {object} dto.SuccessResponse{data=dto.DisconnectResponse} "User disconnected successfully"
-// @Failure 400 {object} dto.ErrorResponse "Bad request - user not found or not connected"
-// @Failure 401 {object} dto.ErrorResponse "Unauthorized - invalid or missing authentication"
-// @Failure 404 {object} dto.ErrorResponse "User not found in system"
-// @Failure 500 {object} dto.ErrorResponse "Internal server error - failed to disconnect user"
+// @Param request body dto.VpnDisconnectUserRequest true "Disconnect user request"
+// @Success 200 {object} response.SuccessResponse{data=dto.VpnDisconnectResponse} "User disconnected successfully"
+// @Failure 400 {object} response.ErrorResponse "Bad request - user not found or not connected"
+// @Failure 401 {object} response.ErrorResponse "Unauthorized - invalid or missing authentication"
+// @Failure 404 {object} response.ErrorResponse "User not found in system"
+// @Failure 500 {object} response.ErrorResponse "Internal server error - failed to disconnect user"
 // @Router /api/openvpn/users/{username}/disconnect [post]
 func (h *DisconnectHandler) DisconnectUser(c *gin.Context) {
 	username := c.Param("username")
@@ -114,7 +114,7 @@ func (h *DisconnectHandler) DisconnectUser(c *gin.Context) {
 		return
 	}
 
-	var req dto.DisconnectUserRequest
+	var req dto.VpnDisconnectUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind disconnect user request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -167,8 +167,8 @@ func (h *DisconnectHandler) DisconnectUser(c *gin.Context) {
 }
 
 // convertBulkDisconnectResult - convert usecase result to DTO for bulk operation
-func (h *DisconnectHandler) convertBulkDisconnectResult(result *usecases.BulkDisconnectResult) dto.DisconnectResponse {
-	return dto.DisconnectResponse{
+func (h *DisconnectHandler) convertBulkDisconnectResult(result *usecases.BulkDisconnectResult) dto.VpnDisconnectResponse {
+	return dto.VpnDisconnectResponse{
 		Success:           result.Success,
 		DisconnectedUsers: result.DisconnectedUsers,
 		Message:           result.Message,
@@ -180,8 +180,8 @@ func (h *DisconnectHandler) convertBulkDisconnectResult(result *usecases.BulkDis
 }
 
 // convertSingleDisconnectResult - convert usecase result to DTO for single operation
-func (h *DisconnectHandler) convertSingleDisconnectResult(result *usecases.DisconnectResult) dto.DisconnectResponse {
-	response := dto.DisconnectResponse{
+func (h *DisconnectHandler) convertSingleDisconnectResult(result *usecases.DisconnectResult) dto.VpnDisconnectResponse {
+	response := dto.VpnDisconnectResponse{
 		Success:           result.Success,
 		DisconnectedUsers: []string{result.Username},
 		Message:           result.Message,
@@ -197,14 +197,14 @@ func (h *DisconnectHandler) convertSingleDisconnectResult(result *usecases.Disco
 }
 
 // convertUsecaseValidationErrors - convert usecase validation errors to DTO
-func (h *DisconnectHandler) convertUsecaseValidationErrors(usecaseErrors []usecases.UserValidationError) []dto.UserValidationError {
+func (h *DisconnectHandler) convertUsecaseValidationErrors(usecaseErrors []usecases.UserValidationError) []dto.VpnUserValidationError {
 	if len(usecaseErrors) == 0 {
 		return nil
 	}
 
-	dtoErrors := make([]dto.UserValidationError, len(usecaseErrors))
+	dtoErrors := make([]dto.VpnUserValidationError, len(usecaseErrors))
 	for i, err := range usecaseErrors {
-		dtoErrors[i] = dto.UserValidationError{
+		dtoErrors[i] = dto.VpnUserValidationError{
 			Username: err.Username,
 			Error:    err.Error,
 		}
@@ -213,12 +213,12 @@ func (h *DisconnectHandler) convertUsecaseValidationErrors(usecaseErrors []useca
 }
 
 // convertConnectionInfo - convert entities.ConnectedUser to DTO
-func (h *DisconnectHandler) convertConnectionInfo(connInfo *entities.ConnectedUser) *dto.UserConnectionInfo {
+func (h *DisconnectHandler) convertConnectionInfo(connInfo *entities.ConnectedUser) *dto.VpnUserConnectionInfo {
 	if connInfo == nil {
 		return nil
 	}
 
-	return &dto.UserConnectionInfo{
+	return &dto.VpnUserConnectionInfo{
 		Username:       connInfo.Username,
 		RealAddress:    connInfo.RealAddress,
 		VirtualAddress: connInfo.VirtualAddress,

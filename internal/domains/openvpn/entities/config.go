@@ -2,7 +2,7 @@
 package entities
 
 // ServerInfo - thông tin cơ bản của server
-type ServerInfo struct {
+type VpnServerInfo struct {
 	NodeType        string `json:"node_type"`
 	WebServerName   string `json:"web_server_name"`
 	AdminPort       string `json:"admin_port"`
@@ -15,7 +15,7 @@ type ServerInfo struct {
 }
 
 // NetworkConfig - cấu hình network của VPN
-type NetworkConfig struct {
+type VpnNetworkConfig struct {
 	// Client Network Settings
 	ClientNetwork     string `json:"client_network"`
 	ClientNetmaskBits string `json:"client_netmask_bits"`
@@ -49,3 +49,7 @@ type NetworkConfig struct {
 	AllowPrivateNetsToClients  bool `json:"allow_private_nets_to_clients"`
 	AllowPrivateNets6ToClients bool `json:"allow_private_nets6_to_clients"`
 }
+
+// Backward compatibility aliases
+type ServerInfo = VpnServerInfo
+type NetworkConfig = VpnNetworkConfig
