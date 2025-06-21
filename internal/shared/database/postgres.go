@@ -47,13 +47,16 @@ func (p *Postgres) Migrate() error {
 		if e.IsDir() {
 			continue
 		}
+		logger.Log.WithField("file", e.Name()).Info("applying migration")
 		data, err := os.ReadFile(filepath.Join(dir, e.Name()))
 		if err != nil {
 			return err
 		}
 		if _, err := p.DB.Exec(string(data)); err != nil {
+			logger.Log.WithError(err).WithField("file", e.Name()).Error("migration failed")
 			return err
 		}
 	}
+	logger.Log.Info("database migrations complete")
 	return nil
 }
