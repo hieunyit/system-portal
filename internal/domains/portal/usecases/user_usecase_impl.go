@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/repositories"
 )
@@ -15,6 +16,13 @@ func NewUserUsecase(repo repositories.UserRepository) UserUsecase {
 }
 
 func (u *userUsecaseImpl) Create(ctx context.Context, user *entities.User) error {
+	if user.Password != "" {
+		hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return err
+		}
+		user.Password = string(hash)
+	}
 	return u.repo.Create(ctx, user)
 }
 
@@ -27,6 +35,13 @@ func (u *userUsecaseImpl) Get(ctx context.Context, id uuid.UUID) (*entities.User
 }
 
 func (u *userUsecaseImpl) Update(ctx context.Context, user *entities.User) error {
+	if user.Password != "" {
+		hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return err
+		}
+		user.Password = string(hash)
+	}
 	return u.repo.Update(ctx, user)
 }
 
