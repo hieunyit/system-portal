@@ -8,7 +8,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/google/uuid"
 	authHandlers "system-portal/internal/domains/auth/handlers"
 	sessionRepoimpl "system-portal/internal/domains/auth/repositories/impl"
 	authRoutes "system-portal/internal/domains/auth/routes"
@@ -17,9 +16,7 @@ import (
 	openvpnRepo "system-portal/internal/domains/openvpn/repositories/impl"
 	openvpnRoutes "system-portal/internal/domains/openvpn/routes"
 	openvpnUsecases "system-portal/internal/domains/openvpn/usecases"
-	"system-portal/internal/domains/portal/entities"
 	portalHandlers "system-portal/internal/domains/portal/handlers"
-	portalRepo "system-portal/internal/domains/portal/repositories"
 	portalRepoImpl "system-portal/internal/domains/portal/repositories/impl"
 	portalRoutes "system-portal/internal/domains/portal/routes"
 	portalUsecases "system-portal/internal/domains/portal/usecases"
