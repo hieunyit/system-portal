@@ -20,8 +20,8 @@ ldap:
 database:
   host: "localhost"
   port: 5432
-  user: "user"
-  password: "pass"
+  user: "portal_user"
+  password: "portal_pass"
   name: "system_portal"
   sslmode: "disable"
 

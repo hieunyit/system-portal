@@ -1,6 +1,9 @@
-// cmd/api/main.go
 package main
 
+// @title       System Portal API
+// @version     1.0
+// @description API quản lý OpenVPN, Authentication, Portal...
+// @host      localhost:8080
 import (
 	"context"
 	"database/sql"
@@ -52,7 +55,6 @@ func main() {
 		"host": cfg.Database.Host,
 		"port": cfg.Database.Port,
 		"db":   cfg.Database.Name,
-		"dsn":  db.DSN,
 	}).Info("checking database connectivity")
 	if err := waitForPostgres(db.DB, 5, time.Second); err != nil {
 		log.Fatal("database unreachable:", err)

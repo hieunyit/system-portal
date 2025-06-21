@@ -16,6 +16,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
+	_ "system-portal/docs" // Import generated Swagger docs
 	authRoutes "system-portal/internal/domains/auth/routes"
 	openvpnRoutes "system-portal/internal/domains/openvpn/routes"
 	portalRoutes "system-portal/internal/domains/portal/routes"

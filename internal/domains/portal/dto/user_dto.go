@@ -2,7 +2,7 @@ package dto
 
 import "github.com/google/uuid"
 
-type UserRequest struct {
+type PortalUserRequest struct {
 	Username string    `json:"username" binding:"required"`
 	Email    string    `json:"email" binding:"required"`
 	FullName string    `json:"fullName"`
@@ -10,7 +10,7 @@ type UserRequest struct {
 	GroupID  uuid.UUID `json:"groupId"`
 }
 
-type UserResponse struct {
+type PortalUserResponse struct {
 	ID       uuid.UUID `json:"id"`
 	Username string    `json:"username"`
 	Email    string    `json:"email"`

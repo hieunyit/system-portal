@@ -4,12 +4,13 @@ import (
 	nethttp "net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"system-portal/internal/domains/portal/dto"
 	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/usecases"
 	http "system-portal/internal/shared/response"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type UserHandler struct {
@@ -24,13 +25,13 @@ func NewUserHandler(u usecases.UserUsecase) *UserHandler { return &UserHandler{u
 // @Tags Portal Users
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {array} dto.UserResponse
+// @Success 200 {array} dto.PortalUserResponse
 // @Router /api/portal/users [get]
 func (h *UserHandler) ListUsers(c *gin.Context) {
 	users, _ := h.uc.List(c.Request.Context())
-	resp := make([]dto.UserResponse, 0, len(users))
+	resp := make([]dto.PortalUserResponse, 0, len(users))
 	for _, u := range users {
-		resp = append(resp, dto.UserResponse{
+		resp = append(resp, dto.PortalUserResponse{
 			ID:       u.ID,
 			Username: u.Username,
 			Email:    u.Email,
@@ -49,17 +50,17 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.UserRequest true "User data"
+// @Param request body dto.PortalUserRequest true "User data"
 // @Success 201 {string} string "created"
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/portal/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var req dto.UserRequest
+	var req dto.PortalUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		http.RespondWithBadRequest(c, "invalid request")
 		return
 	}
-	user := &entities.User{
+	user := &entities.PortalUser{
 		ID:        uuid.New(),
 		Username:  req.Username,
 		Email:     req.Email,
@@ -81,7 +82,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {object} dto.UserResponse
+// @Success 200 {object} dto.PortalUserResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/portal/users/{id} [get]
@@ -96,7 +97,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		http.RespondWithNotFound(c, "not found")
 		return
 	}
-	http.RespondWithSuccess(c, nethttp.StatusOK, dto.UserResponse{
+	http.RespondWithSuccess(c, nethttp.StatusOK, dto.PortalUserResponse{
 		ID:       u.ID,
 		Username: u.Username,
 		Email:    u.Email,
@@ -114,7 +115,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "User ID"
-// @Param request body dto.UserRequest true "User data"
+// @Param request body dto.PortalUserRequest true "User data"
 // @Success 200 {string} string "updated"
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/portal/users/{id} [put]
@@ -124,12 +125,12 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		http.RespondWithBadRequest(c, "invalid id")
 		return
 	}
-	var req dto.UserRequest
+	var req dto.PortalUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		http.RespondWithBadRequest(c, "invalid request")
 		return
 	}
-	user := &entities.User{
+	user := &entities.PortalUser{
 		ID:        id,
 		Username:  req.Username,
 		Email:     req.Email,

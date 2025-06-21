@@ -7,7 +7,7 @@ import (
 )
 
 // User represents a portal user entity.
-type User struct {
+type PortalUser struct {
 	ID        uuid.UUID
 	Username  string
 	Email     string

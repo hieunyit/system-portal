@@ -3,15 +3,16 @@ package repositories
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"system-portal/internal/domains/portal/entities"
+
+	"github.com/google/uuid"
 )
 
 type UserRepository interface {
-	Create(ctx context.Context, user *entities.User) error
-	GetByID(ctx context.Context, id uuid.UUID) (*entities.User, error)
-	GetByUsername(ctx context.Context, username string) (*entities.User, error)
-	List(ctx context.Context) ([]*entities.User, error)
-	Update(ctx context.Context, user *entities.User) error
+	Create(ctx context.Context, user *entities.PortalUser) error
+	GetByID(ctx context.Context, id uuid.UUID) (*entities.PortalUser, error)
+	GetByUsername(ctx context.Context, username string) (*entities.PortalUser, error)
+	List(ctx context.Context) ([]*entities.PortalUser, error)
+	Update(ctx context.Context, user *entities.PortalUser) error
 	Delete(ctx context.Context, id uuid.UUID) error
 }

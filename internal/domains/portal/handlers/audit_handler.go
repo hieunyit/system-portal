@@ -2,17 +2,15 @@ package handlers
 
 import (
 	"bytes"
-	"context"
 	"encoding/csv"
 	nethttp "net/http"
 	"strconv"
 	"time"
 
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/usecases"
 	http "system-portal/internal/shared/response"
+
+	"github.com/gin-gonic/gin"
 )
 
 type AuditHandler struct{ uc usecases.AuditUsecase }
