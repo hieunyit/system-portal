@@ -30,7 +30,7 @@ INSERT INTO users (username, email, password_hash, full_name, group_id)
 VALUES (
     'admin',
     'admin@company.com',
-    '$2a$14$8K1p/a0dL2LkzCKXNP7rVufDhZLCYLWJwONWtdVBXvhX7nVHsP.5K',
+    '$2b$14$0a4r3Cs1ed6D3lekeUFrTu8axaBGnuAuIan6Y9gHnNuAVRAaDbrQi',
     'System Administrator',
     (SELECT id FROM groups WHERE name = 'admin')
 )
@@ -41,7 +41,7 @@ INSERT INTO users (username, email, password_hash, full_name, group_id)
 VALUES (
     'support',
     'support@company.com',
-    '$2a$14$8K1p/a0dL2LkzCKXNP7rVufDhZLCYLWJwONWtdVBXvhX7nVHsP.5K',
+    '$2b$14$0a4r3Cs1ed6D3lekeUFrTu8axaBGnuAuIan6Y9gHnNuAVRAaDbrQi',
     'Support Staff',
     (SELECT id FROM groups WHERE name = 'support')
 )

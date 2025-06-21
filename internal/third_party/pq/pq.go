@@ -1,22 +1,22 @@
-package stdlib
+package pq
 
 import (
-	"context"
-	"database/sql"
-	"database/sql/driver"
-	"io"
+    "context"
+    "database/sql"
+    "database/sql/driver"
+    "io"
 )
 
-// This stub registers a minimal PostgreSQL driver named "pgx" to allow
-// building without the real github.com/jackc/pgx/v5/stdlib package.
+// This stub registers a minimal PostgreSQL driver so the application can
+// build and run in environments without the real github.com/lib/pq package.
 func init() {
-	sql.Register("pgx", &stubDriver{})
+    sql.Register("postgres", &stubDriver{})
 }
 
 type stubDriver struct{}
 
 func (d *stubDriver) Open(name string) (driver.Conn, error) {
-	return &stubConn{}, nil
+    return &stubConn{}, nil
 }
 
 type stubConn struct{}
@@ -30,10 +30,10 @@ func (c *stubConn) Ping(ctx context.Context) error { return nil }
 
 // Optional interfaces with no-op implementations.
 func (c *stubConn) ExecContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Result, error) {
-	return stubResult{}, nil
+    return stubResult{}, nil
 }
 func (c *stubConn) QueryContext(ctx context.Context, query string, args []driver.NamedValue) (driver.Rows, error) {
-	return &stubRows{}, nil
+    return &stubRows{}, nil
 }
 
 // Statement implementation.
