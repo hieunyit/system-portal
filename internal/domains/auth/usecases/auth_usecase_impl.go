@@ -12,6 +12,7 @@ import (
 	portalrepos "system-portal/internal/domains/portal/repositories"
 	"system-portal/pkg/jwt"
 	"system-portal/pkg/logger"
+	"system-portal/pkg/utils"
 )
 
 type authUsecaseImpl struct {
@@ -50,11 +51,13 @@ func (u *authUsecaseImpl) Login(ctx context.Context, username, password string) 
 	}
 	access, _ := u.jwt.GenerateAccessToken(username, role)
 	refresh, _ := u.jwt.GenerateRefreshToken(username, role)
+	accessHash := utils.HashString(access)
+	refreshHash := utils.HashString(refresh)
 	s := &entities.Session{
 		ID:               uuid.New(),
 		UserID:           usr.ID,
-		TokenHash:        access,
-		RefreshTokenHash: refresh,
+		TokenHash:        accessHash,
+		RefreshTokenHash: refreshHash,
 		ExpiresAt:        time.Now().Add(time.Hour),
 		RefreshExpiresAt: time.Now().Add(24 * time.Hour),
 		IsActive:         true,
@@ -89,11 +92,13 @@ func (u *authUsecaseImpl) Refresh(ctx context.Context, refreshToken string) (str
 	}
 	access, _ := u.jwt.GenerateAccessToken(claims.Username, role)
 	refreshNew, _ := u.jwt.GenerateRefreshToken(claims.Username, role)
+	accessHash := utils.HashString(access)
+	refreshHash := utils.HashString(refreshNew)
 	s := &entities.Session{
 		ID:               uuid.New(),
 		UserID:           usr.ID,
-		TokenHash:        access,
-		RefreshTokenHash: refreshNew,
+		TokenHash:        accessHash,
+		RefreshTokenHash: refreshHash,
 		ExpiresAt:        time.Now().Add(time.Hour),
 		RefreshExpiresAt: time.Now().Add(24 * time.Hour),
 		IsActive:         true,
@@ -120,7 +125,7 @@ func (u *authUsecaseImpl) Logout(ctx context.Context, token string) error {
 		logger.Log.WithError(err).Warn("logout token validation failed")
 		return err
 	}
-	sess, err := u.sessions.GetByTokenHash(ctx, token)
+	sess, err := u.sessions.GetByTokenHash(ctx, utils.HashString(token))
 	if err != nil {
 		logger.Log.WithError(err).Error("failed to get session by token")
 		return err

@@ -89,7 +89,9 @@ func main() {
 	validationMiddleware := middleware.NewValidationMiddleware()
 
 	// Initialize domain handlers and routes
-	initializeDomainRoutes(cfg, db, jwtService, xmlrpcClient, ldapClient)
+	auditUC := initializeDomainRoutes(cfg, db, jwtService, xmlrpcClient, ldapClient)
+
+	auditMiddleware := middleware.NewAuditMiddleware(auditUC)
 
 	// Create router configuration
 	routerConfig := &serverHttp.RouterConfig{
@@ -106,6 +108,7 @@ func main() {
 		authMiddleware,
 		corsMiddleware,
 		validationMiddleware,
+		auditMiddleware,
 	)
 
 	// Start server with graceful shutdown
@@ -115,7 +118,7 @@ func main() {
 	}
 }
 
-func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) {
+func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) portalUsecases.AuditUsecase {
 	// Portal domain using PostgreSQL repositories
 	userRepo := portalRepoImpl.NewUserRepositoryPG(db.DB)
 	groupRepo := portalRepoImpl.NewGroupRepositoryPG(db.DB)
@@ -168,6 +171,8 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 		vpnStatusHandlerOV,
 		disconnectHandlerOV,
 	)
+
+	return auditUC
 }
 
 // waitForPostgres pings the database until it responds or retries are exhausted.

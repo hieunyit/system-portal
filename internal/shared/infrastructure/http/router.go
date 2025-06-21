@@ -37,6 +37,7 @@ type Router struct {
 	authMiddleware       *middleware.AuthMiddleware
 	corsMiddleware       *middleware.CorsMiddleware
 	validationMiddleware *middleware.ValidationMiddleware
+	auditMiddleware      *middleware.AuditMiddleware
 }
 
 func NewRouter(
@@ -44,12 +45,14 @@ func NewRouter(
 	authMiddleware *middleware.AuthMiddleware,
 	corsMiddleware *middleware.CorsMiddleware,
 	validationMiddleware *middleware.ValidationMiddleware,
+	auditMiddleware *middleware.AuditMiddleware,
 ) *Router {
 	return &Router{
 		config:               config,
 		authMiddleware:       authMiddleware,
 		corsMiddleware:       corsMiddleware,
 		validationMiddleware: validationMiddleware,
+		auditMiddleware:      auditMiddleware,
 	}
 }
 
@@ -70,6 +73,9 @@ func (r *Router) SetupRoutes() *gin.Engine {
 	router.Use(r.corsMiddleware.Handler())
 	router.Use(r.corsMiddleware.SecurityHeaders())
 	router.Use(r.validationMiddleware.StrictJSONBinding())
+	if r.auditMiddleware != nil {
+		router.Use(r.auditMiddleware.Handler())
+	}
 
 	// Timeout middleware
 	router.Use(timeout.New(
