@@ -1,4 +1,4 @@
-package pq
+package stdlib
 
 import (
 	"context"
@@ -7,10 +7,10 @@ import (
 	"io"
 )
 
-// This stub registers a minimal PostgreSQL driver so the application can
-// build and run in environments without the real github.com/lib/pq package.
+// This stub registers a minimal PostgreSQL driver named "pgx" to allow
+// building without the real github.com/jackc/pgx/v5/stdlib package.
 func init() {
-	sql.Register("postgres", &stubDriver{})
+	sql.Register("pgx", &stubDriver{})
 }
 
 type stubDriver struct{}

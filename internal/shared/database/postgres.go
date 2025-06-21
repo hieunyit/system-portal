@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	_ "github.com/lib/pq"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"system-portal/internal/shared/config"
 	"system-portal/pkg/logger"
 )
@@ -28,7 +28,7 @@ func New(cfg config.DatabaseConfig) (*Postgres, error) {
 		"sslmode": cfg.SSLMode,
 	}).Info("connecting to postgres")
 
-	db, err := sql.Open("postgres", dsn)
+	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err
 	}

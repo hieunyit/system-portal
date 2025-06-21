@@ -16,7 +16,7 @@ require (
         github.com/swaggo/files v1.0.1
         github.com/swaggo/gin-swagger v1.6.0
         github.com/tealeg/xlsx/v3 v3.3.13
-       github.com/lib/pq v1.10.9
+        github.com/jackc/pgx/v5 v5.5.4
 )
 
 require (
@@ -80,5 +80,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/lib/pq => ./internal/third_party/pq
+replace github.com/jackc/pgx/v5 => ./internal/third_party/pgx
 
