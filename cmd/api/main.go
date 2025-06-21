@@ -3,6 +3,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"time"
@@ -49,6 +50,12 @@ func main() {
 		log.Fatal("failed to connect database:", err)
 	}
 	defer db.Close()
+
+	logger.Log.Info("checking database connectivity")
+	if err := waitForPostgres(db.DB, 5, time.Second); err != nil {
+		log.Fatal("database unreachable:", err)
+	}
+
 	if err := db.Migrate(); err != nil {
 		log.Fatal("failed to migrate database:", err)
 	}
@@ -153,6 +160,20 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 		vpnStatusHandlerOV,
 		disconnectHandlerOV,
 	)
+}
+
+// waitForPostgres pings the database until it responds or retries are exhausted.
+func waitForPostgres(db *sql.DB, retries int, delay time.Duration) error {
+	for i := 0; i < retries; i++ {
+		if err := db.Ping(); err == nil {
+			logger.Log.Info("postgres connection established")
+			return nil
+		} else {
+			logger.Log.WithError(err).Warnf("postgres ping failed, retry %d/%d", i+1, retries)
+			time.Sleep(delay)
+		}
+	}
+	return fmt.Errorf("unable to reach postgres after %d attempts", retries)
 }
 
 // checkConnections verifies connectivity to PostgreSQL, LDAP and OpenVPN XML-RPC services.
