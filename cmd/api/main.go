@@ -2,10 +2,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
 
+	"github.com/google/uuid"
 	authHandlers "system-portal/internal/domains/auth/handlers"
 	sessionRepoimpl "system-portal/internal/domains/auth/repositories/impl"
 	authRoutes "system-portal/internal/domains/auth/routes"
@@ -14,6 +16,7 @@ import (
 	openvpnRepo "system-portal/internal/domains/openvpn/repositories/impl"
 	openvpnRoutes "system-portal/internal/domains/openvpn/routes"
 	openvpnUsecases "system-portal/internal/domains/openvpn/usecases"
+	"system-portal/internal/domains/portal/entities"
 	portalHandlers "system-portal/internal/domains/portal/handlers"
 	portalRepo "system-portal/internal/domains/portal/repositories/impl"
 	portalRoutes "system-portal/internal/domains/portal/routes"
@@ -98,9 +101,12 @@ func main() {
 
 func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) {
 	// Portal domain using PostgreSQL repositories
-	userRepo := portalRepo.NewUserRepositoryPG(db.DB)
-	groupRepo := portalRepo.NewGroupRepositoryPG(db.DB)
-	auditRepo := portalRepo.NewAuditRepositoryPG(db.DB)
+	// Use in-memory repositories so the demo works without a real database
+	userRepo := portalRepo.NewUserRepository()
+	groupRepo := portalRepo.NewGroupRepository()
+	auditRepo := portalRepo.NewAuditRepository()
+
+	seedDemoData(userRepo, groupRepo)
 
 	// Auth domain
 	sessionRepo := sessionRepoimpl.NewSessionRepository()
@@ -171,4 +177,51 @@ func checkConnections(db *database.Postgres, ldapClient *ldap.Client, xmlClient 
 	}
 
 	return nil
+}
+
+// seedDemoData populates in-memory repositories with a default admin and support user.
+func seedDemoData(userRepo portalRepo.UserRepository, groupRepo portalRepo.GroupRepository) {
+	adminGroup := &entities.PortalGroup{
+		ID:          uuid.New(),
+		Name:        "admin",
+		DisplayName: "Administrator",
+		IsActive:    true,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+	supportGroup := &entities.PortalGroup{
+		ID:          uuid.New(),
+		Name:        "support",
+		DisplayName: "Support Staff",
+		IsActive:    true,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+	groupRepo.Create(context.Background(), adminGroup)
+	groupRepo.Create(context.Background(), supportGroup)
+
+	adminUser := &entities.User{
+		ID:        uuid.New(),
+		Username:  "admin",
+		Email:     "admin@company.com",
+		Password:  "$2a$14$8K1p/a0dL2LkzCKXNP7rVufDhZLCYLWJwONWtdVBXvhX7nVHsP.5K",
+		FullName:  "System Administrator",
+		GroupID:   adminGroup.ID,
+		IsActive:  true,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+	supportUser := &entities.User{
+		ID:        uuid.New(),
+		Username:  "support",
+		Email:     "support@company.com",
+		Password:  "$2a$14$8K1p/a0dL2LkzCKXNP7rVufDhZLCYLWJwONWtdVBXvhX7nVHsP.5K",
+		FullName:  "Support Staff",
+		GroupID:   supportGroup.ID,
+		IsActive:  true,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+	userRepo.Create(context.Background(), adminUser)
+	userRepo.Create(context.Background(), supportUser)
 }

@@ -32,8 +32,12 @@ func (u *authUsecaseImpl) Login(ctx context.Context, username, password string) 
 		return "", "", errors.New("invalid credentials")
 	}
 
-	access, _ := u.jwt.GenerateAccessToken(username, "portal")
-	refresh, _ := u.jwt.GenerateRefreshToken(username, "portal")
+	role := "support"
+	if username == "admin" {
+		role = "admin"
+	}
+	access, _ := u.jwt.GenerateAccessToken(username, role)
+	refresh, _ := u.jwt.GenerateRefreshToken(username, role)
 	s := &entities.Session{
 		ID:               uuid.New(),
 		UserID:           usr.ID,
