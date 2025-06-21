@@ -25,13 +25,18 @@ func NewAuthUsecase(sessionRepo repositories.SessionRepository, userRepo portalr
 }
 
 func (u *authUsecaseImpl) Login(ctx context.Context, username, password string) (string, string, error) {
+	logger.Log.WithField("username", username).Info("login attempt")
 	usr, err := u.users.GetByUsername(ctx, username)
 	if err != nil {
 		logger.Log.WithError(err).Error("failed to fetch user")
 		return "", "", errors.New("invalid credentials")
 	}
-	if usr == nil || !usr.IsActive {
-		logger.Log.WithField("username", username).Warn("user not found or inactive")
+	if usr == nil {
+		logger.Log.WithField("username", username).Warn("user not found")
+		return "", "", errors.New("invalid credentials")
+	}
+	if !usr.IsActive {
+		logger.Log.WithField("username", username).Warn("user inactive")
 		return "", "", errors.New("invalid credentials")
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(password)); err != nil {
