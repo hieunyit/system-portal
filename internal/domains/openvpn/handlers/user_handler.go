@@ -39,13 +39,13 @@ func NewUserHandler(userUsecase usecases.UserUsecase, xmlrpcClient *xmlrpc.Clien
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.CreateUserRequest true "User creation data"
+// @Param request body dto.VpnCreateUserRequest true "User creation data"
 // @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 409 {object} response.ErrorResponse
 // @Router /api/openvpn/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var req dto.CreateUserRequest
+	var req dto.VpnCreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind create user request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -117,7 +117,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param username path string true "Username"
-// @Success 200 {object} dto.UserResponse
+// @Success 200 {object} dto.VpnUserResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username} [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
@@ -151,7 +151,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param username path string true "Username"
-// @Param request body dto.UpdateUserRequest true "User update data"
+// @Param request body dto.VpnUpdateUserRequest true "User update data"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
@@ -174,7 +174,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	var req dto.UpdateUserRequest
+	var req dto.VpnUpdateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind update user request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -267,7 +267,7 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 // @Produce json
 // @Param username path string true "Username"
 // @Param action path string true "Action" Enums(enable, disable, reset-otp, change-password)
-// @Param request body dto.ChangePasswordRequest false "Required only for change-password action"
+// @Param request body dto.VpnChangePasswordRequest false "Required only for change-password action"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/users/{username}/{action} [put]
@@ -340,7 +340,7 @@ func (h *UserHandler) UserAction(c *gin.Context) {
 			return
 		}
 
-		var req dto.ChangePasswordRequest
+		var req dto.VpnChangePasswordRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
 			logger.Log.WithError(err).Error("Failed to bind change password request")
 			http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -410,11 +410,11 @@ func (h *UserHandler) UserAction(c *gin.Context) {
 // @Param limit query int false "Items per page (max 100)" default(20)
 // @Param exactMatch query boolean false "Use exact matching instead of partial" default(false)
 // @Param caseSensitive query boolean false "Case sensitive search" default(false)
-// @Success 200 {object} dto.UserListResponse
+// @Success 200 {object} dto.VpnUserListResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/users [get]
 func (h *UserHandler) ListUsers(c *gin.Context) {
-	var filter dto.UserFilter
+	var filter dto.VpnUserFilter
 	if err := c.ShouldBindQuery(&filter); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind user filter")
 		http.RespondWithError(c, errors.BadRequest("Invalid filter parameters", err))
@@ -452,7 +452,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 	}
 
 	// Convert to response DTOs
-	userResponses := make([]dto.UserResponse, len(users))
+	userResponses := make([]dto.VpnUserResponse, len(users))
 	for i, user := range users {
 		userResponses[i] = h.convertUserToResponse(user)
 	}
@@ -461,7 +461,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 	totalPages := int(math.Ceil(float64(totalCount) / float64(filter.Limit)))
 
 	// Build enhanced response with metadata
-	response := dto.UserListResponse{
+	response := dto.VpnUserListResponse{
 		Users:      userResponses,
 		Total:      totalCount,
 		Page:       filter.Page,
@@ -482,7 +482,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 // @Produce json
 // @Param days query int false "Number of days to check for expiration" default(7)
 // @Param includeExpired query bool false "Include already expired users" default(false)
-// @Success 200 {object} dto.UserExpirationsResponse
+// @Success 200 {object} dto.VpnUserExpirationsResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/users/expirations [get]
 func (h *UserHandler) GetUserExpirations(c *gin.Context) {
@@ -514,7 +514,7 @@ func (h *UserHandler) GetUserExpirations(c *gin.Context) {
 
 	// ✅ NEW: Filter expired users based on includeExpired parameter
 	if !includeExpired {
-		filteredUsers := make([]dto.UserExpirationInfo, 0)
+		filteredUsers := make([]dto.VpnUserExpirationInfo, 0)
 		for _, user := range response.Users {
 			if user.ExpirationStatus != "expired" {
 				filteredUsers = append(filteredUsers, user)
@@ -528,7 +528,7 @@ func (h *UserHandler) GetUserExpirations(c *gin.Context) {
 }
 
 // NEW: Helper method to validate enhanced user filters
-func (h *UserHandler) validateUserFilter(filter *dto.UserFilter) error {
+func (h *UserHandler) validateUserFilter(filter *dto.VpnUserFilter) error {
 	// Date validation
 	if filter.UserExpirationAfter != nil && filter.UserExpirationBefore != nil {
 		if filter.UserExpirationAfter.After(*filter.UserExpirationBefore) {
@@ -564,7 +564,7 @@ func (h *UserHandler) validateUserFilter(filter *dto.UserFilter) error {
 }
 
 // NEW: Helper method to convert DTO filter to entity filter
-func (h *UserHandler) convertToEntityFilter(dtoFilter *dto.UserFilter) *entities.UserFilter {
+func (h *UserHandler) convertToEntityFilter(dtoFilter *dto.VpnUserFilter) *entities.UserFilter {
 	return &entities.UserFilter{
 		// Basic filters
 		Username:   dtoFilter.Username,
@@ -604,8 +604,8 @@ func (h *UserHandler) convertToEntityFilter(dtoFilter *dto.UserFilter) *entities
 }
 
 // NEW: Helper method to convert User entity to UserResponse DTO
-func (h *UserHandler) convertUserToResponse(user *entities.User) dto.UserResponse {
-	response := dto.UserResponse{
+func (h *UserHandler) convertUserToResponse(user *entities.User) dto.VpnUserResponse {
+	response := dto.VpnUserResponse{
 		Username:       user.Username,
 		Email:          user.Email,
 		AuthMethod:     user.AuthMethod,
@@ -637,7 +637,7 @@ func (h *UserHandler) convertUserToResponse(user *entities.User) dto.UserRespons
 }
 
 // NEW: Helper method to build filter metadata
-func (h *UserHandler) buildFilterMetadata(filter *dto.UserFilter) dto.FilterMetadata {
+func (h *UserHandler) buildFilterMetadata(filter *dto.VpnUserFilter) dto.VpnFilterMetadata {
 	appliedFilters := []string{}
 
 	if filter.Username != "" {
@@ -686,7 +686,7 @@ func (h *UserHandler) buildFilterMetadata(filter *dto.UserFilter) dto.FilterMeta
 		appliedFilters = append(appliedFilters, "searchText")
 	}
 
-	return dto.FilterMetadata{
+	return dto.VpnFilterMetadata{
 		AppliedFilters: appliedFilters,
 		SortedBy:       filter.SortBy,
 		SortOrder:      filter.SortOrder,
@@ -695,7 +695,7 @@ func (h *UserHandler) buildFilterMetadata(filter *dto.UserFilter) dto.FilterMeta
 }
 
 // CRITICAL FIX: Validate auth method specific requirements
-func (h *UserHandler) validateAuthSpecificRequirements(req *dto.CreateUserRequest) error {
+func (h *UserHandler) validateAuthSpecificRequirements(req *dto.VpnCreateUserRequest) error {
 	authMethod := strings.ToLower(strings.TrimSpace(req.AuthMethod))
 
 	switch authMethod {

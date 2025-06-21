@@ -35,13 +35,13 @@ func NewBulkHandler(bulkUsecase usecases.BulkUsecase, xmlrpcClient *xmlrpc.Clien
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.BulkCreateUsersRequest true "Bulk user creation data"
-// @Success 201 {object} dto.BulkCreateUsersResponse
+// @Param request body dto.VpnBulkCreateUsersRequest true "Bulk user creation data"
+// @Success 201 {object} dto.VpnBulkCreateUsersResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 413 {object} response.ErrorResponse "Request too large"
 // @Router /api/openvpn/bulk/users/create [post]
 func (h *BulkHandler) BulkCreateUsers(c *gin.Context) {
-	var req dto.BulkCreateUsersRequest
+	var req dto.VpnBulkCreateUsersRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk create users request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -89,12 +89,12 @@ func (h *BulkHandler) BulkCreateUsers(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.BulkUserActionsRequest true "Bulk user actions data"
-// @Success 200 {object} dto.BulkActionResponse
+// @Param request body dto.VpnBulkUserActionsRequest true "Bulk user actions data"
+// @Success 200 {object} dto.VpnBulkActionResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/users/actions [post]
 func (h *BulkHandler) BulkUserActions(c *gin.Context) {
-	var req dto.BulkUserActionsRequest
+	var req dto.VpnBulkUserActionsRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk user actions request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -145,12 +145,12 @@ func (h *BulkHandler) BulkUserActions(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.BulkUserExtendRequest true "Bulk user extension data"
-// @Success 200 {object} dto.BulkActionResponse
+// @Param request body dto.VpnBulkUserExtendRequest true "Bulk user extension data"
+// @Success 200 {object} dto.VpnBulkActionResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/users/extend [post]
 func (h *BulkHandler) BulkExtendUsers(c *gin.Context) {
-	var req dto.BulkUserExtendRequest
+	var req dto.VpnBulkUserExtendRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk extend users request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -204,7 +204,7 @@ func (h *BulkHandler) BulkExtendUsers(c *gin.Context) {
 // @Param format formData string false "File format" Enums(csv, json, xlsx)
 // @Param dryRun formData boolean false "Dry run mode (validate only)"
 // @Param override formData boolean false "Override existing users"
-// @Success 200 {object} dto.ImportResponse
+// @Success 200 {object} dto.VpnImportResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 413 {object} response.ErrorResponse "File too large"
 // @Router /api/openvpn/bulk/users/import [post]
@@ -216,7 +216,7 @@ func (h *BulkHandler) ImportUsers(c *gin.Context) {
 		return
 	}
 
-	var req dto.ImportUsersRequest
+	var req dto.VpnImportUsersRequest
 	if err := c.ShouldBind(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind import users request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -283,12 +283,12 @@ func (h *BulkHandler) ImportUsers(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.BulkCreateGroupsRequest true "Bulk group creation data"
-// @Success 201 {object} dto.BulkCreateGroupsResponse
+// @Param request body dto.VpnBulkCreateGroupsRequest true "Bulk group creation data"
+// @Success 201 {object} dto.VpnBulkCreateGroupsResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/create [post]
 func (h *BulkHandler) BulkCreateGroups(c *gin.Context) {
-	var req dto.BulkCreateGroupsRequest
+	var req dto.VpnBulkCreateGroupsRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk create groups request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -336,12 +336,12 @@ func (h *BulkHandler) BulkCreateGroups(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.BulkGroupActionsRequest true "Bulk group actions data"
-// @Success 200 {object} dto.BulkGroupActionResponse
+// @Param request body dto.VpnBulkGroupActionsRequest true "Bulk group actions data"
+// @Success 200 {object} dto.VpnBulkGroupActionResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/actions [post]
 func (h *BulkHandler) BulkGroupActions(c *gin.Context) {
-	var req dto.BulkGroupActionsRequest
+	var req dto.VpnBulkGroupActionsRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind bulk group actions request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
@@ -396,7 +396,7 @@ func (h *BulkHandler) BulkGroupActions(c *gin.Context) {
 // @Param format formData string false "File format" Enums(csv, json, xlsx)
 // @Param dryRun formData boolean false "Dry run mode (validate only)"
 // @Param override formData boolean false "Override existing groups"
-// @Success 200 {object} dto.ImportResponse
+// @Success 200 {object} dto.VpnImportResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/openvpn/bulk/groups/import [post]
 func (h *BulkHandler) ImportGroups(c *gin.Context) {
@@ -407,7 +407,7 @@ func (h *BulkHandler) ImportGroups(c *gin.Context) {
 		return
 	}
 
-	var req dto.ImportGroupsRequest
+	var req dto.VpnImportGroupsRequest
 	if err := c.ShouldBind(&req); err != nil {
 		logger.Log.WithError(err).Error("Failed to bind import groups request")
 		http.RespondWithError(c, errors.BadRequest("Invalid request format", err))
