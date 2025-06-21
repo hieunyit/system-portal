@@ -8,13 +8,13 @@ import (
 
 // BulkCreateUsersRequest for creating multiple users at once
 // swagger:model
-type BulkCreateUsersRequest struct {
+type VpnBulkCreateUsersRequest struct {
 	Users []CreateUserRequest `json:"users" validate:"required,min=1,max=100,dive"`
 }
 
 // BulkCreateUsersResponse with detailed results for each user
 // swagger:model
-type BulkCreateUsersResponse struct {
+type VpnBulkCreateUsersResponse struct {
 	Total   int                       `json:"total" example:"10"`
 	Success int                       `json:"success" example:"8"`
 	Failed  int                       `json:"failed" example:"2"`
@@ -23,21 +23,21 @@ type BulkCreateUsersResponse struct {
 
 // BulkUserActionsRequest for bulk enable/disable operations
 // swagger:model
-type BulkUserActionsRequest struct {
+type VpnBulkUserActionsRequest struct {
 	Usernames []string `json:"usernames" validate:"required,min=1,max=100,dive,min=3,max=30"`
 	Action    string   `json:"action" validate:"required,oneof=enable disable reset-otp"`
 }
 
 // BulkUserExtendRequest for bulk expiration extension
 // swagger:model
-type BulkUserExtendRequest struct {
+type VpnBulkUserExtendRequest struct {
 	Usernames     []string `json:"usernames" validate:"required,min=1,max=100,dive,min=3,max=30"`
 	NewExpiration string   `json:"newExpiration" validate:"required,date"`
 }
 
 // BulkUserOperationResult represents result for individual user operation
 // swagger:model
-type BulkUserOperationResult struct {
+type VpnBulkUserOperationResult struct {
 	Username string `json:"username" example:"testuser"`
 	Success  bool   `json:"success" example:"true"`
 	Message  string `json:"message" example:"User created successfully"`
@@ -46,7 +46,7 @@ type BulkUserOperationResult struct {
 
 // BulkActionResponse for bulk operations response
 // swagger:model
-type BulkActionResponse struct {
+type VpnBulkActionResponse struct {
 	Total   int                       `json:"total" example:"10"`
 	Success int                       `json:"success" example:"8"`
 	Failed  int                       `json:"failed" example:"2"`
@@ -57,13 +57,13 @@ type BulkActionResponse struct {
 
 // BulkCreateGroupsRequest for creating multiple groups at once
 // swagger:model
-type BulkCreateGroupsRequest struct {
+type VpnBulkCreateGroupsRequest struct {
 	Groups []CreateGroupRequest `json:"groups" validate:"required,min=1,max=50,dive"`
 }
 
 // BulkCreateGroupsResponse with detailed results for each group
 // swagger:model
-type BulkCreateGroupsResponse struct {
+type VpnBulkCreateGroupsResponse struct {
 	Total   int                        `json:"total" example:"5"`
 	Success int                        `json:"success" example:"4"`
 	Failed  int                        `json:"failed" example:"1"`
@@ -72,14 +72,14 @@ type BulkCreateGroupsResponse struct {
 
 // BulkGroupActionsRequest for bulk group enable/disable operations
 // swagger:model
-type BulkGroupActionsRequest struct {
+type VpnBulkGroupActionsRequest struct {
 	GroupNames []string `json:"groupNames" validate:"required,min=1,max=50,dive,min=3,max=50"`
 	Action     string   `json:"action" validate:"required,oneof=enable disable"`
 }
 
 // BulkGroupOperationResult represents result for individual group operation
 // swagger:model
-type BulkGroupOperationResult struct {
+type VpnBulkGroupOperationResult struct {
 	GroupName string `json:"groupName" example:"TEST_GROUP"`
 	Success   bool   `json:"success" example:"true"`
 	Message   string `json:"message" example:"Group created successfully"`
@@ -88,7 +88,7 @@ type BulkGroupOperationResult struct {
 
 // BulkGroupActionResponse for bulk group operations response
 // swagger:model
-type BulkGroupActionResponse struct {
+type VpnBulkGroupActionResponse struct {
 	Total   int                        `json:"total" example:"5"`
 	Success int                        `json:"success" example:"4"`
 	Failed  int                        `json:"failed" example:"1"`
@@ -99,7 +99,7 @@ type BulkGroupActionResponse struct {
 
 // ImportUsersRequest for importing users from file
 // swagger:model
-type ImportUsersRequest struct {
+type VpnImportUsersRequest struct {
 	File     *multipart.FileHeader `form:"file" binding:"required"`
 	DryRun   bool                  `form:"dryRun" example:"false"`
 	Format   string                `form:"format" validate:"oneof=csv json xlsx" example:"csv"`
@@ -108,7 +108,7 @@ type ImportUsersRequest struct {
 
 // ImportGroupsRequest for importing groups from file
 // swagger:model
-type ImportGroupsRequest struct {
+type VpnImportGroupsRequest struct {
 	File     *multipart.FileHeader `form:"file" binding:"required"`
 	DryRun   bool                  `form:"dryRun" example:"false"`
 	Format   string                `form:"format" validate:"oneof=csv json xlsx" example:"csv"`
@@ -117,7 +117,7 @@ type ImportGroupsRequest struct {
 
 // ImportValidationError represents validation error during import
 // swagger:model
-type ImportValidationError struct {
+type VpnImportValidationError struct {
 	Row     int    `json:"row" example:"3"`
 	Field   string `json:"field" example:"email"`
 	Value   string `json:"value" example:"invalid-email"`
@@ -126,7 +126,7 @@ type ImportValidationError struct {
 
 // ImportResponse for file import operations
 // swagger:model
-type ImportResponse struct {
+type VpnImportResponse struct {
 	Total            int                     `json:"total" example:"100"`
 	ValidRecords     int                     `json:"validRecords" example:"95"`
 	InvalidRecords   int                     `json:"invalidRecords" example:"5"`
@@ -142,7 +142,7 @@ type ImportResponse struct {
 
 // UserCSVRecord represents a user record in CSV format
 // swagger:model
-type UserCSVRecord struct {
+type VpnUserCSVRecord struct {
 	Username       string `csv:"username" example:"testuser"`
 	Email          string `csv:"email" example:"test@example.com"`
 	Password       string `csv:"password,omitempty" example:"SecurePass123!"`
@@ -157,7 +157,7 @@ type UserCSVRecord struct {
 
 // GroupCSVRecord represents a group record in CSV format - UPDATED with new fields
 // swagger:model
-type GroupCSVRecord struct {
+type VpnGroupCSVRecord struct {
 	GroupName     string `csv:"group_name" example:"TEST_GROUP"`
 	AuthMethod    string `csv:"auth_method" example:"local"`
 	MFA           string `csv:"mfa" example:"true"`
@@ -228,3 +228,22 @@ func (r ImportGroupsRequest) GetValidationErrors() map[string]string {
 		"Format.oneof":  "Format must be one of: csv, json, xlsx",
 	}
 }
+
+// Backward compatibility aliases
+type BulkCreateUsersRequest = VpnBulkCreateUsersRequest
+type BulkCreateUsersResponse = VpnBulkCreateUsersResponse
+type BulkUserActionsRequest = VpnBulkUserActionsRequest
+type BulkUserExtendRequest = VpnBulkUserExtendRequest
+type BulkUserOperationResult = VpnBulkUserOperationResult
+type BulkActionResponse = VpnBulkActionResponse
+type BulkCreateGroupsRequest = VpnBulkCreateGroupsRequest
+type BulkCreateGroupsResponse = VpnBulkCreateGroupsResponse
+type BulkGroupActionsRequest = VpnBulkGroupActionsRequest
+type BulkGroupOperationResult = VpnBulkGroupOperationResult
+type BulkGroupActionResponse = VpnBulkGroupActionResponse
+type ImportUsersRequest = VpnImportUsersRequest
+type ImportGroupsRequest = VpnImportGroupsRequest
+type ImportValidationError = VpnImportValidationError
+type ImportResponse = VpnImportResponse
+type UserCSVRecord = VpnUserCSVRecord
+type GroupCSVRecord = VpnGroupCSVRecord

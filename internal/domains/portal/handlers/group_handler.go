@@ -20,7 +20,7 @@ func NewGroupHandler(u usecases.GroupUsecase) *GroupHandler { return &GroupHandl
 // @Tags Portal Groups
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {array} entities.Group
+// @Success 200 {array} entities.PortalGroup
 // @Router /api/portal/groups [get]
 func (h *GroupHandler) ListGroups(c *gin.Context) {
 	groups, _ := h.uc.List(c.Request.Context())
@@ -33,7 +33,7 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "Group ID"
-// @Success 200 {object} entities.Group
+// @Success 200 {object} entities.PortalGroup
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/portal/groups/{id} [get]
@@ -57,12 +57,12 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body entities.Group true "Group data"
+// @Param request body entities.PortalGroup true "Group data"
 // @Success 201 {string} string "created"
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/portal/groups [post]
 func (h *GroupHandler) CreateGroup(c *gin.Context) {
-	var g entities.Group
+	var g entities.PortalGroup
 	if err := c.ShouldBindJSON(&g); err != nil {
 		http.RespondWithBadRequest(c, "invalid request")
 		return

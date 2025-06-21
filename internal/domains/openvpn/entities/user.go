@@ -2,7 +2,7 @@ package entities
 
 import "time"
 
-type User struct {
+type VpnUser struct {
 	Username       string   `json:"username"`
 	Email          string   `json:"email"`
 	AuthMethod     string   `json:"authMethod"`
@@ -18,7 +18,7 @@ type User struct {
 	IPAssignMode   string   `json:"ipAssignMode"`
 }
 
-type UserFilter struct {
+type VpnUserFilter struct {
 	// Basic filters (existing)
 	Username   string `json:"username" form:"username"`
 	Email      string `json:"email" form:"email"`
@@ -56,7 +56,7 @@ type UserFilter struct {
 }
 
 // SetDefaults sets default values for UserFilter
-func (f *UserFilter) SetDefaults() {
+func (f *VpnUserFilter) SetDefaults() {
 	if f.Page == 0 {
 		f.Page = 1
 	}
@@ -93,35 +93,35 @@ const (
 )
 
 // Methods
-func (u *User) IsAdmin() bool {
+func (u *VpnUser) IsAdmin() bool {
 	return u.Role == UserRoleAdmin
 }
 
-func (u *User) IsLocalAuth() bool {
+func (u *VpnUser) IsLocalAuth() bool {
 	return u.AuthMethod == AuthMethodLocal
 }
 
-func (u *User) IsLDAPAuth() bool {
+func (u *VpnUser) IsLDAPAuth() bool {
 	return u.AuthMethod == AuthMethodLDAP
 }
 
-func (u *User) IsAccessDenied() bool {
+func (u *VpnUser) IsAccessDenied() bool {
 	return u.DenyAccess == "true"
 }
 
-func (u *User) IsMFAEnabled() bool {
+func (u *VpnUser) IsMFAEnabled() bool {
 	return u.MFA == "true"
 }
 
-func (u *User) IsEnabled() bool {
+func (u *VpnUser) IsEnabled() bool {
 	return u.DenyAccess != "true"
 }
 
-func (u *User) HasAccessControl() bool {
+func (u *VpnUser) HasAccessControl() bool {
 	return len(u.AccessControl) > 0
 }
 
-func (u *User) SetDenyAccess(deny bool) {
+func (u *VpnUser) SetDenyAccess(deny bool) {
 	if deny {
 		u.DenyAccess = "true"
 	} else {
@@ -129,7 +129,7 @@ func (u *User) SetDenyAccess(deny bool) {
 	}
 }
 
-func (u *User) SetMFA(enabled bool) {
+func (u *VpnUser) SetMFA(enabled bool) {
 	if enabled {
 		u.MFA = "true"
 	} else {
@@ -137,8 +137,8 @@ func (u *User) SetMFA(enabled bool) {
 	}
 }
 
-func NewUser(username, email, authMethod, groupName string) *User {
-	return &User{
+func NewVpnUser(username, email, authMethod, groupName string) *VpnUser {
+	return &VpnUser{
 		Username:     username,
 		Email:        email,
 		AuthMethod:   authMethod,
@@ -148,4 +148,12 @@ func NewUser(username, email, authMethod, groupName string) *User {
 		MFA:          "true",
 		IPAssignMode: IPAssignModeDynamic,
 	}
+}
+
+// Backward compatibility aliases
+type User = VpnUser
+type UserFilter = VpnUserFilter
+
+func NewUser(username, email, authMethod, groupName string) *User {
+	return NewVpnUser(username, email, authMethod, groupName)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 // Group represents a portal group with permissions.
-type Group struct {
+type PortalGroup struct {
 	ID          uuid.UUID
 	Name        string
 	DisplayName string
@@ -16,3 +16,6 @@ type Group struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+// Backward compatibility alias
+type Group = PortalGroup

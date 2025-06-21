@@ -7,7 +7,7 @@ import (
 )
 
 type GroupUsecase interface {
-	Create(ctx context.Context, g *entities.Group) error
-	List(ctx context.Context) ([]*entities.Group, error)
-	Get(ctx context.Context, id uuid.UUID) (*entities.Group, error)
+	Create(ctx context.Context, g *entities.PortalGroup) error
+	List(ctx context.Context) ([]*entities.PortalGroup, error)
+	Get(ctx context.Context, id uuid.UUID) (*entities.PortalGroup, error)
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type GroupRepository interface {
-	Create(ctx context.Context, group *entities.Group) error
-	GetByID(ctx context.Context, id uuid.UUID) (*entities.Group, error)
-	List(ctx context.Context) ([]*entities.Group, error)
+	Create(ctx context.Context, group *entities.PortalGroup) error
+	GetByID(ctx context.Context, id uuid.UUID) (*entities.PortalGroup, error)
+	List(ctx context.Context) ([]*entities.PortalGroup, error)
 }

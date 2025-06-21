@@ -1,7 +1,7 @@
 package dto
 
 // ServerInfoResponse - API response cho server information
-type ServerInfoResponse struct {
+type VpnServerInfoResponse struct {
 	NodeType        string `json:"node_type" example:"PRIMARY"`
 	WebServerName   string `json:"web_server_name" example:"OpenVPN-AS"`
 	AdminPort       string `json:"admin_port" example:"943"`
@@ -16,7 +16,7 @@ type ServerInfoResponse struct {
 }
 
 // NetworkConfigResponse - API response cho network configuration
-type NetworkConfigResponse struct {
+type VpnNetworkConfigResponse struct {
 	// Client Network Settings
 	ClientNetwork     string `json:"client_network" example:"172.27.224.0"`
 	ClientNetmaskBits string `json:"client_netmask_bits" example:"20"`
@@ -54,3 +54,7 @@ type NetworkConfigResponse struct {
 	Status  string `json:"status" example:"optimal"`
 	Message string `json:"message" example:"Network config retrieved successfully"`
 }
+
+// Backward compatibility aliases
+type ServerInfoResponse = VpnServerInfoResponse
+type NetworkConfigResponse = VpnNetworkConfigResponse

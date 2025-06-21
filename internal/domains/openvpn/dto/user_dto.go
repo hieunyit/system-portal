@@ -6,7 +6,7 @@ import (
 )
 
 // CreateUserRequest defines payload for creating a new VPN user
-type CreateUserRequest struct {
+type VpnCreateUserRequest struct {
 	Username       string   `json:"username" validate:"required,min=3,max=30,username" example:"testuser"`
 	Email          string   `json:"email" validate:"required,email" example:"testuser@example.com"`
 	Password       string   `json:"password,omitempty" validate:"password_if_local" example:"SecurePass123!"`
@@ -20,7 +20,7 @@ type CreateUserRequest struct {
 }
 
 // UpdateUserRequest defines payload for updating an existing VPN user
-type UpdateUserRequest struct {
+type VpnUpdateUserRequest struct {
 	UserExpiration string   `json:"userExpiration,omitempty" validate:"omitempty,date" example:"31/12/2025"`
 	DenyAccess     *bool    `json:"denyAccess,omitempty" example:"false"`
 	MacAddresses   []string `json:"macAddresses,omitempty" validate:"omitempty,dive,mac_address" example:"5E:CD:C9:D4:88:65"`
@@ -31,7 +31,7 @@ type UpdateUserRequest struct {
 }
 
 // UserResponse represents detailed information about a VPN user
-type UserResponse struct {
+type VpnUserResponse struct {
 	Username       string   `json:"username" example:"testuser"`
 	Email          string   `json:"email" example:"testuser@example.com"`
 	AuthMethod     string   `json:"authMethod" example:"local"`
@@ -51,7 +51,7 @@ type UserResponse struct {
 }
 
 // UserFilter contains available filtering options when listing VPN users
-type UserFilter struct {
+type VpnUserFilter struct {
 	// Basic filters (existing)
 	Username   string `form:"username" example:"testuser"`
 	Email      string `form:"email" example:"test@example.com"`
@@ -104,7 +104,7 @@ func (f *UserFilter) SetDefaults() {
 }
 
 // FilterMetadata provides information about applied filters in list responses
-type FilterMetadata struct {
+type VpnFilterMetadata struct {
 	AppliedFilters []string `json:"appliedFilters" example:"username,authMethod,isEnabled"` // List of applied filters
 	SortedBy       string   `json:"sortedBy" example:"username"`                            // Current sort field
 	SortOrder      string   `json:"sortOrder" example:"asc"`                                // Current sort order
@@ -112,7 +112,7 @@ type FilterMetadata struct {
 }
 
 // UserListResponse wraps a list of users along with filter metadata
-type UserListResponse struct {
+type VpnUserListResponse struct {
 	Users      []UserResponse `json:"users"`
 	Total      int            `json:"total" example:"50"`
 	Page       int            `json:"page" example:"1"`
@@ -123,31 +123,31 @@ type UserListResponse struct {
 }
 
 // UserActionRequest represents an action to perform on a user
-type UserActionRequest struct {
+type VpnUserActionRequest struct {
 	Action string `json:"action" validate:"required,oneof=enable disable reset-otp change-password" example:"enable"`
 }
 
 // ChangePasswordRequest is used when changing a user's password
-type ChangePasswordRequest struct {
+type VpnChangePasswordRequest struct {
 	Password string `json:"password" validate:"required,min=8" example:"NewSecurePass123!"`
 }
 
 // UserExpirationResponse returns emails that are about to expire
-type UserExpirationResponse struct {
+type VpnUserExpirationResponse struct {
 	Emails []string `json:"emails" example:"user1@example.com,user2@example.com"`
 	Count  int      `json:"count" example:"2"`
 	Days   int      `json:"days" example:"7"`
 }
 
 // UserExpirationsResponse holds a list of user expirations
-type UserExpirationsResponse struct {
+type VpnUserExpirationsResponse struct {
 	Users []UserExpirationInfo `json:"users"`
 	Count int                  `json:"count"`
 	Days  int                  `json:"days"`
 }
 
 // UserExpirationInfo describes expiration information for a single user
-type UserExpirationInfo struct {
+type VpnUserExpirationInfo struct {
 	Username         string   `json:"username"`
 	Email            string   `json:"email"`
 	UserExpiration   string   `json:"userExpiration"`
@@ -161,6 +161,19 @@ type UserExpirationInfo struct {
 	DaysUntilExpiry  int      `json:"daysUntilExpiry"`  // Số ngày còn lại
 	ExpirationStatus string   `json:"expirationStatus"` // "expired", "expiring", "warning"
 }
+
+// Backward compatibility aliases
+type CreateUserRequest = VpnCreateUserRequest
+type UpdateUserRequest = VpnUpdateUserRequest
+type UserResponse = VpnUserResponse
+type UserFilter = VpnUserFilter
+type FilterMetadata = VpnFilterMetadata
+type UserListResponse = VpnUserListResponse
+type UserActionRequest = VpnUserActionRequest
+type ChangePasswordRequest = VpnChangePasswordRequest
+type UserExpirationResponse = VpnUserExpirationResponse
+type UserExpirationsResponse = VpnUserExpirationsResponse
+type UserExpirationInfo = VpnUserExpirationInfo
 
 // Enhanced validation messages with new filters
 func (r CreateUserRequest) GetValidationErrors() map[string]string {

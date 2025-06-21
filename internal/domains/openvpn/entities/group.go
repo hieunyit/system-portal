@@ -1,6 +1,6 @@
 package entities
 
-type Group struct {
+type VpnGroup struct {
 	GroupName     string   `json:"groupName"`
 	AuthMethod    string   `json:"authMethod"`
 	MFA           string   `json:"mfa"`
@@ -11,7 +11,7 @@ type Group struct {
 	GroupRange    []string `json:"groupRange"`
 }
 
-type GroupFilter struct {
+type VpnGroupFilter struct {
 	GroupName  string
 	AuthMethod string
 	IsEnabled  *bool
@@ -22,11 +22,11 @@ type GroupFilter struct {
 }
 
 // Methods
-func (g *Group) IsAccessDenied() bool {
+func (g *VpnGroup) IsAccessDenied() bool {
 	return g.DenyAccess == "true"
 }
 
-func (g *Group) SetDenyAccess(deny bool) {
+func (g *VpnGroup) SetDenyAccess(deny bool) {
 	if deny {
 		g.DenyAccess = "true"
 	} else {
@@ -34,7 +34,7 @@ func (g *Group) SetDenyAccess(deny bool) {
 	}
 }
 
-func (g *Group) SetMFA(enabled bool) {
+func (g *VpnGroup) SetMFA(enabled bool) {
 	if enabled {
 		g.MFA = "true"
 	} else {
@@ -42,20 +42,20 @@ func (g *Group) SetMFA(enabled bool) {
 	}
 }
 
-func (g *Group) HasAccessControl() bool {
+func (g *VpnGroup) HasAccessControl() bool {
 	return len(g.AccessControl) > 0
 }
 
-func (g *Group) HasGroupSubnet() bool {
+func (g *VpnGroup) HasGroupSubnet() bool {
 	return len(g.GroupSubnet) > 0
 }
 
-func (g *Group) HasGroupRange() bool {
+func (g *VpnGroup) HasGroupRange() bool {
 	return len(g.GroupRange) > 0
 }
 
-func NewGroup(groupName, authMethod string) *Group {
-	return &Group{
+func NewVpnGroup(groupName, authMethod string) *VpnGroup {
+	return &VpnGroup{
 		GroupName:   groupName,
 		AuthMethod:  authMethod,
 		Role:        UserRoleUser,
@@ -65,3 +65,9 @@ func NewGroup(groupName, authMethod string) *Group {
 		GroupRange:  []string{},
 	}
 }
+
+// Backward compatibility aliases
+type Group = VpnGroup
+type GroupFilter = VpnGroupFilter
+
+func NewGroup(groupName, authMethod string) *Group { return NewVpnGroup(groupName, authMethod) }

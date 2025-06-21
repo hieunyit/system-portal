@@ -1,7 +1,7 @@
 package dto
 
 // CreateGroupRequest defines payload for creating a new group
-type CreateGroupRequest struct {
+type VpnCreateGroupRequest struct {
 	GroupName     string   `json:"groupName" validate:"required,min=3,max=50"`
 	AuthMethod    string   `json:"authMethod" validate:"required,oneof=ldap local"`
 	MFA           *bool    `json:"mfa,omitempty"`
@@ -12,7 +12,7 @@ type CreateGroupRequest struct {
 }
 
 // UpdateGroupRequest defines payload for updating group information
-type UpdateGroupRequest struct {
+type VpnUpdateGroupRequest struct {
 	AccessControl []string `json:"accessControl,omitempty" validate:"omitempty,dive,ipv4|cidrv4|ipv4_protocol"`
 	MFA           *bool    `json:"mfa,omitempty"`
 	Role          string   `json:"role,omitempty" validate:"omitempty,oneof=User Admin"`
@@ -22,7 +22,7 @@ type UpdateGroupRequest struct {
 }
 
 // GroupResponse represents details of an OpenVPN group
-type GroupResponse struct {
+type VpnGroupResponse struct {
 	GroupName     string   `json:"groupName"`
 	AuthMethod    string   `json:"authMethod"`
 	MFA           bool     `json:"mfa"`
@@ -34,7 +34,7 @@ type GroupResponse struct {
 }
 
 // GroupListResponse wraps a list of groups for pagination
-type GroupListResponse struct {
+type VpnGroupListResponse struct {
 	Groups []GroupResponse `json:"groups"`
 	Total  int             `json:"total"`
 	Page   int             `json:"page"`
@@ -42,12 +42,12 @@ type GroupListResponse struct {
 }
 
 // GroupActionRequest represents an action to perform on a group
-type GroupActionRequest struct {
+type VpnGroupActionRequest struct {
 	Action string `json:"action" validate:"required,oneof=enable disable"`
 }
 
 // GroupFilter allows filtering of groups when listing
-type GroupFilter struct {
+type VpnGroupFilter struct {
 	GroupName  string `form:"groupName"`
 	AuthMethod string `form:"authMethod"`
 	Role       string `form:"role"`
@@ -56,7 +56,7 @@ type GroupFilter struct {
 }
 
 // Validation messages
-func (r CreateGroupRequest) GetValidationErrors() map[string]string {
+func (r VpnCreateGroupRequest) GetValidationErrors() map[string]string {
 	return map[string]string{
 		"GroupName.required":   "Group name is required",
 		"GroupName.min":        "Group name must be at least 3 characters",
@@ -71,7 +71,7 @@ func (r CreateGroupRequest) GetValidationErrors() map[string]string {
 	}
 }
 
-func (r UpdateGroupRequest) GetValidationErrors() map[string]string {
+func (r VpnUpdateGroupRequest) GetValidationErrors() map[string]string {
 	return map[string]string{
 		"Role.oneof":           "Role must be either 'User' or 'Admin'",
 		"AccessControl.ipv4":   "Access control must be valid IPv4 address",
@@ -81,9 +81,17 @@ func (r UpdateGroupRequest) GetValidationErrors() map[string]string {
 	}
 }
 
-func (r GroupActionRequest) GetValidationErrors() map[string]string {
+func (r VpnGroupActionRequest) GetValidationErrors() map[string]string {
 	return map[string]string{
 		"Action.required": "Action is required",
 		"Action.oneof":    "Action must be either 'enable' or 'disable'",
 	}
 }
+
+// Backward compatibility aliases
+type CreateGroupRequest = VpnCreateGroupRequest
+type UpdateGroupRequest = VpnUpdateGroupRequest
+type GroupResponse = VpnGroupResponse
+type GroupListResponse = VpnGroupListResponse
+type GroupActionRequest = VpnGroupActionRequest
+type GroupFilter = VpnGroupFilter

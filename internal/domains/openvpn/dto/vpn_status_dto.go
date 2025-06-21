@@ -3,14 +3,14 @@ package dto
 import "time"
 
 // VPNStatusResponse - Response cho API VPN Status
-type VPNStatusResponse struct {
+type VpnStatusResponse struct {
 	TotalConnectedUsers int                     `json:"total_connected_users" example:"5"`
 	ConnectedUsers      []ConnectedUserResponse `json:"connected_users"`
 	Timestamp           time.Time               `json:"timestamp" example:"2025-06-14T15:08:06Z"`
 }
 
 // ConnectedUserResponse - Response cho user đang kết nối
-type ConnectedUserResponse struct {
+type VpnConnectedUserResponse struct {
 	CommonName         string    `json:"common_name" example:"user123"`
 	RealAddress        string    `json:"real_address" example:"203.113.45.123"`
 	VirtualAddress     string    `json:"virtual_address" example:"172.27.232.15"`
@@ -28,7 +28,12 @@ type ConnectedUserResponse struct {
 }
 
 // GlobalStatsResponse - Response cho global stats
-type GlobalStatsResponse struct {
+type VpnGlobalStatsResponse struct {
 	MaxBcastMcastQueueLength string `json:"max_bcast_mcast_queue_length" example:"0"`
 	DCOEnabled               bool   `json:"dco_enabled" example:"false"`
 }
+
+// Backward compatibility aliases
+type VPNStatusResponse = VpnStatusResponse
+type ConnectedUserResponse = VpnConnectedUserResponse
+type GlobalStatsResponse = VpnGlobalStatsResponse
