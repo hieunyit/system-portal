@@ -44,10 +44,7 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 	w := csv.NewWriter(&buf)
 	_ = w.Write([]string{"id", "user_id", "action", "resource", "success", "created_at"})
 	for _, l := range logs {
-		uid := ""
-		if l.UserID != nil {
-			uid = l.UserID.String()
-		}
+		uid := l.UserID.String()
 		_ = w.Write([]string{
 			l.ID.String(),
 			uid,

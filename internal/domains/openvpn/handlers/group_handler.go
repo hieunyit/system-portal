@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"fmt"
 	nethttp "net/http"
 	"strings"
@@ -89,7 +88,7 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 		effectiveGroupRange = []string{}
 	}
 
-	if err := h.validateGroupSubnetAndRange(c.Request.Context(), effectiveGroupSubnet, effectiveGroupRange); err != nil {
+	if err := h.validateGroupSubnetAndRange(effectiveGroupSubnet, effectiveGroupRange); err != nil {
 		http.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
@@ -446,7 +445,7 @@ func (h *GroupHandler) GroupAction(c *gin.Context) {
 // validateGroupSubnetAndRange validates GroupSubnet and GroupRange according to business rules
 // NOTE: This function is now moved to usecase layer for better separation of concerns
 // and to include comprehensive conflict checking with existing groups
-func (h *GroupHandler) validateGroupSubnetAndRange(ctx context.Context, groupSubnets, groupRanges []string) error {
+func (h *GroupHandler) validateGroupSubnetAndRange(groupSubnets, groupRanges []string) error {
 	// Basic validation can be done here, but comprehensive validation
 	// including conflict checking is now handled in usecase layer
 	if len(groupSubnets) == 0 && len(groupRanges) > 0 {
