@@ -7,6 +7,8 @@ import (
 	"sort"
 
 	_ "github.com/lib/pq"
+	"system-portal/internal/shared/config"
+	"system-portal/pkg/logger"
 )
 
 // Postgres wraps a sql.DB connection pool.
@@ -16,7 +18,16 @@ type Postgres struct {
 }
 
 // New opens a PostgreSQL connection.
-func New(dsn string) (*Postgres, error) {
+func New(cfg config.DatabaseConfig) (*Postgres, error) {
+	dsn := cfg.DSN()
+	logger.Log.WithFields(map[string]interface{}{
+		"host":    cfg.Host,
+		"port":    cfg.Port,
+		"user":    cfg.User,
+		"db":      cfg.Name,
+		"sslmode": cfg.SSLMode,
+	}).Info("connecting to postgres")
+
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		return nil, err
@@ -24,6 +35,7 @@ func New(dsn string) (*Postgres, error) {
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
+	logger.Log.Info("postgres connection established")
 	return &Postgres{DSN: dsn, DB: db}, nil
 }
 

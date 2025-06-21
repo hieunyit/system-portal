@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -34,7 +35,18 @@ type LDAPConfig = ldapCfg.Config
 
 // Database connection settings
 type DatabaseConfig struct {
-	DSN string `mapstructure:"dsn"`
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
+	Name     string `mapstructure:"name"`
+	SSLMode  string `mapstructure:"sslmode"`
+}
+
+// DSN builds a PostgreSQL connection string from the database config.
+func (d DatabaseConfig) DSN() string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s",
+		d.User, d.Password, d.Host, d.Port, d.Name, d.SSLMode)
 }
 
 type LoggerConfig = logger.LoggerConfig
@@ -147,7 +159,12 @@ func setDefaults() {
 	viper.SetDefault("redis.ttl", 10*time.Minute)
 
 	// Database defaults
-	viper.SetDefault("database.dsn", "postgres://user:pass@localhost:5432/system_portal?sslmode=disable")
+	viper.SetDefault("database.host", "localhost")
+	viper.SetDefault("database.port", 5432)
+	viper.SetDefault("database.user", "user")
+	viper.SetDefault("database.password", "pass")
+	viper.SetDefault("database.name", "system_portal")
+	viper.SetDefault("database.sslmode", "disable")
 
 	// Security defaults
 	viper.SetDefault("security.enableSecurityHeaders", true)

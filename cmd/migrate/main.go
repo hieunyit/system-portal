@@ -12,7 +12,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
-	pg, err := database.New(cfg.Database.DSN)
+	pg, err := database.New(cfg.Database)
 	if err != nil {
 		log.Fatalf("database connection error: %v", err)
 	}

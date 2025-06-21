@@ -18,7 +18,12 @@ ldap:
 
 # PostgreSQL connection
 database:
-  dsn: "postgres://user:pass@localhost:5432/system_portal?sslmode=disable"
+  host: "localhost"
+  port: 5432
+  user: "user"
+  password: "pass"
+  name: "system_portal"
+  sslmode: "disable"
 
 logger:
   level: "debug"

@@ -45,13 +45,17 @@ func main() {
 	log.Println("🚀 Initializing System Portal...")
 
 	// Connect to PostgreSQL and run migrations
-	db, err := database.New(cfg.Database.DSN)
+	db, err := database.New(cfg.Database)
 	if err != nil {
 		log.Fatal("failed to connect database:", err)
 	}
 	defer db.Close()
 
-	logger.Log.WithField("dsn", cfg.Database.DSN).Info("checking database connectivity")
+	logger.Log.WithFields(map[string]interface{}{
+		"host": cfg.Database.Host,
+		"port": cfg.Database.Port,
+		"db":   cfg.Database.Name,
+	}).Info("checking database connectivity")
 	if err := waitForPostgres(db.DB, 5, time.Second); err != nil {
 		log.Fatal("database unreachable:", err)
 	}
