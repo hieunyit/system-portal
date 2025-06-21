@@ -18,7 +18,8 @@ import (
 	openvpnUsecases "system-portal/internal/domains/openvpn/usecases"
 	"system-portal/internal/domains/portal/entities"
 	portalHandlers "system-portal/internal/domains/portal/handlers"
-	portalRepo "system-portal/internal/domains/portal/repositories/impl"
+	portalRepo "system-portal/internal/domains/portal/repositories"
+	portalRepoImpl "system-portal/internal/domains/portal/repositories/impl"
 	portalRoutes "system-portal/internal/domains/portal/routes"
 	portalUsecases "system-portal/internal/domains/portal/usecases"
 	"system-portal/internal/shared/config"
@@ -102,9 +103,9 @@ func main() {
 func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) {
 	// Portal domain using PostgreSQL repositories
 	// Use in-memory repositories so the demo works without a real database
-	userRepo := portalRepo.NewUserRepository()
-	groupRepo := portalRepo.NewGroupRepository()
-	auditRepo := portalRepo.NewAuditRepository()
+	userRepo := portalRepoImpl.NewUserRepository()
+	groupRepo := portalRepoImpl.NewGroupRepository()
+	auditRepo := portalRepoImpl.NewAuditRepository()
 
 	seedDemoData(userRepo, groupRepo)
 

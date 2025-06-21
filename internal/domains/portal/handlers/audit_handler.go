@@ -80,8 +80,3 @@ func (h *AuditHandler) GetAuditStats(c *gin.Context) {
 	stats := map[string]int{"total": total, "success": success, "failed": failed}
 	http.RespondWithSuccess(c, nethttp.StatusOK, stats)
 }
-
-// helper to add log, not used in routes
-func (h *AuditHandler) addLog(action, resource string) {
-	h.uc.Add(context.Background(), &entities.AuditLog{ID: uuid.New(), Action: action, Resource: resource, Success: true, CreatedAt: time.Now()})
-}
