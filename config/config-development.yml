@@ -36,9 +36,10 @@ jwt:
   accessTokenExpireDuration: "1h"
   refreshTokenExpireDuration: "24h"
   
-  # RSA Private Keys (Base64 encoded PEM format)
-  # Leave empty to auto-generate keys on startup
-  # For production, generate your own keys and store securely
+  # RSA Private Keys (PEM format)
+  # If left empty, new keys are generated on every start which invalidates
+  # existing tokens. Populate these with persistent keys to keep sessions alive
+  # across restarts.
   accessPrivateKey: ""
   refreshPrivateKey: ""
   

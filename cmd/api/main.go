@@ -69,9 +69,29 @@ func main() {
 	logExistingUsers(db.DB)
 
 	// Initialize JWT service
-	jwtService, err := jwt.NewRSAService(cfg.JWT.AccessTokenExpireDuration, cfg.JWT.RefreshTokenExpireDuration)
-	if err != nil {
-		log.Fatal(err)
+	var jwtService *jwt.RSAService
+	if cfg.JWT.AccessPrivateKey != "" && cfg.JWT.RefreshPrivateKey != "" {
+		jwtService, err = jwt.NewRSAServiceWithKeys(
+			cfg.JWT.AccessPrivateKey,
+			cfg.JWT.RefreshPrivateKey,
+			cfg.JWT.AccessTokenExpireDuration,
+			cfg.JWT.RefreshTokenExpireDuration,
+		)
+		if err != nil {
+			log.Fatal("failed to load RSA keys:", err)
+		}
+	} else {
+		jwtService, err = jwt.NewRSAService(cfg.JWT.AccessTokenExpireDuration, cfg.JWT.RefreshTokenExpireDuration)
+		if err != nil {
+			log.Fatal(err)
+		}
+		accessPEM, _ := jwtService.GetAccessPrivateKeyPEM()
+		refreshPEM, _ := jwtService.GetRefreshPrivateKeyPEM()
+		log.Println("generated new RSA keys; store them in config to preserve sessions")
+		log.Println("accessPrivateKey:")
+		log.Println(accessPEM)
+		log.Println("refreshPrivateKey:")
+		log.Println(refreshPEM)
 	}
 
 	// Initialize infrastructure clients

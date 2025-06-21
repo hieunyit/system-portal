@@ -16,10 +16,16 @@ func NewAuditRepositoryPG(db *sql.DB) repositories.AuditRepository {
 }
 
 func (r *pgAuditRepo) Add(ctx context.Context, a *entities.AuditLog) error {
+	var userID interface{}
+	if a.UserID == uuid.Nil {
+		userID = nil
+	} else {
+		userID = a.UserID
+	}
 	_, err := r.db.ExecContext(ctx,
 		`INSERT INTO audit_logs (id, user_id, action, resource_type, success, created_at)
-         VALUES ($1,$2,$3,$4,$5,$6)`,
-		a.ID, a.UserID, a.Action, a.Resource, a.Success, a.CreatedAt,
+        VALUES ($1,$2,$3,$4,$5,$6)`,
+		a.ID, userID, a.Action, a.Resource, a.Success, a.CreatedAt,
 	)
 	return err
 }
