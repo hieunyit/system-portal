@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"system-portal/internal/domains/portal/dto"
+	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/repositories"
 	http "system-portal/internal/shared/response"
 )
@@ -36,7 +37,8 @@ func (h *DashboardHandler) GetDashboardStats(c *gin.Context) {
 // @Success 200 {array} dto.AuditResponse
 // @Router /api/portal/dashboard/activities [get]
 func (h *DashboardHandler) GetRecentActivities(c *gin.Context) {
-	logs, _ := h.auditRepo.List(c.Request.Context())
+	filter := &entities.AuditFilter{Page: 1, Limit: 10}
+	logs, _, _ := h.auditRepo.List(c.Request.Context(), filter)
 	resp := make([]dto.AuditResponse, 0, len(logs))
 	for _, l := range logs {
 		resp = append(resp, dto.AuditResponse{
