@@ -57,9 +57,11 @@ func (u *authUsecaseImpl) Login(ctx context.Context, username, password, ip stri
 		}
 	}
 
-	role := "support"
+	role := ""
 	if g, err := u.groups.GetByID(ctx, usr.GroupID); err == nil && g != nil {
 		role = g.Name
+	} else if err != nil {
+		logger.Log.WithError(err).Warn("failed to fetch user group")
 	}
 	access, _ := u.jwt.GenerateAccessToken(username, role)
 	refresh, _ := u.jwt.GenerateRefreshToken(username, role)
@@ -99,9 +101,11 @@ func (u *authUsecaseImpl) Refresh(ctx context.Context, refreshToken string) (str
 		return "", "", errors.New("invalid credentials")
 	}
 
-	role := "support"
+	role := ""
 	if g, err := u.groups.GetByID(ctx, usr.GroupID); err == nil && g != nil {
 		role = g.Name
+	} else if err != nil {
+		logger.Log.WithError(err).Warn("failed to fetch user group")
 	}
 	access, _ := u.jwt.GenerateAccessToken(claims.Username, role)
 	refreshNew, _ := u.jwt.GenerateRefreshToken(claims.Username, role)
