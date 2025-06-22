@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -36,14 +37,20 @@ func (a *AuditMiddleware) Handler() gin.HandlerFunc {
 		}).Info("request handled")
 
 		if a.uc != nil && (c.Request.Method == http.MethodPost || c.Request.Method == http.MethodPut || c.Request.Method == http.MethodDelete) {
+			resourceType := ""
+			full := strings.Trim(c.FullPath(), "/")
+			if full != "" {
+				parts := strings.Split(full, "/")
+				resourceType = parts[0]
+			}
 			logEntry := &entities.AuditLog{
 				ID:           uuid.New(),
 				Action:       c.Request.Method,
-				Resource:     c.Request.URL.Path,
-				Success:      c.Writer.Status() < 400,
-				CreatedAt:    time.Now(),
+				ResourceType: resourceType,
 				ResourceName: c.FullPath(),
 				IPAddress:    c.ClientIP(),
+				Success:      c.Writer.Status() < 400,
+				CreatedAt:    time.Now(),
 			}
 
 			if uid, ok := c.Get("userID"); ok {

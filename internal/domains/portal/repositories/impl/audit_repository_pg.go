@@ -24,10 +24,10 @@ func (r *pgAuditRepo) Add(ctx context.Context, a *entities.AuditLog) error {
 	}
 	_, err := r.db.ExecContext(ctx,
 		`INSERT INTO audit_logs (
-                        id, user_id, username, user_group, action, resource_type,
-                        resource_name, ip_address, success, created_at)
-                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
-		a.ID, userID, a.Username, a.UserGroup, a.Action, a.Resource,
+                       id, user_id, username, user_group, action, resource_type,
+                       resource_name, ip_address, success, created_at)
+               VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+		a.ID, userID, a.Username, a.UserGroup, a.Action, a.ResourceType,
 		a.ResourceName, a.IPAddress, a.Success, a.CreatedAt,
 	)
 	return err
@@ -36,8 +36,8 @@ func (r *pgAuditRepo) Add(ctx context.Context, a *entities.AuditLog) error {
 func (r *pgAuditRepo) List(ctx context.Context) ([]*entities.AuditLog, error) {
 	rows, err := r.db.QueryContext(ctx,
 		`SELECT id, user_id, username, user_group, action, resource_type,
-                        resource_name, ip_address, success, created_at
-                FROM audit_logs`)
+                       resource_name, ip_address, success, created_at
+               FROM audit_logs`)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (r *pgAuditRepo) List(ctx context.Context) ([]*entities.AuditLog, error) {
 	for rows.Next() {
 		var a entities.AuditLog
 		if err := rows.Scan(
-			&a.ID, &a.UserID, &a.Username, &a.UserGroup, &a.Action, &a.Resource,
+			&a.ID, &a.UserID, &a.Username, &a.UserGroup, &a.Action, &a.ResourceType,
 			&a.ResourceName, &a.IPAddress, &a.Success, &a.CreatedAt,
 		); err != nil {
 			return nil, err
@@ -63,7 +63,7 @@ func (r *pgAuditRepo) GetByID(ctx context.Context, id uuid.UUID) (*entities.Audi
                 FROM audit_logs WHERE id=$1`, id)
 	var a entities.AuditLog
 	err := row.Scan(
-		&a.ID, &a.UserID, &a.Username, &a.UserGroup, &a.Action, &a.Resource,
+		&a.ID, &a.UserID, &a.Username, &a.UserGroup, &a.Action, &a.ResourceType,
 		&a.ResourceName, &a.IPAddress, &a.Success, &a.CreatedAt,
 	)
 	if err == sql.ErrNoRows {

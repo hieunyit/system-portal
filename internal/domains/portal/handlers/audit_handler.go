@@ -40,7 +40,7 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 	logs, _ := h.uc.List(c.Request.Context())
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
-	_ = w.Write([]string{"id", "user_id", "username", "user_group", "action", "resource", "resource_name", "ip_address", "success", "created_at"})
+	_ = w.Write([]string{"id", "user_id", "username", "user_group", "action", "resource_type", "resource_name", "ip_address", "success", "created_at"})
 	for _, l := range logs {
 		uid := l.UserID.String()
 		_ = w.Write([]string{
@@ -49,7 +49,7 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 			l.Username,
 			l.UserGroup,
 			l.Action,
-			l.Resource,
+			l.ResourceType,
 			l.ResourceName,
 			l.IPAddress,
 			strconv.FormatBool(l.Success),

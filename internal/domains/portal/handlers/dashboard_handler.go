@@ -39,7 +39,14 @@ func (h *DashboardHandler) GetRecentActivities(c *gin.Context) {
 	logs, _ := h.auditRepo.List(c.Request.Context())
 	resp := make([]dto.AuditResponse, 0, len(logs))
 	for _, l := range logs {
-		resp = append(resp, dto.AuditResponse{ID: l.ID, UserID: l.UserID, Action: l.Action, Resource: l.Resource, Success: l.Success})
+		resp = append(resp, dto.AuditResponse{
+			ID:           l.ID,
+			UserID:       l.UserID,
+			Action:       l.Action,
+			Resource:     l.ResourceType,
+			ResourceName: l.ResourceName,
+			Success:      l.Success,
+		})
 	}
 	http.RespondWithSuccess(c, 200, resp)
 }

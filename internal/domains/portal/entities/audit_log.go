@@ -13,7 +13,7 @@ type AuditLog struct {
 	Username     string
 	UserGroup    string
 	Action       string
-	Resource     string
+	ResourceType string
 	ResourceName string
 	IPAddress    string
 	Success      bool
