@@ -38,6 +38,7 @@ func RegisterRoutes(router *gin.RouterGroup) {
 
 	// Portal user management routes
 	registerUserRoutes(portal)
+	portal.GET("/permissions", groupHandler.ListPermissions)
 
 	// Portal group management routes
 	registerGroupRoutes(portal)
@@ -70,6 +71,8 @@ func registerGroupRoutes(portal *gin.RouterGroup) {
 	{
 		groups.GET("", groupHandler.ListGroups)
 		groups.GET("/:id", groupHandler.GetGroup)
+		groups.GET("/:id/permissions", groupHandler.GetGroupPermissions)
+		groups.PUT("/:id/permissions", groupHandler.UpdateGroupPermissions)
 		// Groups are predefined (admin, support), so no create/update/delete
 	}
 }

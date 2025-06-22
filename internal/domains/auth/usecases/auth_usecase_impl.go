@@ -18,11 +18,12 @@ import (
 type authUsecaseImpl struct {
 	sessions repositories.SessionRepository
 	users    portalrepos.UserRepository
+	groups   portalrepos.GroupRepository
 	jwt      *jwt.RSAService
 }
 
-func NewAuthUsecase(sessionRepo repositories.SessionRepository, userRepo portalrepos.UserRepository, jwtSvc *jwt.RSAService) AuthUsecase {
-	return &authUsecaseImpl{sessions: sessionRepo, users: userRepo, jwt: jwtSvc}
+func NewAuthUsecase(sessionRepo repositories.SessionRepository, userRepo portalrepos.UserRepository, groupRepo portalrepos.GroupRepository, jwtSvc *jwt.RSAService) AuthUsecase {
+	return &authUsecaseImpl{sessions: sessionRepo, users: userRepo, groups: groupRepo, jwt: jwtSvc}
 }
 
 func (u *authUsecaseImpl) Login(ctx context.Context, username, password, ip string) (string, string, uuid.UUID, string, error) {
@@ -57,8 +58,8 @@ func (u *authUsecaseImpl) Login(ctx context.Context, username, password, ip stri
 	}
 
 	role := "support"
-	if username == "admin" {
-		role = "admin"
+	if g, err := u.groups.GetByID(ctx, usr.GroupID); err == nil && g != nil {
+		role = g.Name
 	}
 	access, _ := u.jwt.GenerateAccessToken(username, role)
 	refresh, _ := u.jwt.GenerateRefreshToken(username, role)
@@ -99,8 +100,8 @@ func (u *authUsecaseImpl) Refresh(ctx context.Context, refreshToken string) (str
 	}
 
 	role := "support"
-	if claims.Username == "admin" {
-		role = "admin"
+	if g, err := u.groups.GetByID(ctx, usr.GroupID); err == nil && g != nil {
+		role = g.Name
 	}
 	access, _ := u.jwt.GenerateAccessToken(claims.Username, role)
 	refreshNew, _ := u.jwt.GenerateRefreshToken(claims.Username, role)

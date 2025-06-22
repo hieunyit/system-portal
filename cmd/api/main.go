@@ -20,6 +20,7 @@ import (
 	openvpnRoutes "system-portal/internal/domains/openvpn/routes"
 	openvpnUsecases "system-portal/internal/domains/openvpn/usecases"
 	portalHandlers "system-portal/internal/domains/portal/handlers"
+	"system-portal/internal/domains/portal/repositories"
 	portalRepo "system-portal/internal/domains/portal/repositories"
 	portalRepoImpl "system-portal/internal/domains/portal/repositories/impl"
 	portalRoutes "system-portal/internal/domains/portal/routes"
@@ -144,15 +145,16 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 	userRepo := portalRepoImpl.NewUserRepositoryPG(db.DB)
 	groupRepo := portalRepoImpl.NewGroupRepositoryPG(db.DB)
 	auditRepo := portalRepoImpl.NewAuditRepositoryPG(db.DB)
+	permRepo := portalRepoImpl.NewPermissionRepositoryPG(db.DB)
 
 	// Auth domain
 	sessionRepo := sessionRepoimpl.NewSessionRepositoryPG(db.DB)
-	authUsecase := authUsecases.NewAuthUsecase(sessionRepo, userRepo, jwtSvc)
+	authUsecase := authUsecases.NewAuthUsecase(sessionRepo, userRepo, groupRepo, jwtSvc)
 	authHandler := authHandlers.NewAuthHandler(authUsecase)
 	authRoutes.Initialize(authHandler)
 
 	userUC := portalUsecases.NewUserUsecase(userRepo)
-	groupUC := portalUsecases.NewGroupUsecase(groupRepo)
+	groupUC := portalUsecases.NewGroupUsecase(groupRepo, permRepo)
 	auditUC := portalUsecases.NewAuditUsecase(auditRepo)
 
 	userHandler := portalHandlers.NewUserHandler(userUC)
@@ -183,6 +185,7 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 	configHandlerOV := openvpnHandlers.NewConfigHandler(configUCOV)
 	vpnStatusHandlerOV := openvpnHandlers.NewVPNStatusHandler(vpnStatusUC)
 	disconnectHandlerOV := openvpnHandlers.NewDisconnectHandler(disconnectUC)
+	permMiddleware := middleware.NewPermissionMiddleware(permRepo, groupRepo)
 
 	openvpnRoutes.Initialize(
 		userHandlerOV,
@@ -191,6 +194,7 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 		configHandlerOV,
 		vpnStatusHandlerOV,
 		disconnectHandlerOV,
+		permMiddleware,
 	)
 
 	return auditUC, userRepo, groupRepo

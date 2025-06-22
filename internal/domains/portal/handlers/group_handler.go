@@ -73,3 +73,62 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 	h.uc.Create(c.Request.Context(), &g)
 	http.RespondWithMessage(c, nethttp.StatusCreated, "created")
 }
+
+// ListPermissions godoc
+// @Summary List permissions
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {array} entities.Permission
+// @Router /api/portal/permissions [get]
+func (h *GroupHandler) ListPermissions(c *gin.Context) {
+	perms, _ := h.uc.ListPermissions(c.Request.Context())
+	http.RespondWithSuccess(c, nethttp.StatusOK, perms)
+}
+
+// GetGroupPermissions godoc
+// @Summary Get permissions for a group
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "Group ID"
+// @Success 200 {array} entities.Permission
+// @Router /api/portal/groups/{id}/permissions [get]
+func (h *GroupHandler) GetGroupPermissions(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		http.RespondWithBadRequest(c, "invalid id")
+		return
+	}
+	perms, _ := h.uc.GetPermissions(c.Request.Context(), id)
+	http.RespondWithSuccess(c, nethttp.StatusOK, perms)
+}
+
+type updatePermsRequest struct {
+	PermissionIDs []uuid.UUID `json:"permission_ids"`
+}
+
+// UpdateGroupPermissions godoc
+// @Summary Update group permissions
+// @Tags Portal Groups
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param id path string true "Group ID"
+// @Param request body updatePermsRequest true "Permission IDs"
+// @Success 200 {string} string "updated"
+// @Router /api/portal/groups/{id}/permissions [put]
+func (h *GroupHandler) UpdateGroupPermissions(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		http.RespondWithBadRequest(c, "invalid id")
+		return
+	}
+	var req updatePermsRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		http.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+	h.uc.UpdatePermissions(c.Request.Context(), id, req.PermissionIDs)
+	http.RespondWithMessage(c, nethttp.StatusOK, "updated")
+}
