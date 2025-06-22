@@ -32,6 +32,39 @@ func (r *pgPermissionRepo) List(ctx context.Context) ([]*entities.Permission, er
 	return perms, nil
 }
 
+func (r *pgPermissionRepo) GetByID(ctx context.Context, id uuid.UUID) (*entities.Permission, error) {
+	row := r.db.QueryRowContext(ctx, `SELECT id, resource, action, description FROM permissions WHERE id=$1`, id)
+	var p entities.Permission
+	if err := row.Scan(&p.ID, &p.Resource, &p.Action, &p.Description); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &p, nil
+}
+
+func (r *pgPermissionRepo) Create(ctx context.Context, p *entities.Permission) error {
+	_, err := r.db.ExecContext(ctx,
+		`INSERT INTO permissions (id, resource, action, description) VALUES ($1,$2,$3,$4)`,
+		p.ID, p.Resource, p.Action, p.Description,
+	)
+	return err
+}
+
+func (r *pgPermissionRepo) Update(ctx context.Context, p *entities.Permission) error {
+	_, err := r.db.ExecContext(ctx,
+		`UPDATE permissions SET resource=$1, action=$2, description=$3 WHERE id=$4`,
+		p.Resource, p.Action, p.Description, p.ID,
+	)
+	return err
+}
+
+func (r *pgPermissionRepo) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := r.db.ExecContext(ctx, `DELETE FROM permissions WHERE id=$1`, id)
+	return err
+}
+
 func (r *pgPermissionRepo) GetByGroup(ctx context.Context, groupID uuid.UUID) ([]*entities.Permission, error) {
 	rows, err := r.db.QueryContext(ctx, `SELECT p.id, p.resource, p.action, p.description
         FROM permissions p

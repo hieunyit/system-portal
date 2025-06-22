@@ -10,21 +10,24 @@ import (
 
 // Dependencies injected from main
 var (
-	userHandler      *handlers.UserHandler
-	groupHandler     *handlers.GroupHandler
-	auditHandler     *handlers.AuditHandler
-	dashboardHandler *handlers.DashboardHandler
+	userHandler       *handlers.UserHandler
+	groupHandler      *handlers.GroupHandler
+	permissionHandler *handlers.PermissionHandler
+	auditHandler      *handlers.AuditHandler
+	dashboardHandler  *handlers.DashboardHandler
 )
 
 // Initialize sets up the handler dependencies
 func Initialize(
 	uh *handlers.UserHandler,
 	gh *handlers.GroupHandler,
+	ph *handlers.PermissionHandler,
 	ah *handlers.AuditHandler,
 	dh *handlers.DashboardHandler,
 ) {
 	userHandler = uh
 	groupHandler = gh
+	permissionHandler = ph
 	auditHandler = ah
 	dashboardHandler = dh
 }
@@ -38,7 +41,7 @@ func RegisterRoutes(router *gin.RouterGroup) {
 
 	// Portal user management routes
 	registerUserRoutes(portal)
-	portal.GET("/permissions", groupHandler.ListPermissions)
+	registerPermissionRoutes(portal)
 
 	// Portal group management routes
 	registerGroupRoutes(portal)
@@ -74,6 +77,16 @@ func registerGroupRoutes(portal *gin.RouterGroup) {
 		groups.GET("/:id/permissions", groupHandler.GetGroupPermissions)
 		groups.PUT("/:id/permissions", groupHandler.UpdateGroupPermissions)
 		// Groups are predefined (admin, support), so no create/update/delete
+	}
+}
+
+func registerPermissionRoutes(portal *gin.RouterGroup) {
+	perms := portal.Group("/permissions")
+	{
+		perms.GET("", permissionHandler.ListPermissions)
+		perms.POST("", permissionHandler.CreatePermission)
+		perms.PUT("/:id", permissionHandler.UpdatePermission)
+		perms.DELETE("/:id", permissionHandler.DeletePermission)
 	}
 }
 

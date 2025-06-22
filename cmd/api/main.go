@@ -155,14 +155,16 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 
 	userUC := portalUsecases.NewUserUsecase(userRepo)
 	groupUC := portalUsecases.NewGroupUsecase(groupRepo, permRepo)
+	permUC := portalUsecases.NewPermissionUsecase(permRepo)
 	auditUC := portalUsecases.NewAuditUsecase(auditRepo)
 
 	userHandler := portalHandlers.NewUserHandler(userUC)
 	groupHandler := portalHandlers.NewGroupHandler(groupUC)
+	permHandler := portalHandlers.NewPermissionHandler(permUC)
 	auditHandler := portalHandlers.NewAuditHandler(auditUC)
 	dashboardHandler := portalHandlers.NewDashboardHandler(userRepo, auditRepo)
 
-	portalRoutes.Initialize(userHandler, groupHandler, auditHandler, dashboardHandler)
+	portalRoutes.Initialize(userHandler, groupHandler, permHandler, auditHandler, dashboardHandler)
 
 	// OpenVPN domain initialization
 

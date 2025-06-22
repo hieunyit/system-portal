@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/usecases"
 	http "system-portal/internal/shared/response"
 
@@ -24,9 +25,30 @@ func NewAuditHandler(u usecases.AuditUsecase) *AuditHandler { return &AuditHandl
 // @Produce json
 // @Success 200 {array} entities.AuditLog
 // @Router /api/portal/audit/logs [get]
+type auditQuery struct {
+	Username string     `form:"username"`
+	Group    string     `form:"group"`
+	IP       string     `form:"ip"`
+	From     *time.Time `form:"from" time_format:"2006-01-02"`
+	To       *time.Time `form:"to" time_format:"2006-01-02"`
+	Page     int        `form:"page,default=1"`
+	Limit    int        `form:"limit,default=20"`
+}
+
 func (h *AuditHandler) GetAuditLogs(c *gin.Context) {
-	logs, _ := h.uc.List(c.Request.Context())
-	http.RespondWithSuccess(c, nethttp.StatusOK, logs)
+	var q auditQuery
+	_ = c.ShouldBindQuery(&q)
+	filter := &entities.AuditFilter{
+		Username:  q.Username,
+		UserGroup: q.Group,
+		IPAddress: q.IP,
+		FromTime:  q.From,
+		ToTime:    q.To,
+		Page:      q.Page,
+		Limit:     q.Limit,
+	}
+	logs, total, _ := h.uc.List(c.Request.Context(), filter)
+	http.RespondWithSuccess(c, nethttp.StatusOK, gin.H{"logs": logs, "total": total, "page": filter.Page, "limit": filter.Limit})
 }
 
 // ExportAuditLogs godoc
@@ -37,7 +59,16 @@ func (h *AuditHandler) GetAuditLogs(c *gin.Context) {
 // @Success 200 {string} string "not implemented"
 // @Router /api/portal/audit/logs/export [get]
 func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
-	logs, _ := h.uc.List(c.Request.Context())
+	var q auditQuery
+	_ = c.ShouldBindQuery(&q)
+	filter := &entities.AuditFilter{
+		Username:  q.Username,
+		UserGroup: q.Group,
+		IPAddress: q.IP,
+		FromTime:  q.From,
+		ToTime:    q.To,
+	}
+	logs, _, _ := h.uc.List(c.Request.Context(), filter)
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
 	_ = w.Write([]string{"id", "user_id", "username", "user_group", "action", "resource_type", "resource_name", "ip_address", "success", "created_at"})
@@ -69,7 +100,10 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 // @Success 200 {string} string "not implemented"
 // @Router /api/portal/audit/stats [get]
 func (h *AuditHandler) GetAuditStats(c *gin.Context) {
-	logs, _ := h.uc.List(c.Request.Context())
+	var q auditQuery
+	_ = c.ShouldBindQuery(&q)
+	filter := &entities.AuditFilter{Username: q.Username, UserGroup: q.Group, IPAddress: q.IP, FromTime: q.From, ToTime: q.To}
+	logs, _, _ := h.uc.List(c.Request.Context(), filter)
 	var total, success, failed int
 	for _, l := range logs {
 		total++
