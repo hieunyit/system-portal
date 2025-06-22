@@ -25,23 +25,23 @@ JOIN permissions p ON (p.resource, p.action) IN (( 'openvpn', 'manage_users' ), 
 WHERE g.name = 'support'
 ON CONFLICT DO NOTHING;
 
--- Create initial admin user
+-- Create initial admin user with low-cost bcrypt hash
 INSERT INTO users (username, email, password_hash, full_name, group_id)
 VALUES (
     'admin',
     'admin@company.com',
-    '$2b$14$0a4r3Cs1ed6D3lekeUFrTu8axaBGnuAuIan6Y9gHnNuAVRAaDbrQi',
+    crypt('admin123', gen_salt('bf', 10)),
     'System Administrator',
     (SELECT id FROM groups WHERE name = 'admin')
 )
 ON CONFLICT (username) DO NOTHING;
 
--- Create initial support user
+-- Create initial support user with low-cost bcrypt hash
 INSERT INTO users (username, email, password_hash, full_name, group_id)
 VALUES (
     'support',
     'support@company.com',
-    '$2b$14$0a4r3Cs1ed6D3lekeUFrTu8axaBGnuAuIan6Y9gHnNuAVRAaDbrQi',
+    crypt('support123', gen_salt('bf', 10)),
     'Support Staff',
     (SELECT id FROM groups WHERE name = 'support')
 )

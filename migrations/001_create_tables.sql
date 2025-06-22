@@ -1,5 +1,7 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Enable pgcrypto for crypt() function used in seed data
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- Groups table
 CREATE TABLE IF NOT EXISTS groups (
