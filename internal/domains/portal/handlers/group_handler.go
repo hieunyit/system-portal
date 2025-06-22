@@ -135,7 +135,7 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 // @Tags Permissions
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} response.SuccessResponse{data=[]entities.Permission}
+// @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
 // @Router /api/portal/permissions [get]
 func (h *GroupHandler) ListPermissions(c *gin.Context) {
 	perms, _ := h.uc.ListPermissions(c.Request.Context())
@@ -148,7 +148,7 @@ func (h *GroupHandler) ListPermissions(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "Group ID"
-// @Success 200 {object} response.SuccessResponse{data=[]entities.Permission}
+// @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
 // @Router /api/portal/groups/{id}/permissions [get]
 func (h *GroupHandler) GetGroupPermissions(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))

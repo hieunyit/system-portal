@@ -11,7 +11,7 @@ type PortalGroup struct {
 	ID          uuid.UUID
 	Name        string
 	DisplayName string
-	Permissions []Permission
+	Permissions []*Permission
 	IsActive    bool
 	CreatedAt   time.Time
 	UpdatedAt   time.Time

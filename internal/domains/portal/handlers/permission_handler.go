@@ -21,7 +21,7 @@ func NewPermissionHandler(u usecases.PermissionUsecase) *PermissionHandler {
 // @Tags Permissions
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} response.SuccessResponse{data=[]entities.Permission}
+// @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
 // @Router /api/portal/permissions [get]
 func (h *PermissionHandler) ListPermissions(c *gin.Context) {
 	perms, _ := h.uc.List(c.Request.Context())
