@@ -1570,6 +1570,43 @@ const docTemplate = `{
         },
         "/api/portal/audit/logs": {
             "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "username"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "group"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "ip"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "from"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "to"
+                    },
+                    {
+                        "type": "integer",
+                        "in": "query",
+                        "name": "page"
+                    },
+                    {
+                        "type": "integer",
+                        "in": "query",
+                        "name": "limit"
+                    }
+                ],
                 "security": [
                     {
                         "BearerAuth": []
@@ -3940,29 +3977,41 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.AuditLog": {
-            "type": "object",
-            "properties": {
-                "action": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "resource": {
-                    "type": "string"
-                },
-                "success": {
-                    "type": "boolean"
-                },
-                "userID": {
-                    "type": "string"
-                }
-            }
-        },
+       "entities.AuditLog": {
+           "type": "object",
+           "properties": {
+               "id": {
+                   "type": "string"
+               },
+               "userID": {
+                   "type": "string"
+               },
+               "username": {
+                   "type": "string"
+               },
+               "userGroup": {
+                   "type": "string"
+               },
+               "action": {
+                   "type": "string"
+               },
+               "resourceType": {
+                   "type": "string"
+               },
+               "resourceName": {
+                   "type": "string"
+               },
+               "ipAddress": {
+                   "type": "string"
+               },
+               "success": {
+                   "type": "boolean"
+               },
+               "createdAt": {
+                   "type": "string"
+               }
+           }
+       },
         "entities.Permission": {
             "type": "object",
             "properties": {
