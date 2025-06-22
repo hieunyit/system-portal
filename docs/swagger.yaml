@@ -265,6 +265,15 @@ definitions:
     - email
     - username
     type: object
+  dto.PortalUserUpdateRequest:
+    properties:
+      fullName:
+        type: string
+      groupId:
+        type: string
+      password:
+        type: string
+    type: object
   dto.PortalUserResponse:
     properties:
       email:
@@ -2624,7 +2633,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/dto.PortalUserRequest'
+          $ref: '#/definitions/dto.PortalUserUpdateRequest'
       produces:
       - application/json
       responses:

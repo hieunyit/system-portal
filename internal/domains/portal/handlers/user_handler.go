@@ -50,12 +50,12 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body dto.PortalUserRequest true "User data"
+// @Param request body dto.PortalUserUpdateRequest true "User data"
 // @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/portal/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var req dto.PortalUserRequest
+	var req dto.PortalUserUpdateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		http.RespondWithBadRequest(c, "invalid request")
 		return
@@ -135,8 +135,6 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 	}
 	user := &entities.PortalUser{
 		ID:        id,
-		Username:  req.Username,
-		Email:     req.Email,
 		FullName:  req.FullName,
 		Password:  req.Password,
 		GroupID:   req.GroupID,

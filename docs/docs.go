@@ -1946,7 +1946,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.PortalUserRequest"
+                            "$ref": "#/definitions/dto.PortalUserUpdateRequest"
                         }
                     }
                 ],
@@ -2042,7 +2042,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.PortalUserRequest"
+                            "$ref": "#/definitions/dto.PortalUserUpdateRequest"
                         }
                     }
                 ],
@@ -2706,7 +2706,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.PortalUserRequest": {
+                "dto.PortalUserRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -2726,6 +2726,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.PortalUserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "fullName": {
+                    "type": "string"
+                },
+                "groupId": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }

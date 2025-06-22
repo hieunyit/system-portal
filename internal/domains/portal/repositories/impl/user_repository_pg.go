@@ -100,8 +100,8 @@ func (r *pgUserRepo) List(ctx context.Context) ([]*entities.PortalUser, error) {
 func (r *pgUserRepo) Update(ctx context.Context, u *entities.PortalUser) error {
 	u.UpdatedAt = time.Now()
 	_, err := r.db.ExecContext(ctx,
-		`UPDATE users SET username=$2, email=$3, password_hash=$4, full_name=$5, group_id=$6, is_active=$7, updated_at=$8 WHERE id=$1`,
-		u.ID, u.Username, u.Email, u.Password, u.FullName, u.GroupID, u.IsActive, u.UpdatedAt,
+		`UPDATE users SET password_hash=$2, full_name=$3, group_id=$4, is_active=$5, updated_at=$6 WHERE id=$1`,
+		u.ID, u.Password, u.FullName, u.GroupID, u.IsActive, u.UpdatedAt,
 	)
 	if err != nil {
 		logger.Log.WithError(err).Error("update user failed")

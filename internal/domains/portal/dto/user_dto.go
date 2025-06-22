@@ -10,6 +10,14 @@ type PortalUserRequest struct {
 	GroupID  uuid.UUID `json:"groupId"`
 }
 
+// PortalUserUpdateRequest is used when updating a user. Username and email are
+// intentionally omitted as they cannot be changed.
+type PortalUserUpdateRequest struct {
+	FullName string    `json:"fullName"`
+	Password string    `json:"password"`
+	GroupID  uuid.UUID `json:"groupId"`
+}
+
 type PortalUserResponse struct {
 	ID       uuid.UUID `json:"id"`
 	Username string    `json:"username"`

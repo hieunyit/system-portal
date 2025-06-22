@@ -56,12 +56,10 @@ func (u *userUsecaseImpl) Update(ctx context.Context, user *entities.PortalUser)
 	if existing == nil {
 		return fmt.Errorf("user not found")
 	}
-	if other, _ := u.repo.GetByUsername(ctx, user.Username); other != nil && other.ID != user.ID {
-		return fmt.Errorf("username already exists")
-	}
-	if other, _ := u.repo.GetByEmail(ctx, user.Email); other != nil && other.ID != user.ID {
-		return fmt.Errorf("email already exists")
-	}
+	// username and email should not be updated; keep existing values
+	user.Username = existing.Username
+	user.Email = existing.Email
+
 	if g, _ := u.groupRepo.GetByID(ctx, user.GroupID); g == nil {
 		return fmt.Errorf("group not found")
 	}
@@ -71,6 +69,8 @@ func (u *userUsecaseImpl) Update(ctx context.Context, user *entities.PortalUser)
 			return err
 		}
 		user.Password = string(hash)
+	} else {
+		user.Password = existing.Password
 	}
 	return u.repo.Update(ctx, user)
 }
