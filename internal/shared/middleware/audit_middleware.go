@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -34,7 +35,7 @@ func (a *AuditMiddleware) Handler() gin.HandlerFunc {
 			"duration": duration.String(),
 		}).Info("request handled")
 
-		if a.uc != nil {
+		if a.uc != nil && (c.Request.Method == http.MethodPost || c.Request.Method == http.MethodPut || c.Request.Method == http.MethodDelete) {
 			logEntry := &entities.AuditLog{
 				ID:        uuid.New(),
 				Action:    c.Request.Method,
