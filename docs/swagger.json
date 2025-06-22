@@ -1860,6 +1860,87 @@
                 }
             }
         },
+        "/api/portal/permissions": {
+            "get": {
+                "security": [
+                    {"BearerAuth": []}
+                ],
+                "produces": ["application/json"],
+                "tags": ["Permissions"],
+                "summary": "List permissions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {"$ref": "#/definitions/entities.Permission"}
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {"BearerAuth": []}
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "tags": ["Permissions"],
+                "summary": "Create permission",
+                "parameters": [
+                    {
+                        "description": "Permission data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {"$ref": "#/definitions/entities.Permission"}
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {"$ref": "#/definitions/response.SuccessResponse"}
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {"$ref": "#/definitions/response.ErrorResponse"}
+                    }
+                }
+            }
+        },
+        "/api/portal/permissions/{id}": {
+            "put": {
+                "security": [
+                    {"BearerAuth": []}
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "tags": ["Permissions"],
+                "summary": "Update permission",
+                "parameters": [
+                    {"type": "string", "description": "Permission ID", "name": "id", "in": "path", "required": true},
+                    {"description": "Permission data", "name": "request", "in": "body", "required": true, "schema": {"$ref": "#/definitions/entities.Permission"}}
+                ],
+                "responses": {
+                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}},
+                    "400": {"description": "Bad Request", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
+                }
+            },
+            "delete": {
+                "security": [
+                    {"BearerAuth": []}
+                ],
+                "produces": ["application/json"],
+                "tags": ["Permissions"],
+                "summary": "Delete permission",
+                "parameters": [
+                    {"type": "string", "description": "Permission ID", "name": "id", "in": "path", "required": true}
+                ],
+                "responses": {
+                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}},
+                    "400": {"description": "Bad Request", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
+                }
+            }
+        },
         "/api/portal/users": {
             "get": {
                 "security": [

@@ -2386,7 +2386,7 @@ paths:
       - BearerAuth: []
       summary: Create portal group
       tags:
-      - Portal Groups
+  - Portal Groups
   /api/portal/groups/{id}:
     get:
       parameters:
@@ -2415,6 +2415,103 @@ paths:
       summary: Get portal group
       tags:
       - Portal Groups
+  /api/portal/permissions:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Permission'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: List permissions
+      tags:
+      - Permissions
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Permission data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Permission'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create permission
+      tags:
+      - Permissions
+  /api/portal/permissions/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Permission ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Permission data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Permission'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update permission
+      tags:
+      - Permissions
+    delete:
+      parameters:
+      - description: Permission ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete permission
+      tags:
+      - Permissions
   /api/portal/users:
     get:
       description: Retrieve all portal users

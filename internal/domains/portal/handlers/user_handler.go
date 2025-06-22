@@ -25,7 +25,7 @@ func NewUserHandler(u usecases.UserUsecase) *UserHandler { return &UserHandler{u
 // @Tags Portal Users
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {array} dto.PortalUserResponse
+// @Success 200 {object} response.SuccessResponse{data=[]dto.PortalUserResponse}
 // @Router /api/portal/users [get]
 func (h *UserHandler) ListUsers(c *gin.Context) {
 	users, _ := h.uc.List(c.Request.Context())
@@ -51,7 +51,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param request body dto.PortalUserRequest true "User data"
-// @Success 201 {string} string "created"
+// @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/portal/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
@@ -82,7 +82,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {object} dto.PortalUserResponse
+// @Success 200 {object} response.SuccessResponse{data=dto.PortalUserResponse}
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Router /api/portal/users/{id} [get]
@@ -116,7 +116,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Produce json
 // @Param id path string true "User ID"
 // @Param request body dto.PortalUserRequest true "User data"
-// @Success 200 {string} string "updated"
+// @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/portal/users/{id} [put]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
@@ -151,7 +151,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {string} string "deleted"
+// @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
 // @Router /api/portal/users/{id} [delete]
 func (h *UserHandler) DeleteUser(c *gin.Context) {
@@ -170,7 +170,7 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {string} string "ok"
+// @Success 200 {object} response.SuccessResponse
 // @Router /api/portal/users/{id}/activate [put]
 func (h *UserHandler) ActivateUser(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }
 
@@ -180,7 +180,7 @@ func (h *UserHandler) ActivateUser(c *gin.Context) { http.RespondWithMessage(c, 
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {string} string "ok"
+// @Success 200 {object} response.SuccessResponse
 // @Router /api/portal/users/{id}/deactivate [put]
 func (h *UserHandler) DeactivateUser(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }
 
@@ -190,6 +190,6 @@ func (h *UserHandler) DeactivateUser(c *gin.Context) { http.RespondWithMessage(c
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {string} string "ok"
+// @Success 200 {object} response.SuccessResponse
 // @Router /api/portal/users/{id}/reset-password [put]
 func (h *UserHandler) ResetPassword(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }

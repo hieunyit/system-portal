@@ -16,11 +16,28 @@ func NewPermissionHandler(u usecases.PermissionUsecase) *PermissionHandler {
 	return &PermissionHandler{uc: u}
 }
 
+// ListPermissions godoc
+// @Summary List permissions
+// @Tags Permissions
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} response.SuccessResponse{data=[]entities.Permission}
+// @Router /api/portal/permissions [get]
 func (h *PermissionHandler) ListPermissions(c *gin.Context) {
 	perms, _ := h.uc.List(c.Request.Context())
 	httpresp.RespondWithSuccess(c, nethttp.StatusOK, perms)
 }
 
+// CreatePermission godoc
+// @Summary Create permission
+// @Tags Permissions
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body entities.Permission true "Permission data"
+// @Success 201 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/permissions [post]
 func (h *PermissionHandler) CreatePermission(c *gin.Context) {
 	var p entities.Permission
 	if err := c.ShouldBindJSON(&p); err != nil {
@@ -32,6 +49,17 @@ func (h *PermissionHandler) CreatePermission(c *gin.Context) {
 	httpresp.RespondWithMessage(c, nethttp.StatusCreated, "created")
 }
 
+// UpdatePermission godoc
+// @Summary Update permission
+// @Tags Permissions
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param id path string true "Permission ID"
+// @Param request body entities.Permission true "Permission data"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/permissions/{id} [put]
 func (h *PermissionHandler) UpdatePermission(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -48,6 +76,15 @@ func (h *PermissionHandler) UpdatePermission(c *gin.Context) {
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "updated")
 }
 
+// DeletePermission godoc
+// @Summary Delete permission
+// @Tags Permissions
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "Permission ID"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/permissions/{id} [delete]
 func (h *PermissionHandler) DeletePermission(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {

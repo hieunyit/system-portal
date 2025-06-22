@@ -23,7 +23,14 @@ func NewAuditHandler(u usecases.AuditUsecase) *AuditHandler { return &AuditHandl
 // @Tags Audit
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {array} entities.AuditLog
+// @Param username query string false "Filter by username"
+// @Param group query string false "Filter by group"
+// @Param ip query string false "Filter by IP address"
+// @Param from query string false "Start date" Format(date)
+// @Param to query string false "End date" Format(date)
+// @Param page query int false "Page number" default(1)
+// @Param limit query int false "Items per page" default(20)
+// @Success 200 {object} response.SuccessResponse{data=[]entities.AuditLog}
 // @Router /api/portal/audit/logs [get]
 type auditQuery struct {
 	Username string     `form:"username"`
@@ -55,8 +62,13 @@ func (h *AuditHandler) GetAuditLogs(c *gin.Context) {
 // @Summary Export audit logs
 // @Tags Audit
 // @Security BearerAuth
-// @Produce json
-// @Success 200 {string} string "not implemented"
+// @Produce text/csv
+// @Param username query string false "Filter by username"
+// @Param group query string false "Filter by group"
+// @Param ip query string false "Filter by IP address"
+// @Param from query string false "Start date" Format(date)
+// @Param to query string false "End date" Format(date)
+// @Success 200 {string} string "CSV file"
 // @Router /api/portal/audit/logs/export [get]
 func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 	var q auditQuery
@@ -97,7 +109,12 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 // @Tags Audit
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {string} string "not implemented"
+// @Param username query string false "Filter by username"
+// @Param group query string false "Filter by group"
+// @Param ip query string false "Filter by IP address"
+// @Param from query string false "Start date" Format(date)
+// @Param to query string false "End date" Format(date)
+// @Success 200 {object} response.SuccessResponse{data=map[string]int}
 // @Router /api/portal/audit/stats [get]
 func (h *AuditHandler) GetAuditStats(c *gin.Context) {
 	var q auditQuery

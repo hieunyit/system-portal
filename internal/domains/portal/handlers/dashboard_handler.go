@@ -22,7 +22,7 @@ func NewDashboardHandler(u repositories.UserRepository, a repositories.AuditRepo
 // @Tags Dashboard
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} dto.StatsResponse
+// @Success 200 {object} response.SuccessResponse{data=dto.StatsResponse}
 // @Router /api/portal/dashboard/stats [get]
 func (h *DashboardHandler) GetDashboardStats(c *gin.Context) {
 	users, _ := h.userRepo.List(c.Request.Context())
@@ -34,7 +34,7 @@ func (h *DashboardHandler) GetDashboardStats(c *gin.Context) {
 // @Tags Dashboard
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {array} dto.AuditResponse
+// @Success 200 {object} response.SuccessResponse{data=[]dto.AuditResponse}
 // @Router /api/portal/dashboard/activities [get]
 func (h *DashboardHandler) GetRecentActivities(c *gin.Context) {
 	filter := &entities.AuditFilter{Page: 1, Limit: 10}
@@ -58,7 +58,7 @@ func (h *DashboardHandler) GetRecentActivities(c *gin.Context) {
 // @Tags Dashboard
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} response.SuccessResponse{data=map[string]interface{}}
 // @Router /api/portal/dashboard/charts/users [get]
 func (h *DashboardHandler) GetUserChartData(c *gin.Context) {
 	http.RespondWithSuccess(c, 200, gin.H{})
@@ -69,7 +69,7 @@ func (h *DashboardHandler) GetUserChartData(c *gin.Context) {
 // @Tags Dashboard
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} response.SuccessResponse{data=map[string]interface{}}
 // @Router /api/portal/dashboard/charts/activities [get]
 func (h *DashboardHandler) GetActivityChartData(c *gin.Context) {
 	http.RespondWithSuccess(c, 200, gin.H{})
