@@ -45,6 +45,17 @@ func (u *authUsecaseImpl) Login(ctx context.Context, username, password, ip stri
 		return "", "", uuid.Nil, "", errors.New("invalid credentials")
 	}
 
+	if cost, err := bcrypt.Cost([]byte(usr.Password)); err == nil && cost > bcrypt.DefaultCost {
+		if newHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost); err == nil {
+			usr.Password = string(newHash)
+			if err := u.users.Update(ctx, usr); err != nil {
+				logger.Log.WithError(err).Warn("failed to update password hash")
+			} else {
+				logger.Log.WithField("username", username).Debug("password rehashed with lower cost")
+			}
+		}
+	}
+
 	role := "support"
 	if username == "admin" {
 		role = "admin"
