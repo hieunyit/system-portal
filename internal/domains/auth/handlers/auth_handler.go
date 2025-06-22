@@ -36,13 +36,16 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		http.RespondWithBadRequest(c, "invalid request")
 		return
 	}
-	access, refresh, err := h.usecase.Login(c.Request.Context(), req.Username, req.Password)
+	access, refresh, userID, role, err := h.usecase.Login(c.Request.Context(), req.Username, req.Password)
 	if err != nil {
 		logger.Log.WithError(err).WithField("username", req.Username).Error("login failed")
 		http.RespondWithUnauthorized(c, "login failed")
 		return
 	}
 	logger.Log.WithField("username", req.Username).Info("user logged in")
+	c.Set("username", req.Username)
+	c.Set("userID", userID)
+	c.Set("role", role)
 	http.RespondWithSuccess(c, 200, dto.TokenResponse{AccessToken: access, RefreshToken: refresh})
 }
 

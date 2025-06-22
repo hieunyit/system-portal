@@ -25,24 +25,24 @@ func NewAuthUsecase(sessionRepo repositories.SessionRepository, userRepo portalr
 	return &authUsecaseImpl{sessions: sessionRepo, users: userRepo, jwt: jwtSvc}
 }
 
-func (u *authUsecaseImpl) Login(ctx context.Context, username, password string) (string, string, error) {
+func (u *authUsecaseImpl) Login(ctx context.Context, username, password string) (string, string, uuid.UUID, string, error) {
 	logger.Log.WithField("username", username).Info("login attempt")
 	usr, err := u.users.GetByUsername(ctx, username)
 	if err != nil {
 		logger.Log.WithError(err).Error("failed to fetch user")
-		return "", "", errors.New("invalid credentials")
+		return "", "", uuid.Nil, "", errors.New("invalid credentials")
 	}
 	if usr == nil {
 		logger.Log.WithField("username", username).Warn("user not found")
-		return "", "", errors.New("invalid credentials")
+		return "", "", uuid.Nil, "", errors.New("invalid credentials")
 	}
 	if !usr.IsActive {
 		logger.Log.WithField("username", username).Warn("user inactive")
-		return "", "", errors.New("invalid credentials")
+		return "", "", uuid.Nil, "", errors.New("invalid credentials")
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(password)); err != nil {
 		logger.Log.WithField("username", username).Warn("password mismatch")
-		return "", "", errors.New("invalid credentials")
+		return "", "", uuid.Nil, "", errors.New("invalid credentials")
 	}
 
 	role := "support"
@@ -65,7 +65,7 @@ func (u *authUsecaseImpl) Login(ctx context.Context, username, password string) 
 	}
 	u.sessions.Create(ctx, s)
 	logger.Log.WithField("username", username).Info("session created")
-	return access, refresh, nil
+	return access, refresh, usr.ID, role, nil
 }
 
 func (u *authUsecaseImpl) Refresh(ctx context.Context, refreshToken string) (string, string, error) {
