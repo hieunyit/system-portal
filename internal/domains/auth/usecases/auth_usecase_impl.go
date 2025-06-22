@@ -78,8 +78,11 @@ func (u *authUsecaseImpl) Login(ctx context.Context, username, password, ip stri
 		CreatedAt:        time.Now(),
 		IPAddress:        ip,
 	}
-	u.sessions.Create(ctx, s)
-	logger.Log.WithField("username", username).Info("session created")
+	if err := u.sessions.Create(ctx, s); err != nil {
+		logger.Log.WithError(err).Error("failed to create session")
+	} else {
+		logger.Log.WithField("username", username).Info("session created")
+	}
 	return access, refresh, usr.ID, role, nil
 }
 
@@ -121,8 +124,11 @@ func (u *authUsecaseImpl) Refresh(ctx context.Context, refreshToken string) (str
 		IsActive:         true,
 		CreatedAt:        time.Now(),
 	}
-	u.sessions.Create(ctx, s)
-	logger.Log.WithField("username", claims.Username).Info("session refreshed")
+	if err := u.sessions.Create(ctx, s); err != nil {
+		logger.Log.WithError(err).Error("failed to create session on refresh")
+	} else {
+		logger.Log.WithField("username", claims.Username).Info("session refreshed")
+	}
 	return access, refreshNew, nil
 }
 
