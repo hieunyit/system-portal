@@ -185,6 +185,9 @@ func (h *GroupHandler) UpdateGroupPermissions(c *gin.Context) {
 		http.RespondWithBadRequest(c, "invalid request")
 		return
 	}
-	h.uc.UpdatePermissions(c.Request.Context(), id, req.PermissionIDs)
+	if err := h.uc.UpdatePermissions(c.Request.Context(), id, req.PermissionIDs); err != nil {
+		http.RespondWithBadRequest(c, err.Error())
+		return
+	}
 	http.RespondWithMessage(c, nethttp.StatusOK, "updated")
 }

@@ -1895,6 +1895,65 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/portal/groups/{id}/permissions": {
+            "get": {
+                "security": [
+                    {"BearerAuth": []}
+                ],
+                "produces": ["application/json"],
+                "tags": ["Permissions"],
+                "summary": "Get permissions for a group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {"type": "array", "items": {"$ref": "#/definitions/entities.Permission"}}
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {"BearerAuth": []}
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "tags": ["Permissions"],
+                "summary": "Update group permissions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Permission IDs",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "permission_ids": {"type": "array", "items": {"type": "string"}}
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}},
+                    "400": {"description": "Bad Request", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
+                }
+            }
+        },
         "/api/portal/users": {
             "get": {
                 "security": [

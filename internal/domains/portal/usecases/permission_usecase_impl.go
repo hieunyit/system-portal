@@ -2,6 +2,8 @@ package usecases
 
 import (
 	"context"
+	"fmt"
+
 	"github.com/google/uuid"
 	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/repositories"
@@ -24,10 +26,27 @@ func (u *permissionUsecaseImpl) Get(ctx context.Context, id uuid.UUID) (*entitie
 }
 
 func (u *permissionUsecaseImpl) Create(ctx context.Context, p *entities.Permission) error {
+	if existing, err := u.repo.GetByResourceAction(ctx, p.Resource, p.Action); err == nil && existing != nil {
+		return fmt.Errorf("permission already exists")
+	} else if err != nil {
+		return err
+	}
 	return u.repo.Create(ctx, p)
 }
 
 func (u *permissionUsecaseImpl) Update(ctx context.Context, p *entities.Permission) error {
+	existing, err := u.repo.GetByID(ctx, p.ID)
+	if err != nil {
+		return err
+	}
+	if existing == nil {
+		return fmt.Errorf("permission not found")
+	}
+	if dup, err := u.repo.GetByResourceAction(ctx, p.Resource, p.Action); err == nil && dup != nil && dup.ID != p.ID {
+		return fmt.Errorf("permission already exists")
+	} else if err != nil {
+		return err
+	}
 	return u.repo.Update(ctx, p)
 }
 

@@ -65,6 +65,18 @@ func (r *pgPermissionRepo) Delete(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
+func (r *pgPermissionRepo) GetByResourceAction(ctx context.Context, resource, action string) (*entities.Permission, error) {
+	row := r.db.QueryRowContext(ctx, `SELECT id, resource, action, description FROM permissions WHERE resource=$1 AND action=$2`, resource, action)
+	var p entities.Permission
+	if err := row.Scan(&p.ID, &p.Resource, &p.Action, &p.Description); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &p, nil
+}
+
 func (r *pgPermissionRepo) GetByGroup(ctx context.Context, groupID uuid.UUID) ([]*entities.Permission, error) {
 	rows, err := r.db.QueryContext(ctx, `SELECT p.id, p.resource, p.action, p.description
         FROM permissions p

@@ -24,7 +24,11 @@ func NewPermissionHandler(u usecases.PermissionUsecase) *PermissionHandler {
 // @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
 // @Router /api/portal/permissions [get]
 func (h *PermissionHandler) ListPermissions(c *gin.Context) {
-	perms, _ := h.uc.List(c.Request.Context())
+	perms, err := h.uc.List(c.Request.Context())
+	if err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
 	httpresp.RespondWithSuccess(c, nethttp.StatusOK, perms)
 }
 
@@ -45,7 +49,10 @@ func (h *PermissionHandler) CreatePermission(c *gin.Context) {
 		return
 	}
 	p.ID = uuid.New()
-	h.uc.Create(c.Request.Context(), &p)
+	if err := h.uc.Create(c.Request.Context(), &p); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
 	httpresp.RespondWithMessage(c, nethttp.StatusCreated, "created")
 }
 
@@ -72,7 +79,10 @@ func (h *PermissionHandler) UpdatePermission(c *gin.Context) {
 		return
 	}
 	p.ID = id
-	h.uc.Update(c.Request.Context(), &p)
+	if err := h.uc.Update(c.Request.Context(), &p); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "updated")
 }
 
@@ -91,6 +101,9 @@ func (h *PermissionHandler) DeletePermission(c *gin.Context) {
 		httpresp.RespondWithBadRequest(c, "invalid id")
 		return
 	}
-	h.uc.Delete(c.Request.Context(), id)
+	if err := h.uc.Delete(c.Request.Context(), id); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "deleted")
 }

@@ -2424,6 +2424,64 @@ paths:
       summary: Get portal group
       tags:
       - Portal Groups
+  /api/portal/groups/{id}/permissions:
+    get:
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/entities.Permission'
+      security:
+      - BearerAuth: []
+      summary: Get permissions for a group
+      tags:
+      - Permissions
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Permission IDs
+        in: body
+        name: request
+        required: true
+        schema:
+          type: object
+          properties:
+            permission_ids:
+              type: array
+              items:
+                type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update group permissions
+      tags:
+      - Permissions
   /api/portal/permissions:
     get:
       produces:

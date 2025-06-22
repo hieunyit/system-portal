@@ -89,6 +89,22 @@ func (g *groupUsecaseImpl) UpdatePermissions(ctx context.Context, id uuid.UUID, 
 	if g.permRepo == nil {
 		return nil
 	}
+	grp, err := g.repo.GetByID(ctx, id)
+	if err != nil {
+		return err
+	}
+	if grp == nil {
+		return fmt.Errorf("group not found")
+	}
+	for _, pid := range permIDs {
+		p, err := g.permRepo.GetByID(ctx, pid)
+		if err != nil {
+			return err
+		}
+		if p == nil {
+			return fmt.Errorf("permission not found")
+		}
+	}
 	return g.permRepo.SetForGroup(ctx, id, permIDs)
 }
 
