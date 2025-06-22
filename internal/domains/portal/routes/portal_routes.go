@@ -2,28 +2,28 @@
 package routes
 
 import (
-	"system-portal/internal/domains/portal/handlers"
-	"system-portal/internal/shared/middleware"
+        portalHandlers "system-portal/internal/domains/portal/handlers"
+        "system-portal/internal/shared/middleware"
 
-	"github.com/gin-gonic/gin"
+        "github.com/gin-gonic/gin"
 )
 
 // Dependencies injected from main
 var (
-	userHandler       *handlers.UserHandler
-	groupHandler      *handlers.GroupHandler
-	permissionHandler *handlers.PermissionHandler
-	auditHandler      *handlers.AuditHandler
-	dashboardHandler  *handlers.DashboardHandler
+        userHandler       *portalHandlers.UserHandler
+        groupHandler      *portalHandlers.GroupHandler
+        permissionHandler *portalHandlers.PermissionHandler
+        auditHandler      *portalHandlers.AuditHandler
+        dashboardHandler  *portalHandlers.DashboardHandler
 )
 
 // Initialize sets up the handler dependencies
 func Initialize(
-	uh *handlers.UserHandler,
-	gh *handlers.GroupHandler,
-	ph *handlers.PermissionHandler,
-	ah *handlers.AuditHandler,
-	dh *handlers.DashboardHandler,
+        uh *portalHandlers.UserHandler,
+        gh *portalHandlers.GroupHandler,
+        ph *portalHandlers.PermissionHandler,
+        ah *portalHandlers.AuditHandler,
+        dh *portalHandlers.DashboardHandler,
 ) {
 	userHandler = uh
 	groupHandler = gh
