@@ -6,16 +6,21 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"system-portal/internal/domains/portal/entities"
+	portalrepos "system-portal/internal/domains/portal/repositories"
 	"system-portal/internal/domains/portal/usecases"
 	"system-portal/pkg/logger"
 )
 
 // AuditMiddleware logs simple request information.
 type AuditMiddleware struct {
-	uc usecases.AuditUsecase
+	uc     usecases.AuditUsecase
+	users  portalrepos.UserRepository
+	groups portalrepos.GroupRepository
 }
 
-func NewAuditMiddleware(u usecases.AuditUsecase) *AuditMiddleware { return &AuditMiddleware{uc: u} }
+func NewAuditMiddleware(u usecases.AuditUsecase, userRepo portalrepos.UserRepository, groupRepo portalrepos.GroupRepository) *AuditMiddleware {
+	return &AuditMiddleware{uc: u, users: userRepo, groups: groupRepo}
+}
 
 func (a *AuditMiddleware) Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -37,12 +42,28 @@ func (a *AuditMiddleware) Handler() gin.HandlerFunc {
 				Success:   c.Writer.Status() < 400,
 				CreatedAt: time.Now(),
 			}
-			// Username is available via context but user ID lookup is omitted
+
 			if uname, ok := c.Get("username"); ok {
 				if name, ok := uname.(string); ok {
-					logEntry.Action = name + " " + logEntry.Action
+					logEntry.Username = name
+					if a.users != nil {
+						if usr, err := a.users.GetByUsername(c.Request.Context(), name); err == nil && usr != nil {
+							logEntry.UserID = usr.ID
+							if a.groups != nil {
+								if grp, err := a.groups.GetByID(c.Request.Context(), usr.GroupID); err == nil && grp != nil {
+									logEntry.UserGroup = grp.Name
+								}
+							}
+						}
+					}
 				}
 			}
+			if group, ok := c.Get("role"); ok && logEntry.UserGroup == "" {
+				if g, ok := group.(string); ok {
+					logEntry.UserGroup = g
+				}
+			}
+
 			if err := a.uc.Add(c.Request.Context(), logEntry); err != nil {
 				logger.Log.WithError(err).Warn("failed to add audit log")
 			}

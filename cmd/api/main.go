@@ -20,6 +20,7 @@ import (
 	openvpnRoutes "system-portal/internal/domains/openvpn/routes"
 	openvpnUsecases "system-portal/internal/domains/openvpn/usecases"
 	portalHandlers "system-portal/internal/domains/portal/handlers"
+	portalRepo "system-portal/internal/domains/portal/repositories"
 	portalRepoImpl "system-portal/internal/domains/portal/repositories/impl"
 	portalRoutes "system-portal/internal/domains/portal/routes"
 	portalUsecases "system-portal/internal/domains/portal/usecases"
@@ -109,9 +110,9 @@ func main() {
 	validationMiddleware := middleware.NewValidationMiddleware()
 
 	// Initialize domain handlers and routes
-	auditUC := initializeDomainRoutes(cfg, db, jwtService, xmlrpcClient, ldapClient)
+	auditUC, userRepo, groupRepo := initializeDomainRoutes(cfg, db, jwtService, xmlrpcClient, ldapClient)
 
-	auditMiddleware := middleware.NewAuditMiddleware(auditUC)
+	auditMiddleware := middleware.NewAuditMiddleware(auditUC, userRepo, groupRepo)
 
 	// Create router configuration
 	routerConfig := &serverHttp.RouterConfig{
@@ -138,7 +139,7 @@ func main() {
 	}
 }
 
-func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) portalUsecases.AuditUsecase {
+func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) (portalUsecases.AuditUsecase, portalRepo.UserRepository, portalRepo.GroupRepository) {
 	// Portal domain using PostgreSQL repositories
 	userRepo := portalRepoImpl.NewUserRepositoryPG(db.DB)
 	groupRepo := portalRepoImpl.NewGroupRepositoryPG(db.DB)
@@ -192,7 +193,7 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 		disconnectHandlerOV,
 	)
 
-	return auditUC
+	return auditUC, userRepo, groupRepo
 }
 
 // waitForPostgres pings the database until it responds or retries are exhausted.

@@ -10,6 +10,8 @@ import (
 type AuditLog struct {
 	ID        uuid.UUID
 	UserID    uuid.UUID
+	Username  string
+	UserGroup string
 	Action    string
 	Resource  string
 	Success   bool
