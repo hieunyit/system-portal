@@ -71,7 +71,10 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
-	h.uc.Create(c.Request.Context(), user)
+	if err := h.uc.Create(c.Request.Context(), user); err != nil {
+		http.RespondWithBadRequest(c, err.Error())
+		return
+	}
 	http.RespondWithMessage(c, nethttp.StatusCreated, "created")
 }
 
@@ -140,7 +143,10 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		IsActive:  true,
 		UpdatedAt: time.Now(),
 	}
-	h.uc.Update(c.Request.Context(), user)
+	if err := h.uc.Update(c.Request.Context(), user); err != nil {
+		http.RespondWithBadRequest(c, err.Error())
+		return
+	}
 	http.RespondWithMessage(c, nethttp.StatusOK, "updated")
 }
 
@@ -160,7 +166,10 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 		http.RespondWithBadRequest(c, "invalid id")
 		return
 	}
-	h.uc.Delete(c.Request.Context(), id)
+	if err := h.uc.Delete(c.Request.Context(), id); err != nil {
+		http.RespondWithBadRequest(c, err.Error())
+		return
+	}
 	http.RespondWithMessage(c, nethttp.StatusOK, "deleted")
 }
 

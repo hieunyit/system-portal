@@ -2,6 +2,8 @@ package usecases
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"system-portal/internal/domains/portal/entities"
@@ -18,19 +20,69 @@ func NewGroupUsecase(repo repositories.GroupRepository, perm repositories.Permis
 }
 
 func (g *groupUsecaseImpl) Create(ctx context.Context, gr *entities.PortalGroup) error {
+	existing, err := g.repo.GetByName(ctx, gr.Name)
+	if err != nil {
+		return err
+	}
+	if existing != nil {
+		return fmt.Errorf("group already exists")
+	}
 	return g.repo.Create(ctx, gr)
 }
 
 func (g *groupUsecaseImpl) List(ctx context.Context) ([]*entities.PortalGroup, error) {
-	return g.repo.List(ctx)
+	groups, err := g.repo.List(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if g.permRepo != nil {
+		for _, grp := range groups {
+			perms, _ := g.permRepo.GetByGroup(ctx, grp.ID)
+			grp.Permissions = perms
+		}
+	}
+	return groups, nil
 }
 
 func (g *groupUsecaseImpl) Get(ctx context.Context, id uuid.UUID) (*entities.PortalGroup, error) {
-	return g.repo.GetByID(ctx, id)
+	grp, err := g.repo.GetByID(ctx, id)
+	if err != nil || grp == nil {
+		return grp, err
+	}
+	if g.permRepo != nil {
+		grp.Permissions, _ = g.permRepo.GetByGroup(ctx, grp.ID)
+	}
+	return grp, nil
 }
 
 func (g *groupUsecaseImpl) GetByName(ctx context.Context, name string) (*entities.PortalGroup, error) {
 	return g.repo.GetByName(ctx, name)
+}
+
+func (g *groupUsecaseImpl) Update(ctx context.Context, gr *entities.PortalGroup) error {
+	existing, err := g.repo.GetByID(ctx, gr.ID)
+	if err != nil {
+		return err
+	}
+	if existing == nil {
+		return fmt.Errorf("group not found")
+	}
+	if other, err := g.repo.GetByName(ctx, gr.Name); err == nil && other != nil && other.ID != gr.ID {
+		return fmt.Errorf("group already exists")
+	}
+	gr.UpdatedAt = time.Now()
+	return g.repo.Update(ctx, gr)
+}
+
+func (g *groupUsecaseImpl) Delete(ctx context.Context, id uuid.UUID) error {
+	existing, err := g.repo.GetByID(ctx, id)
+	if err != nil {
+		return err
+	}
+	if existing == nil {
+		return fmt.Errorf("group not found")
+	}
+	return g.repo.Delete(ctx, id)
 }
 
 func (g *groupUsecaseImpl) UpdatePermissions(ctx context.Context, id uuid.UUID, permIDs []uuid.UUID) error {

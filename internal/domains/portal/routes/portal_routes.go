@@ -2,28 +2,28 @@
 package routes
 
 import (
-        portalHandlers "system-portal/internal/domains/portal/handlers"
-        "system-portal/internal/shared/middleware"
+	portalHandlers "system-portal/internal/domains/portal/handlers"
+	"system-portal/internal/shared/middleware"
 
-        "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 // Dependencies injected from main
 var (
-        userHandler       *portalHandlers.UserHandler
-        groupHandler      *portalHandlers.GroupHandler
-        permissionHandler *portalHandlers.PermissionHandler
-        auditHandler      *portalHandlers.AuditHandler
-        dashboardHandler  *portalHandlers.DashboardHandler
+	userHandler       *portalHandlers.UserHandler
+	groupHandler      *portalHandlers.GroupHandler
+	permissionHandler *portalHandlers.PermissionHandler
+	auditHandler      *portalHandlers.AuditHandler
+	dashboardHandler  *portalHandlers.DashboardHandler
 )
 
 // Initialize sets up the handler dependencies
 func Initialize(
-        uh *portalHandlers.UserHandler,
-        gh *portalHandlers.GroupHandler,
-        ph *portalHandlers.PermissionHandler,
-        ah *portalHandlers.AuditHandler,
-        dh *portalHandlers.DashboardHandler,
+	uh *portalHandlers.UserHandler,
+	gh *portalHandlers.GroupHandler,
+	ph *portalHandlers.PermissionHandler,
+	ah *portalHandlers.AuditHandler,
+	dh *portalHandlers.DashboardHandler,
 ) {
 	userHandler = uh
 	groupHandler = gh
@@ -74,9 +74,11 @@ func registerGroupRoutes(portal *gin.RouterGroup) {
 	{
 		groups.GET("", groupHandler.ListGroups)
 		groups.GET("/:id", groupHandler.GetGroup)
+		groups.POST("", groupHandler.CreateGroup)
+		groups.PUT("/:id", groupHandler.UpdateGroup)
+		groups.DELETE("/:id", groupHandler.DeleteGroup)
 		groups.GET("/:id/permissions", groupHandler.GetGroupPermissions)
 		groups.PUT("/:id/permissions", groupHandler.UpdateGroupPermissions)
-		// Groups are predefined (admin, support), so no create/update/delete
 	}
 }
 

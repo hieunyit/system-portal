@@ -69,3 +69,16 @@ func (r *pgGroupRepo) List(ctx context.Context) ([]*entities.PortalGroup, error)
 	}
 	return groups, nil
 }
+
+func (r *pgGroupRepo) Update(ctx context.Context, g *entities.PortalGroup) error {
+	_, err := r.db.ExecContext(ctx,
+		`UPDATE groups SET name=$2, display_name=$3, is_active=$4, updated_at=$5 WHERE id=$1`,
+		g.ID, g.Name, g.DisplayName, g.IsActive, g.UpdatedAt,
+	)
+	return err
+}
+
+func (r *pgGroupRepo) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := r.db.ExecContext(ctx, `DELETE FROM groups WHERE id=$1`, id)
+	return err
+}

@@ -63,6 +63,22 @@ func (r *pgUserRepo) GetByUsername(ctx context.Context, username string) (*entit
 	return &u, nil
 }
 
+func (r *pgUserRepo) GetByEmail(ctx context.Context, email string) (*entities.PortalUser, error) {
+	row := r.db.QueryRowContext(ctx,
+		`SELECT id, username, email, password_hash, full_name, group_id, is_active, created_at, updated_at
+        FROM users WHERE email=$1`, email)
+	var u entities.PortalUser
+	err := row.Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.FullName, &u.GroupID, &u.IsActive, &u.CreatedAt, &u.UpdatedAt)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		logger.Log.WithError(err).Error("get user by email failed")
+		return nil, err
+	}
+	return &u, nil
+}
+
 func (r *pgUserRepo) List(ctx context.Context) ([]*entities.PortalUser, error) {
 	rows, err := r.db.QueryContext(ctx,
 		`SELECT id, username, email, full_name, group_id, is_active, created_at, updated_at FROM users`)

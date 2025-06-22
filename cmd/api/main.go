@@ -153,7 +153,7 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 	authHandler := authHandlers.NewAuthHandler(authUsecase)
 	authRoutes.Initialize(authHandler)
 
-	userUC := portalUsecases.NewUserUsecase(userRepo)
+	userUC := portalUsecases.NewUserUsecase(userRepo, groupRepo)
 	groupUC := portalUsecases.NewGroupUsecase(groupRepo, permRepo)
 	permUC := portalUsecases.NewPermissionUsecase(permRepo)
 	auditUC := portalUsecases.NewAuditUsecase(auditRepo)
