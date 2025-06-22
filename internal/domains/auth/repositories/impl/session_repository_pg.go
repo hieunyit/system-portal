@@ -18,9 +18,9 @@ func NewSessionRepositoryPG(db *sql.DB) repositories.SessionRepository {
 
 func (r *pgSessionRepo) Create(ctx context.Context, s *entities.Session) error {
 	_, err := r.db.ExecContext(ctx,
-		`INSERT INTO user_sessions (id, user_id, token_hash, refresh_token_hash, expires_at, refresh_expires_at, is_active, created_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
-		s.ID, s.UserID, s.TokenHash, s.RefreshTokenHash, s.ExpiresAt, s.RefreshExpiresAt, s.IsActive, s.CreatedAt,
+		`INSERT INTO user_sessions (id, user_id, token_hash, refresh_token_hash, expires_at, refresh_expires_at, is_active, ip_address, created_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+		s.ID, s.UserID, s.TokenHash, s.RefreshTokenHash, s.ExpiresAt, s.RefreshExpiresAt, s.IsActive, s.IPAddress, s.CreatedAt,
 	)
 	if err != nil {
 		logger.Log.WithError(err).Error("create session failed")
@@ -30,10 +30,10 @@ func (r *pgSessionRepo) Create(ctx context.Context, s *entities.Session) error {
 
 func (r *pgSessionRepo) GetByTokenHash(ctx context.Context, hash string) (*entities.Session, error) {
 	row := r.db.QueryRowContext(ctx,
-		`SELECT id, user_id, token_hash, refresh_token_hash, expires_at, refresh_expires_at, is_active, created_at
+		`SELECT id, user_id, token_hash, refresh_token_hash, expires_at, refresh_expires_at, is_active, ip_address, created_at
          FROM user_sessions WHERE token_hash=$1`, hash)
 	var s entities.Session
-	err := row.Scan(&s.ID, &s.UserID, &s.TokenHash, &s.RefreshTokenHash, &s.ExpiresAt, &s.RefreshExpiresAt, &s.IsActive, &s.CreatedAt)
+	err := row.Scan(&s.ID, &s.UserID, &s.TokenHash, &s.RefreshTokenHash, &s.ExpiresAt, &s.RefreshExpiresAt, &s.IsActive, &s.IPAddress, &s.CreatedAt)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}

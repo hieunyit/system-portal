@@ -15,5 +15,6 @@ type Session struct {
 	ExpiresAt        time.Time
 	RefreshExpiresAt time.Time
 	IsActive         bool
+	IPAddress        string
 	CreatedAt        time.Time
 }

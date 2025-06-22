@@ -25,7 +25,7 @@ func NewAuthUsecase(sessionRepo repositories.SessionRepository, userRepo portalr
 	return &authUsecaseImpl{sessions: sessionRepo, users: userRepo, jwt: jwtSvc}
 }
 
-func (u *authUsecaseImpl) Login(ctx context.Context, username, password string) (string, string, uuid.UUID, string, error) {
+func (u *authUsecaseImpl) Login(ctx context.Context, username, password, ip string) (string, string, uuid.UUID, string, error) {
 	logger.Log.WithField("username", username).Info("login attempt")
 	usr, err := u.users.GetByUsername(ctx, username)
 	if err != nil {
@@ -62,6 +62,7 @@ func (u *authUsecaseImpl) Login(ctx context.Context, username, password string) 
 		RefreshExpiresAt: time.Now().Add(24 * time.Hour),
 		IsActive:         true,
 		CreatedAt:        time.Now(),
+		IPAddress:        ip,
 	}
 	u.sessions.Create(ctx, s)
 	logger.Log.WithField("username", username).Info("session created")

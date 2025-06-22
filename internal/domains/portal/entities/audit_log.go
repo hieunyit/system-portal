@@ -14,12 +14,8 @@ type AuditLog struct {
 	UserGroup    string
 	Action       string
 	Resource     string
-	ResourceID   string
 	ResourceName string
 	IPAddress    string
-	UserAgent    string
-	ErrorMessage string
-	DurationMs   int
 	Success      bool
 	CreatedAt    time.Time
 }

@@ -51,15 +51,9 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     user_group VARCHAR(50),
     action VARCHAR(100) NOT NULL,
     resource_type VARCHAR(50) NOT NULL,
-    resource_id VARCHAR(100),
     resource_name VARCHAR(200),
-    old_values JSONB,
-    new_values JSONB,
     ip_address INET,
-    user_agent TEXT,
     success BOOLEAN DEFAULT TRUE,
-    error_message TEXT,
-    duration_ms INTEGER,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
