@@ -24,12 +24,11 @@ jwt:
   accessTokenExpireDuration: "1h"
   refreshTokenExpireDuration: "24h"
   
-  # RSA Private Keys (PEM format)
-  # If left empty, new keys are generated on every start which invalidates
-  # existing tokens. Populate these with persistent keys to keep sessions alive
-  # across restarts.
-  accessPrivateKey: ""
-  refreshPrivateKey: ""
+  # RSA Private Key file paths (PEM format)
+  # Provide paths to PEM files containing the private keys. If left empty,
+  # new keys are generated on every start which invalidates existing tokens.
+  accessPrivateKeyPath: "./config/access_private.pem"
+  refreshPrivateKeyPath: "./config/refresh_private.pem"
   
   # Legacy HMAC Configuration (Deprecated - only for backward compatibility)
   # Only used when useRSA: false

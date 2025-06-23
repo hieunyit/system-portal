@@ -50,8 +50,8 @@ type JWTConfig struct {
 
 	// RSA configuration (recommended)
 	UseRSA                     bool          `mapstructure:"useRSA"`
-	AccessPrivateKey           string        `mapstructure:"accessPrivateKey"`
-	RefreshPrivateKey          string        `mapstructure:"refreshPrivateKey"`
+	AccessPrivateKeyPath       string        `mapstructure:"accessPrivateKeyPath"`
+	RefreshPrivateKeyPath      string        `mapstructure:"refreshPrivateKeyPath"`
 	AccessTokenExpireDuration  time.Duration `mapstructure:"accessTokenExpireDuration"`
 	RefreshTokenExpireDuration time.Duration `mapstructure:"refreshTokenExpireDuration"`
 }
@@ -128,6 +128,8 @@ func setDefaults() {
 
 	// JWT defaults
 	viper.SetDefault("jwt.useRSA", true)
+	viper.SetDefault("jwt.accessPrivateKeyPath", "")
+	viper.SetDefault("jwt.refreshPrivateKeyPath", "")
 	viper.SetDefault("jwt.accessTokenExpireDuration", time.Hour)
 	viper.SetDefault("jwt.refreshTokenExpireDuration", 24*time.Hour)
 

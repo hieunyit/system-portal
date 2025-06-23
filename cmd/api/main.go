@@ -8,6 +8,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"os"
 	"time"
 
 	authHandlers "system-portal/internal/domains/auth/handlers"
@@ -66,10 +67,18 @@ func main() {
 
 	// Initialize JWT service
 	var jwtService *jwt.RSAService
-	if cfg.JWT.AccessPrivateKey != "" && cfg.JWT.RefreshPrivateKey != "" {
+	if cfg.JWT.AccessPrivateKeyPath != "" && cfg.JWT.RefreshPrivateKeyPath != "" {
+		accessData, err := os.ReadFile(cfg.JWT.AccessPrivateKeyPath)
+		if err != nil {
+			logger.Log.Fatal("failed to read access key file:", err)
+		}
+		refreshData, err := os.ReadFile(cfg.JWT.RefreshPrivateKeyPath)
+		if err != nil {
+			logger.Log.Fatal("failed to read refresh key file:", err)
+		}
 		jwtService, err = jwt.NewRSAServiceWithKeys(
-			cfg.JWT.AccessPrivateKey,
-			cfg.JWT.RefreshPrivateKey,
+			string(accessData),
+			string(refreshData),
 			cfg.JWT.AccessTokenExpireDuration,
 			cfg.JWT.RefreshTokenExpireDuration,
 		)
