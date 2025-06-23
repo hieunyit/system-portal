@@ -71,6 +71,7 @@ type RedisConfig struct {
 type SecurityConfig struct {
 	EnableSecurityHeaders bool       `mapstructure:"enableSecurityHeaders"`
 	CORS                  CORSConfig `mapstructure:"cors"`
+	EncryptionKey         string     `mapstructure:"encryptionKey"`
 }
 
 type CORSConfig struct {
@@ -160,4 +161,5 @@ func setDefaults() {
 	viper.SetDefault("security.cors.allowedMethods", []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"})
 	viper.SetDefault("security.cors.allowedHeaders", []string{"Authorization", "Content-Type"})
 	viper.SetDefault("security.cors.allowCredentials", true)
+	viper.SetDefault("security.encryptionKey", "")
 }

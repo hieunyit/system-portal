@@ -152,10 +152,10 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 	auditHandler := portalHandlers.NewAuditHandler(auditUC)
 	dashboardHandler := portalHandlers.NewDashboardHandler(userRepo, auditRepo)
 
-	ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
-	ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
+	ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB, cfg.Security.EncryptionKey)
+	ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB, cfg.Security.EncryptionKey)
 	configUC := portalUsecases.NewConfigUsecase(ovRepo, ldapRepo)
-	reloadOpenVPN := configureOpenVPN(db, permRepo, groupRepo)
+	reloadOpenVPN := configureOpenVPN(db, permRepo, groupRepo, cfg.Security.EncryptionKey)
 	configHandler := portalHandlers.NewConfigHandler(configUC, reloadOpenVPN)
 	portalRoutes.Initialize(userHandler, groupHandler, permHandler, auditHandler, dashboardHandler, configHandler)
 
@@ -203,10 +203,10 @@ func checkConnections(db *database.Postgres, ldapClient *ldap.Client, xmlClient 
 	return nil
 }
 
-func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepository, groupRepo portalRepo.GroupRepository) func() {
+func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepository, groupRepo portalRepo.GroupRepository, encKey string) func() {
 	return func() {
-		ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
-		ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
+		ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB, encKey)
+		ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB, encKey)
 		ovCfg, _ := ovRepo.Get(context.Background())
 		ldapCfg, _ := ldapRepo.Get(context.Background())
 		if ovCfg == nil {

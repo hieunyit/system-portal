@@ -48,6 +48,8 @@ redis:
 security:
   # Enable additional security headers
   enableSecurityHeaders: true
+  # Encryption key for sensitive configuration fields (32 bytes)
+  encryptionKey: "0123456789abcdef0123456789abcdef"
   
   # CORS Configuration - CẬP NHẬT QUAN TRỌNG
   cors:
