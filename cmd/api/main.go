@@ -8,7 +8,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 	"time"
 
 	authHandlers "system-portal/internal/domains/auth/handlers"
@@ -38,17 +37,17 @@ func main() {
 	// Load configuration
 	cfg, err := config.Load()
 	if err != nil {
-		log.Fatal("Failed to load config:", err)
+		logger.Log.Fatal("Failed to load config:", err)
 	}
 
 	// Initialize logger
 	logger.Init(cfg.Logger)
-	log.Println("🚀 Initializing System Portal...")
+	logger.Log.Info("Initializing System Portal...")
 
 	// Connect to PostgreSQL and run migrations
 	db, err := database.New(cfg.Database)
 	if err != nil {
-		log.Fatal("failed to connect database:", err)
+		logger.Log.Fatal("failed to connect database:", err)
 	}
 	defer db.Close()
 
@@ -58,16 +57,12 @@ func main() {
 		"db":   cfg.Database.Name,
 	}).Info("checking database connectivity")
 	if err := waitForPostgres(db.DB, 5, time.Second); err != nil {
-		log.Fatal("database unreachable:", err)
+		logger.Log.Fatal("database unreachable:", err)
 	}
-
-	logDatabaseVersion(db.DB)
 
 	if err := db.Migrate(); err != nil {
-		log.Fatal("failed to migrate database:", err)
+		logger.Log.Fatal("failed to migrate database:", err)
 	}
-
-	logExistingUsers(db.DB)
 
 	// Initialize JWT service
 	var jwtService *jwt.RSAService
@@ -79,20 +74,18 @@ func main() {
 			cfg.JWT.RefreshTokenExpireDuration,
 		)
 		if err != nil {
-			log.Fatal("failed to load RSA keys:", err)
+			logger.Log.Fatal("failed to load RSA keys:", err)
 		}
 	} else {
 		jwtService, err = jwt.NewRSAService(cfg.JWT.AccessTokenExpireDuration, cfg.JWT.RefreshTokenExpireDuration)
 		if err != nil {
-			log.Fatal(err)
+			logger.Log.Fatal(err)
 		}
 		accessPEM, _ := jwtService.GetAccessPrivateKeyPEM()
 		refreshPEM, _ := jwtService.GetRefreshPrivateKeyPEM()
-		log.Println("generated new RSA keys; store them in config to preserve sessions")
-		log.Println("accessPrivateKey:")
-		log.Println(accessPEM)
-		log.Println("refreshPrivateKey:")
-		log.Println(refreshPEM)
+		logger.Log.Warn("generated new RSA keys; store them in config to preserve sessions")
+		logger.Log.Debug("accessPrivateKey:\n" + accessPEM)
+		logger.Log.Debug("refreshPrivateKey:\n" + refreshPEM)
 	}
 
 	// Initialize middleware
@@ -124,9 +117,9 @@ func main() {
 	)
 
 	// Start server with graceful shutdown
-	log.Println("🎯 Starting server...")
+	logger.Log.Info("Starting server...")
 	if err := router.StartServer(); err != nil {
-		log.Fatal("Server error:", err)
+		logger.Log.Fatal("Server error:", err)
 	}
 }
 
@@ -205,35 +198,6 @@ func checkConnections(db *database.Postgres, ldapClient *ldap.Client, xmlClient 
 	return nil
 }
 
-// logExistingUsers outputs all records from the users table for debugging.
-func logExistingUsers(db *sql.DB) {
-	repo := portalRepoImpl.NewUserRepositoryPG(db)
-	users, err := repo.List(context.Background())
-	if err != nil {
-		logger.Log.WithError(err).Error("failed to list users")
-		return
-	}
-	logger.Log.WithField("total", len(users)).Info("users table loaded")
-	for _, u := range users {
-		logger.Log.WithFields(map[string]interface{}{
-			"id":       u.ID,
-			"username": u.Username,
-			"email":    u.Email,
-			"active":   u.IsActive,
-		}).Info("db user")
-	}
-}
-
-// logDatabaseVersion queries and logs the PostgreSQL server version.
-func logDatabaseVersion(db *sql.DB) {
-	var version string
-	if err := db.QueryRow(`SELECT version()`).Scan(&version); err != nil {
-		logger.Log.WithError(err).Warn("failed to retrieve postgres version")
-		return
-	}
-	logger.Log.WithField("version", version).Info("postgres version")
-}
-
 func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepository, groupRepo portalRepo.GroupRepository) func() {
 	return func() {
 		ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
@@ -264,7 +228,7 @@ func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepos
 		}
 		// Connectivity issues should not disable the API; log them for visibility
 		if err := checkConnections(db, ldapClient, xmlrpcClient); err != nil {
-			log.Println("connectivity check failed:", err)
+			logger.Log.WithError(err).Warn("connectivity check failed")
 		}
 
 		userRepoOV := openvpnRepo.NewUserRepository(xmlrpcClient)

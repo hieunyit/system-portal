@@ -3,7 +3,6 @@ package http
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -22,6 +21,7 @@ import (
 	portalRoutes "system-portal/internal/domains/portal/routes"
 	"system-portal/internal/shared/middleware"
 	response "system-portal/internal/shared/response"
+	"system-portal/pkg/logger"
 )
 
 type RouterConfig struct {
@@ -114,9 +114,9 @@ func (r *Router) StartServer() error {
 	go func() {
 		r.logStartupInfo()
 
-		log.Printf("🚀 Starting System Portal API v2.0.0 on port %s", r.config.Port)
+		logger.Log.Infof("Starting System Portal API on port %s", r.config.Port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("❌ Failed to start server: %v", err)
+			logger.Log.Fatalf("Failed to start server: %v", err)
 		}
 	}()
 
@@ -139,9 +139,9 @@ func (r *Router) StartServerWithTLS(certFile, keyFile string) error {
 	go func() {
 		r.logStartupInfo()
 
-		log.Printf("🔒 Starting HTTPS System Portal API v2.0.0 on port %s", r.config.Port)
+		logger.Log.Infof("Starting HTTPS System Portal API on port %s", r.config.Port)
 		if err := server.ListenAndServeTLS(certFile, keyFile); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("❌ Failed to start HTTPS server: %v", err)
+			logger.Log.Fatalf("Failed to start HTTPS server: %v", err)
 		}
 	}()
 
@@ -150,23 +150,19 @@ func (r *Router) StartServerWithTLS(certFile, keyFile string) error {
 
 // ✅ NEW: logStartupInfo logs server startup information
 func (r *Router) logStartupInfo() {
-	log.Println(strings.Repeat("=", 60))
-	log.Printf("🏢 Service: System Portal API")
-	log.Printf("📊 Version: 2.0.0")
-	log.Printf("🏗️  Architecture: Domain-Driven Design")
-	log.Printf("🌐 Server: http://localhost:%s", r.config.Port)
-	log.Printf("📚 Documentation: http://localhost:%s/swagger/index.html", r.config.Port)
-	log.Printf("🏥 Health Check: http://localhost:%s/health", r.config.Port)
-	log.Printf("⚙️  Mode: %s", r.config.Mode)
-	log.Printf("⏱️  Request Timeout: %v", r.config.TimeoutDuration)
-	log.Printf("📖 Read Timeout: %v", r.config.ReadTimeout)
-	log.Printf("✍️  Write Timeout: %v", r.config.WriteTimeout)
-	log.Println(strings.Repeat("=", 60))
-	log.Printf("🎯 Domains Available:")
-	log.Printf("   🔐 Auth: /auth/*")
-	log.Printf("   🏢 Portal: /api/portal/*")
-	log.Printf("   🔌 OpenVPN: /api/openvpn/*")
-	log.Println(strings.Repeat("=", 60))
+	logger.Log.Info(strings.Repeat("=", 60))
+	logger.Log.Info("Service: System Portal API")
+	logger.Log.Info("Version: 2.0.0")
+	logger.Log.Infof("Server: http://localhost:%s", r.config.Port)
+	logger.Log.Infof("Documentation: http://localhost:%s/swagger/index.html", r.config.Port)
+	logger.Log.Infof("Health Check: http://localhost:%s/health", r.config.Port)
+	logger.Log.Infof("Mode: %s", r.config.Mode)
+	logger.Log.Infof("Request Timeout: %v", r.config.TimeoutDuration)
+	logger.Log.Infof("Read Timeout: %v", r.config.ReadTimeout)
+	logger.Log.Infof("Write Timeout: %v", r.config.WriteTimeout)
+	logger.Log.Info(strings.Repeat("=", 60))
+	logger.Log.Info("Domains Available: auth, portal, openvpn")
+	logger.Log.Info(strings.Repeat("=", 60))
 }
 
 // ✅ NEW: waitForShutdown handles graceful shutdown
@@ -179,7 +175,7 @@ func (r *Router) waitForShutdown(server *http.Server) error {
 
 	// Block until signal is received
 	sig := <-quit
-	log.Printf("🔄 Received signal: %v. Shutting down server...", sig)
+	logger.Log.Infof("Received signal: %v. Shutting down server...", sig)
 
 	// Create context with timeout for graceful shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -189,11 +185,11 @@ func (r *Router) waitForShutdown(server *http.Server) error {
 	server.SetKeepAlivesEnabled(false)
 
 	if err := server.Shutdown(ctx); err != nil {
-		log.Printf("❌ Server forced to shutdown: %v", err)
+		logger.Log.Errorf("Server forced to shutdown: %v", err)
 		return err
 	}
 
-	log.Println("✅ Server exited gracefully")
+	logger.Log.Info("Server exited gracefully")
 	return nil
 }
 
