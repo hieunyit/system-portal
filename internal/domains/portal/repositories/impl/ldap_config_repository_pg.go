@@ -40,3 +40,8 @@ func (r *pgLDAPConfigRepo) Update(ctx context.Context, cfg *entities.LDAPConfig)
 	)
 	return err
 }
+
+func (r *pgLDAPConfigRepo) Delete(ctx context.Context) error {
+	_, err := r.db.ExecContext(ctx, `DELETE FROM ldap_configs`)
+	return err
+}

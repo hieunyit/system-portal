@@ -62,6 +62,24 @@ func (h *ConfigHandler) UpdateOpenVPNConfig(c *gin.Context) {
 	h.CreateOpenVPNConfig(c)
 }
 
+// DeleteOpenVPNConfig godoc
+// @Summary Delete OpenVPN connection
+// @Tags Connections
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} response.SuccessResponse
+// @Router /api/portal/connections/openvpn [delete]
+func (h *ConfigHandler) DeleteOpenVPNConfig(c *gin.Context) {
+	if err := h.uc.DeleteOpenVPN(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	if h.reload != nil {
+		h.reload()
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "deleted")
+}
+
 // CreateLDAPConfig godoc
 // @Summary Set LDAP connection
 // @Tags Connections
@@ -105,4 +123,22 @@ func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 // @Router /api/portal/connections/ldap [put]
 func (h *ConfigHandler) UpdateLDAPConfig(c *gin.Context) {
 	h.CreateLDAPConfig(c)
+}
+
+// DeleteLDAPConfig godoc
+// @Summary Delete LDAP connection
+// @Tags Connections
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} response.SuccessResponse
+// @Router /api/portal/connections/ldap [delete]
+func (h *ConfigHandler) DeleteLDAPConfig(c *gin.Context) {
+	if err := h.uc.DeleteLDAP(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	if h.reload != nil {
+		h.reload()
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "deleted")
 }

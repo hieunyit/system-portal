@@ -8,6 +8,8 @@ import (
 type ConfigUsecase interface {
 	GetOpenVPN(ctx context.Context) (*entities.OpenVPNConfig, error)
 	SetOpenVPN(ctx context.Context, cfg *entities.OpenVPNConfig) error
+	DeleteOpenVPN(ctx context.Context) error
 	GetLDAP(ctx context.Context) (*entities.LDAPConfig, error)
 	SetLDAP(ctx context.Context, cfg *entities.LDAPConfig) error
+	DeleteLDAP(ctx context.Context) error
 }

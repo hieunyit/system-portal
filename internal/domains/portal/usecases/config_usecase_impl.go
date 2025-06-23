@@ -48,6 +48,13 @@ func (u *configUsecaseImpl) SetOpenVPN(ctx context.Context, cfg *entities.OpenVP
 	return u.ovRepo.Update(ctx, cfg)
 }
 
+func (u *configUsecaseImpl) DeleteOpenVPN(ctx context.Context) error {
+	if u.ovRepo == nil {
+		return nil
+	}
+	return u.ovRepo.Delete(ctx)
+}
+
 func (u *configUsecaseImpl) GetLDAP(ctx context.Context) (*entities.LDAPConfig, error) {
 	if u.ldapRepo == nil {
 		return nil, nil
@@ -76,4 +83,11 @@ func (u *configUsecaseImpl) SetLDAP(ctx context.Context, cfg *entities.LDAPConfi
 	cfg.CreatedAt = existing.CreatedAt
 	cfg.UpdatedAt = now
 	return u.ldapRepo.Update(ctx, cfg)
+}
+
+func (u *configUsecaseImpl) DeleteLDAP(ctx context.Context) error {
+	if u.ldapRepo == nil {
+		return nil
+	}
+	return u.ldapRepo.Delete(ctx)
 }

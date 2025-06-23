@@ -40,3 +40,8 @@ func (r *pgOpenVPNConfigRepo) Update(ctx context.Context, cfg *entities.OpenVPNC
 	)
 	return err
 }
+
+func (r *pgOpenVPNConfigRepo) Delete(ctx context.Context) error {
+	_, err := r.db.ExecContext(ctx, `DELETE FROM openvpn_configs`)
+	return err
+}
