@@ -173,6 +173,38 @@ const docTemplate = `{
         },
         "/api/openvpn/bulk/groups/template": {
             "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "username"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "group"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "ip"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "resource"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "from"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "to"
+                    }
+                ],
                 "security": [
                     {
                         "BearerAuth": []
@@ -1589,6 +1621,11 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "in": "query",
+                        "name": "resource"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
                         "name": "from"
                     },
                     {
@@ -1634,6 +1671,38 @@ const docTemplate = `{
         },
         "/api/portal/audit/logs/export": {
             "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "username"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "group"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "ip"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "resource"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "from"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "to"
+                    }
+                ],
                 "security": [
                     {
                         "BearerAuth": []

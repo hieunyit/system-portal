@@ -13,6 +13,7 @@ type AuditFilter struct {
 	Username  string
 	UserGroup string
 	IPAddress string
+	Resource  string
 	FromTime  *time.Time
 	ToTime    *time.Time
 	Page      int

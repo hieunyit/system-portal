@@ -1567,6 +1567,7 @@
                     {"type": "string", "in": "query", "name": "username"},
                     {"type": "string", "in": "query", "name": "group"},
                     {"type": "string", "in": "query", "name": "ip"},
+                    {"type": "string", "in": "query", "name": "resource"},
                     {"type": "string", "in": "query", "name": "from"},
                     {"type": "string", "in": "query", "name": "to"},
                     {"type": "integer", "in": "query", "name": "page"},
@@ -1599,6 +1600,14 @@
         },
         "/api/portal/audit/logs/export": {
             "get": {
+                "parameters": [
+                    {"type": "string", "in": "query", "name": "username"},
+                    {"type": "string", "in": "query", "name": "group"},
+                    {"type": "string", "in": "query", "name": "ip"},
+                    {"type": "string", "in": "query", "name": "resource"},
+                    {"type": "string", "in": "query", "name": "from"},
+                    {"type": "string", "in": "query", "name": "to"}
+                ],
                 "security": [
                     {
                         "BearerAuth": []
@@ -1623,6 +1632,14 @@
         },
         "/api/portal/audit/stats": {
             "get": {
+                "parameters": [
+                    {"type": "string", "in": "query", "name": "username"},
+                    {"type": "string", "in": "query", "name": "group"},
+                    {"type": "string", "in": "query", "name": "ip"},
+                    {"type": "string", "in": "query", "name": "resource"},
+                    {"type": "string", "in": "query", "name": "from"},
+                    {"type": "string", "in": "query", "name": "to"}
+                ],
                 "security": [
                     {
                         "BearerAuth": []

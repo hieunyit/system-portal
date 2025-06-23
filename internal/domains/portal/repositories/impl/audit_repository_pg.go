@@ -64,6 +64,11 @@ func (r *pgAuditRepo) List(ctx context.Context, f *entities.AuditFilter) ([]*ent
 		args = append(args, f.IPAddress)
 		idx++
 	}
+	if f.Resource != "" {
+		clauses = append(clauses, "resource_type=$"+strconv.Itoa(idx))
+		args = append(args, f.Resource)
+		idx++
+	}
 	if f.FromTime != nil {
 		clauses = append(clauses, "created_at >= $"+strconv.Itoa(idx))
 		args = append(args, *f.FromTime)

@@ -2241,6 +2241,9 @@ paths:
         name: ip
         type: string
       - in: query
+        name: resource
+        type: string
+      - in: query
         name: from
         type: string
       - in: query
@@ -2268,6 +2271,25 @@ paths:
       - Audit
   /api/portal/audit/logs/export:
     get:
+      parameters:
+      - in: query
+        name: username
+        type: string
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: ip
+        type: string
+      - in: query
+        name: resource
+        type: string
+      - in: query
+        name: from
+        type: string
+      - in: query
+        name: to
+        type: string
       produces:
       - application/json
       responses:
@@ -2282,6 +2304,25 @@ paths:
       - Audit
   /api/portal/audit/stats:
     get:
+      parameters:
+      - in: query
+        name: username
+        type: string
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: ip
+        type: string
+      - in: query
+        name: resource
+        type: string
+      - in: query
+        name: from
+        type: string
+      - in: query
+        name: to
+        type: string
       produces:
       - application/json
       responses:

@@ -36,6 +36,7 @@ type auditQuery struct {
 	Username string     `form:"username"`
 	Group    string     `form:"group"`
 	IP       string     `form:"ip"`
+	Resource string     `form:"resource"`
 	From     *time.Time `form:"from" time_format:"2006-01-02"`
 	To       *time.Time `form:"to" time_format:"2006-01-02"`
 	Page     int        `form:"page,default=1"`
@@ -49,6 +50,7 @@ func (h *AuditHandler) GetAuditLogs(c *gin.Context) {
 		Username:  q.Username,
 		UserGroup: q.Group,
 		IPAddress: q.IP,
+		Resource:  q.Resource,
 		FromTime:  q.From,
 		ToTime:    q.To,
 		Page:      q.Page,
@@ -77,6 +79,7 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 		Username:  q.Username,
 		UserGroup: q.Group,
 		IPAddress: q.IP,
+		Resource:  q.Resource,
 		FromTime:  q.From,
 		ToTime:    q.To,
 	}
@@ -119,7 +122,7 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 func (h *AuditHandler) GetAuditStats(c *gin.Context) {
 	var q auditQuery
 	_ = c.ShouldBindQuery(&q)
-	filter := &entities.AuditFilter{Username: q.Username, UserGroup: q.Group, IPAddress: q.IP, FromTime: q.From, ToTime: q.To}
+	filter := &entities.AuditFilter{Username: q.Username, UserGroup: q.Group, IPAddress: q.IP, Resource: q.Resource, FromTime: q.From, ToTime: q.To}
 	logs, _, _ := h.uc.List(c.Request.Context(), filter)
 	var total, success, failed int
 	for _, l := range logs {
