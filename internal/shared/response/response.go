@@ -44,6 +44,9 @@ func RespondWithSuccess(c *gin.Context, status int, data interface{}) {
 	response.Success.Status = status
 	response.Success.Data = data
 
+	// Prevent sensitive data from being cached
+	c.Header("Cache-Control", "no-store")
+
 	c.JSON(status, response)
 }
 
@@ -52,6 +55,8 @@ func RespondWithMessage(c *gin.Context, status int, message string) {
 	response := SuccessResponse{}
 	response.Success.Status = status
 	response.Success.Message = message
+
+	c.Header("Cache-Control", "no-store")
 
 	c.JSON(status, response)
 }
@@ -62,6 +67,8 @@ func RespondWithError(c *gin.Context, err *errors.AppError) {
 	response.Error.Code = err.Code
 	response.Error.Message = err.Message
 	response.Error.Status = err.Status
+
+	c.Header("Cache-Control", "no-store")
 
 	c.JSON(err.Status, response)
 }
@@ -110,6 +117,7 @@ func RespondWithValidationError(c *gin.Context, err error) {
 		response.Error.Fields["general"] = err.Error()
 	}
 
+	c.Header("Cache-Control", "no-store")
 	c.JSON(http.StatusBadRequest, response)
 }
 
@@ -119,6 +127,8 @@ func RespondWithInternalError(c *gin.Context, message string) {
 	response.Error.Code = "INTERNAL_SERVER_ERROR"
 	response.Error.Message = message
 	response.Error.Status = http.StatusInternalServerError
+
+	c.Header("Cache-Control", "no-store")
 
 	c.JSON(http.StatusInternalServerError, response)
 }
@@ -130,6 +140,8 @@ func RespondWithNotFound(c *gin.Context, message string) {
 	response.Error.Message = message
 	response.Error.Status = http.StatusNotFound
 
+	c.Header("Cache-Control", "no-store")
+
 	c.JSON(http.StatusNotFound, response)
 }
 
@@ -139,6 +151,8 @@ func RespondWithBadRequest(c *gin.Context, message string) {
 	response.Error.Code = "BAD_REQUEST"
 	response.Error.Message = message
 	response.Error.Status = http.StatusBadRequest
+
+	c.Header("Cache-Control", "no-store")
 
 	c.JSON(http.StatusBadRequest, response)
 }
@@ -150,6 +164,8 @@ func RespondWithUnauthorized(c *gin.Context, message string) {
 	response.Error.Message = message
 	response.Error.Status = http.StatusUnauthorized
 
+	c.Header("Cache-Control", "no-store")
+
 	c.JSON(http.StatusUnauthorized, response)
 }
 
@@ -160,6 +176,8 @@ func RespondWithForbidden(c *gin.Context, message string) {
 	response.Error.Message = message
 	response.Error.Status = http.StatusForbidden
 
+	c.Header("Cache-Control", "no-store")
+
 	c.JSON(http.StatusForbidden, response)
 }
 
@@ -169,6 +187,8 @@ func RespondWithConflict(c *gin.Context, message string) {
 	response.Error.Code = "CONFLICT"
 	response.Error.Message = message
 	response.Error.Status = http.StatusConflict
+
+	c.Header("Cache-Control", "no-store")
 
 	c.JSON(http.StatusConflict, response)
 }

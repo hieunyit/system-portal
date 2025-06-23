@@ -90,11 +90,7 @@ func main() {
 		if err != nil {
 			logger.Log.Fatal(err)
 		}
-		accessPEM, _ := jwtService.GetAccessPrivateKeyPEM()
-		refreshPEM, _ := jwtService.GetRefreshPrivateKeyPEM()
 		logger.Log.Warn("generated new RSA keys; store them in config to preserve sessions")
-		logger.Log.Debug("accessPrivateKey:\n" + accessPEM)
-		logger.Log.Debug("refreshPrivateKey:\n" + refreshPEM)
 	}
 
 	// Initialize middleware
