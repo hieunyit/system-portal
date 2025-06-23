@@ -17,6 +17,7 @@ var (
 	vpnStatusHandler  *handlers.VPNStatusHandler
 	disconnectHandler *handlers.DisconnectHandler
 	permMiddleware    *middleware.PermissionMiddleware
+	enabled           bool
 )
 
 // Initialize sets up the handler dependencies
@@ -36,7 +37,11 @@ func Initialize(
 	vpnStatusHandler = vsh
 	disconnectHandler = dh
 	permMiddleware = pmw
+	enabled = true
 }
+
+// Enabled reports whether OpenVPN routes are initialized
+func Enabled() bool { return enabled }
 
 // RegisterRoutes registers all OpenVPN routes with permission-based access control
 func RegisterRoutes(router *gin.RouterGroup) {

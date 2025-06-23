@@ -1,20 +1,8 @@
+# Server configuration
 server:
   port: "8080"
   mode: "debug"
   timeout: 30
-
-openvpn:
-  host: "localhost"
-  username: "openvpn"
-  password: "Asim#2023"
-  port: 943
-
-ldap:
-  host: "localhost"
-  port: 389
-  bindDN: "cn=admin,dc=hieuny,dc=com"
-  bindPassword: "Jisai@11?22"
-  baseDN: "ou=Users,dc=hieuny,dc=com"
 
 # PostgreSQL connection
 database:

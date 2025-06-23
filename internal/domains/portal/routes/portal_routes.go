@@ -15,6 +15,7 @@ var (
 	permissionHandler *portalHandlers.PermissionHandler
 	auditHandler      *portalHandlers.AuditHandler
 	dashboardHandler  *portalHandlers.DashboardHandler
+	configHandler     *portalHandlers.ConfigHandler
 )
 
 // Initialize sets up the handler dependencies
@@ -24,12 +25,14 @@ func Initialize(
 	ph *portalHandlers.PermissionHandler,
 	ah *portalHandlers.AuditHandler,
 	dh *portalHandlers.DashboardHandler,
+	ch *portalHandlers.ConfigHandler,
 ) {
 	userHandler = uh
 	groupHandler = gh
 	permissionHandler = ph
 	auditHandler = ah
 	dashboardHandler = dh
+	configHandler = ch
 }
 
 // RegisterRoutes registers all portal routes
@@ -45,6 +48,9 @@ func RegisterRoutes(router *gin.RouterGroup) {
 
 	// Portal group management routes
 	registerGroupRoutes(portal)
+
+	// Connection config routes
+	registerConfigRoutes(portal)
 
 	// Audit log routes
 	registerAuditRoutes(portal)
@@ -108,5 +114,15 @@ func registerDashboardRoutes(portal *gin.RouterGroup) {
 		dashboard.GET("/activities", dashboardHandler.GetRecentActivities)
 		dashboard.GET("/charts/users", dashboardHandler.GetUserChartData)
 		dashboard.GET("/charts/activities", dashboardHandler.GetActivityChartData)
+	}
+}
+
+func registerConfigRoutes(portal *gin.RouterGroup) {
+	conn := portal.Group("/connections")
+	{
+		conn.POST("/openvpn", configHandler.CreateOpenVPNConfig)
+		conn.PUT("/openvpn", configHandler.UpdateOpenVPNConfig)
+		conn.POST("/ldap", configHandler.CreateLDAPConfig)
+		conn.PUT("/ldap", configHandler.UpdateLDAPConfig)
 	}
 }

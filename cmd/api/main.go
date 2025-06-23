@@ -96,13 +96,32 @@ func main() {
 		log.Println(refreshPEM)
 	}
 
-	// Initialize infrastructure clients
-	xmlrpcClient := xmlrpc.NewClient(cfg.OpenVPN)
-	ldapClient := ldap.NewClient(cfg.LDAP)
+	// Load service connection configs from database
+	ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
+	ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
+	var xmlrpcClient *xmlrpc.Client
+	var ldapClient *ldap.Client
+	if ovCfg, _ := ovRepo.Get(context.Background()); ovCfg != nil {
+		xmlrpcClient = xmlrpc.NewClient(xmlrpc.Config{
+			Host:     ovCfg.Host,
+			Username: ovCfg.Username,
+			Password: ovCfg.Password,
+			Port:     ovCfg.Port,
+		})
+	}
+	if ldapCfg, _ := ldapRepo.Get(context.Background()); ldapCfg != nil {
+		ldapClient = ldap.NewClient(ldap.Config{
+			Host:         ldapCfg.Host,
+			Port:         ldapCfg.Port,
+			BindDN:       ldapCfg.BindDN,
+			BindPassword: ldapCfg.BindPassword,
+			BaseDN:       ldapCfg.BaseDN,
+		})
+	}
 
-	// Verify external service connections
+	// Verify external service connections when configs are present
 	if err := checkConnections(db, ldapClient, xmlrpcClient); err != nil {
-		log.Fatal("connectivity check failed:", err)
+		log.Println("connectivity check failed:", err)
 	}
 
 	// Initialize middleware
@@ -164,40 +183,45 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 	auditHandler := portalHandlers.NewAuditHandler(auditUC)
 	dashboardHandler := portalHandlers.NewDashboardHandler(userRepo, auditRepo)
 
-	portalRoutes.Initialize(userHandler, groupHandler, permHandler, auditHandler, dashboardHandler)
+	ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
+	ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
+	configUC := portalUsecases.NewConfigUsecase(ovRepo, ldapRepo)
+	configHandler := portalHandlers.NewConfigHandler(configUC)
+	portalRoutes.Initialize(userHandler, groupHandler, permHandler, auditHandler, dashboardHandler, configHandler)
 
-	// OpenVPN domain initialization
+	// OpenVPN domain initialization only when configs are present
+	if xmlrpcClient != nil && ldapClient != nil {
+		userRepoOV := openvpnRepo.NewUserRepository(xmlrpcClient)
+		groupRepoOV := openvpnRepo.NewGroupRepository(xmlrpcClient)
+		disconnectRepo := openvpnRepo.NewDisconnectRepository(xmlrpcClient)
+		vpnStatusRepo := openvpnRepo.NewVPNStatusRepository(xmlrpcClient)
+		configRepoOV := openvpnRepo.NewConfigRepository(xmlrpcClient)
 
-	userRepoOV := openvpnRepo.NewUserRepository(xmlrpcClient)
-	groupRepoOV := openvpnRepo.NewGroupRepository(xmlrpcClient)
-	disconnectRepo := openvpnRepo.NewDisconnectRepository(xmlrpcClient)
-	vpnStatusRepo := openvpnRepo.NewVPNStatusRepository(xmlrpcClient)
-	configRepoOV := openvpnRepo.NewConfigRepository(xmlrpcClient)
+		userUCOV := openvpnUsecases.NewUserUsecase(userRepoOV, groupRepoOV, ldapClient)
+		groupUCOV := openvpnUsecases.NewGroupUsecase(groupRepoOV, configRepoOV)
+		bulkUCOV := openvpnUsecases.NewBulkUsecase(userRepoOV, groupRepoOV, ldapClient)
+		disconnectUC := openvpnUsecases.NewDisconnectUsecase(userRepoOV, disconnectRepo, vpnStatusRepo)
+		configUCOV := openvpnUsecases.NewConfigUsecase(configRepoOV)
+		vpnStatusUC := openvpnUsecases.NewVPNStatusUsecase(vpnStatusRepo)
 
-	userUCOV := openvpnUsecases.NewUserUsecase(userRepoOV, groupRepoOV, ldapClient)
-	groupUCOV := openvpnUsecases.NewGroupUsecase(groupRepoOV, configRepoOV)
-	bulkUCOV := openvpnUsecases.NewBulkUsecase(userRepoOV, groupRepoOV, ldapClient)
-	disconnectUC := openvpnUsecases.NewDisconnectUsecase(userRepoOV, disconnectRepo, vpnStatusRepo)
-	configUCOV := openvpnUsecases.NewConfigUsecase(configRepoOV)
-	vpnStatusUC := openvpnUsecases.NewVPNStatusUsecase(vpnStatusRepo)
+		userHandlerOV := openvpnHandlers.NewUserHandler(userUCOV, xmlrpcClient)
+		groupHandlerOV := openvpnHandlers.NewGroupHandler(groupUCOV, configUCOV, xmlrpcClient)
+		bulkHandlerOV := openvpnHandlers.NewBulkHandler(bulkUCOV, xmlrpcClient)
+		configHandlerOV := openvpnHandlers.NewConfigHandler(configUCOV)
+		vpnStatusHandlerOV := openvpnHandlers.NewVPNStatusHandler(vpnStatusUC)
+		disconnectHandlerOV := openvpnHandlers.NewDisconnectHandler(disconnectUC)
+		permMiddleware := middleware.NewPermissionMiddleware(permRepo, groupRepo)
 
-	userHandlerOV := openvpnHandlers.NewUserHandler(userUCOV, xmlrpcClient)
-	groupHandlerOV := openvpnHandlers.NewGroupHandler(groupUCOV, configUCOV, xmlrpcClient)
-	bulkHandlerOV := openvpnHandlers.NewBulkHandler(bulkUCOV, xmlrpcClient)
-	configHandlerOV := openvpnHandlers.NewConfigHandler(configUCOV)
-	vpnStatusHandlerOV := openvpnHandlers.NewVPNStatusHandler(vpnStatusUC)
-	disconnectHandlerOV := openvpnHandlers.NewDisconnectHandler(disconnectUC)
-	permMiddleware := middleware.NewPermissionMiddleware(permRepo, groupRepo)
-
-	openvpnRoutes.Initialize(
-		userHandlerOV,
-		groupHandlerOV,
-		bulkHandlerOV,
-		configHandlerOV,
-		vpnStatusHandlerOV,
-		disconnectHandlerOV,
-		permMiddleware,
-	)
+		openvpnRoutes.Initialize(
+			userHandlerOV,
+			groupHandlerOV,
+			bulkHandlerOV,
+			configHandlerOV,
+			vpnStatusHandlerOV,
+			disconnectHandlerOV,
+			permMiddleware,
+		)
+	}
 
 	return auditUC, userRepo, groupRepo
 }
@@ -223,16 +247,18 @@ func checkConnections(db *database.Postgres, ldapClient *ldap.Client, xmlClient 
 		return fmt.Errorf("postgres connection failed: %w", err)
 	}
 
-	// Verify LDAP connection
-	conn, err := ldapClient.Connect()
-	if err != nil {
-		return fmt.Errorf("ldap connection failed: %w", err)
+	if ldapClient != nil {
+		conn, err := ldapClient.Connect()
+		if err != nil {
+			return fmt.Errorf("ldap connection failed: %w", err)
+		}
+		conn.Close()
 	}
-	conn.Close()
 
-	// Verify OpenVPN XML-RPC endpoint
-	if err := xmlClient.Ping(); err != nil {
-		return fmt.Errorf("openvpn connection failed: %w", err)
+	if xmlClient != nil {
+		if err := xmlClient.Ping(); err != nil {
+			return fmt.Errorf("openvpn connection failed: %w", err)
+		}
 	}
 
 	return nil
