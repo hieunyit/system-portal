@@ -7,15 +7,11 @@ import (
 
 	"github.com/spf13/viper"
 
-	ldapCfg "system-portal/internal/shared/infrastructure/ldap"
-	xmlrpcCfg "system-portal/internal/shared/infrastructure/xmlrpc"
 	"system-portal/pkg/logger"
 )
 
 type Config struct {
 	Server   ServerConfig   `mapstructure:"server"`
-	OpenVPN  OpenVPNConfig  `mapstructure:"openvpn"`
-	LDAP     LDAPConfig     `mapstructure:"ldap"`
 	Database DatabaseConfig `mapstructure:"database"`
 	Logger   LoggerConfig   `mapstructure:"logger"`
 	JWT      JWTConfig      `mapstructure:"jwt"`
@@ -28,10 +24,6 @@ type ServerConfig struct {
 	Mode    string `mapstructure:"mode"`
 	Timeout int    `mapstructure:"timeout"`
 }
-
-type OpenVPNConfig = xmlrpcCfg.Config
-
-type LDAPConfig = ldapCfg.Config
 
 // Database connection settings
 type DatabaseConfig struct {
@@ -129,12 +121,6 @@ func setDefaults() {
 	viper.SetDefault("server.port", "8080")
 	viper.SetDefault("server.mode", "debug")
 	viper.SetDefault("server.timeout", 30)
-
-	// OpenVPN defaults
-	viper.SetDefault("openvpn.port", 943)
-
-	// LDAP defaults
-	viper.SetDefault("ldap.port", 389)
 
 	// Logger defaults
 	viper.SetDefault("logger.level", "info")
