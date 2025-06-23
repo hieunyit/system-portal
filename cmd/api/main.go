@@ -20,7 +20,6 @@ import (
 	openvpnRoutes "system-portal/internal/domains/openvpn/routes"
 	openvpnUsecases "system-portal/internal/domains/openvpn/usecases"
 	portalHandlers "system-portal/internal/domains/portal/handlers"
-	"system-portal/internal/domains/portal/repositories"
 	portalRepo "system-portal/internal/domains/portal/repositories"
 	portalRepoImpl "system-portal/internal/domains/portal/repositories/impl"
 	portalRoutes "system-portal/internal/domains/portal/routes"

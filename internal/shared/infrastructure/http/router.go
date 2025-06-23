@@ -222,9 +222,6 @@ func (r *Router) setupProtectedRoutes(router *gin.Engine) {
 	authRoutes.RegisterProtectedRoutes(protected)
 	portalRoutes.RegisterRoutes(protected)
 	openvpnRoutes.SetRouterGroup(protected)
-	if openvpnRoutes.Enabled() {
-		openvpnRoutes.RegisterRoutes(protected)
-	}
 }
 
 // ✅ ENHANCED: healthCheck with more detailed information
