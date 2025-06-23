@@ -40,7 +40,7 @@ func (h *ConfigHandler) GetOpenVPNConfig(c *gin.Context) {
 }
 
 // CreateOpenVPNConfig godoc
-// @Summary Set OpenVPN connection
+// @Summary Create OpenVPN connection
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
@@ -54,6 +54,16 @@ func (h *ConfigHandler) CreateOpenVPNConfig(c *gin.Context) {
 		httpresp.RespondWithBadRequest(c, "invalid request")
 		return
 	}
+
+	// ensure only one configuration exists
+	if existing, err := h.uc.GetOpenVPN(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	} else if existing != nil {
+		httpresp.RespondWithBadRequest(c, "configuration already exists")
+		return
+	}
+
 	cfg := &entities.OpenVPNConfig{
 		Host:     req.Host,
 		Username: req.Username,
@@ -80,7 +90,35 @@ func (h *ConfigHandler) CreateOpenVPNConfig(c *gin.Context) {
 // @Success 200 {object} response.SuccessResponse
 // @Router /api/portal/connections/openvpn [put]
 func (h *ConfigHandler) UpdateOpenVPNConfig(c *gin.Context) {
-	h.CreateOpenVPNConfig(c)
+	var req dto.OpenVPNConfigRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httpresp.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+
+	// ensure configuration exists before updating
+	if existing, err := h.uc.GetOpenVPN(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	} else if existing == nil {
+		httpresp.RespondWithNotFound(c, "not found")
+		return
+	}
+
+	cfg := &entities.OpenVPNConfig{
+		Host:     req.Host,
+		Username: req.Username,
+		Password: req.Password,
+		Port:     req.Port,
+	}
+	if err := h.uc.SetOpenVPN(c.Request.Context(), cfg); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	if h.reload != nil {
+		h.reload()
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "saved")
 }
 
 // DeleteOpenVPNConfig godoc
@@ -123,7 +161,7 @@ func (h *ConfigHandler) GetLDAPConfig(c *gin.Context) {
 }
 
 // CreateLDAPConfig godoc
-// @Summary Set LDAP connection
+// @Summary Create LDAP connection
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
@@ -137,6 +175,16 @@ func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 		httpresp.RespondWithBadRequest(c, "invalid request")
 		return
 	}
+
+	// ensure only one configuration exists
+	if existing, err := h.uc.GetLDAP(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	} else if existing != nil {
+		httpresp.RespondWithBadRequest(c, "configuration already exists")
+		return
+	}
+
 	cfg := &entities.LDAPConfig{
 		Host:         req.Host,
 		Port:         req.Port,
@@ -164,7 +212,36 @@ func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 // @Success 200 {object} response.SuccessResponse
 // @Router /api/portal/connections/ldap [put]
 func (h *ConfigHandler) UpdateLDAPConfig(c *gin.Context) {
-	h.CreateLDAPConfig(c)
+	var req dto.LDAPConfigRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httpresp.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+
+	// ensure configuration exists before updating
+	if existing, err := h.uc.GetLDAP(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	} else if existing == nil {
+		httpresp.RespondWithNotFound(c, "not found")
+		return
+	}
+
+	cfg := &entities.LDAPConfig{
+		Host:         req.Host,
+		Port:         req.Port,
+		BindDN:       req.BindDN,
+		BindPassword: req.BindPassword,
+		BaseDN:       req.BaseDN,
+	}
+	if err := h.uc.SetLDAP(c.Request.Context(), cfg); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	if h.reload != nil {
+		h.reload()
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "saved")
 }
 
 // DeleteLDAPConfig godoc
