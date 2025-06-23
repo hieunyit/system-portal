@@ -241,6 +241,7 @@ func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepos
 		ovCfg, _ := ovRepo.Get(context.Background())
 		ldapCfg, _ := ldapRepo.Get(context.Background())
 		if ovCfg == nil || ldapCfg == nil {
+			openvpnRoutes.Disable()
 			return
 		}
 		xmlrpcClient := xmlrpc.NewClient(xmlrpc.Config{
@@ -258,6 +259,7 @@ func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepos
 		})
 		if err := checkConnections(db, ldapClient, xmlrpcClient); err != nil {
 			log.Println("connectivity check failed:", err)
+			openvpnRoutes.Disable()
 			return
 		}
 

@@ -1,6 +1,8 @@
 package routes
 
 import (
+	nethttp "net/http"
+
 	"system-portal/internal/domains/openvpn/handlers"
 	"system-portal/internal/shared/middleware"
 
@@ -49,6 +51,20 @@ func Initialize(
 // Enabled reports whether OpenVPN routes are initialized
 func Enabled() bool { return enabled }
 
+// Disable turns off OpenVPN routes so requests return 404
+func Disable() { enabled = false }
+
+// enabledMiddleware aborts requests when OpenVPN routes are disabled
+func enabledMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if !enabled {
+			c.AbortWithStatus(nethttp.StatusNotFound)
+			return
+		}
+		c.Next()
+	}
+}
+
 // SetRouterGroup stores the router group for dynamic registration
 func SetRouterGroup(rg *gin.RouterGroup) {
 	routerGroup = rg
@@ -61,6 +77,7 @@ func SetRouterGroup(rg *gin.RouterGroup) {
 // RegisterRoutes registers all OpenVPN routes with permission-based access control
 func RegisterRoutes(router *gin.RouterGroup) {
 	openvpn := router.Group("/api/openvpn")
+	openvpn.Use(enabledMiddleware())
 
 	// Register route groups
 	registerUserRoutes(openvpn)
