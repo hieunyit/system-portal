@@ -9,9 +9,14 @@ import (
 	httpresp "system-portal/internal/shared/response"
 )
 
-type ConfigHandler struct{ uc usecases.ConfigUsecase }
+type ConfigHandler struct {
+	uc     usecases.ConfigUsecase
+	reload func()
+}
 
-func NewConfigHandler(u usecases.ConfigUsecase) *ConfigHandler { return &ConfigHandler{uc: u} }
+func NewConfigHandler(u usecases.ConfigUsecase, reload func()) *ConfigHandler {
+	return &ConfigHandler{uc: u, reload: reload}
+}
 
 // CreateOpenVPNConfig godoc
 // @Summary Set OpenVPN connection
@@ -37,6 +42,9 @@ func (h *ConfigHandler) CreateOpenVPNConfig(c *gin.Context) {
 	if err := h.uc.SetOpenVPN(c.Request.Context(), cfg); err != nil {
 		httpresp.RespondWithBadRequest(c, err.Error())
 		return
+	}
+	if h.reload != nil {
+		h.reload()
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusCreated, "saved")
 }
@@ -79,6 +87,9 @@ func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 	if err := h.uc.SetLDAP(c.Request.Context(), cfg); err != nil {
 		httpresp.RespondWithBadRequest(c, err.Error())
 		return
+	}
+	if h.reload != nil {
+		h.reload()
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusCreated, "saved")
 }

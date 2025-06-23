@@ -221,6 +221,7 @@ func (r *Router) setupProtectedRoutes(router *gin.Engine) {
 	// Register domain routes
 	authRoutes.RegisterProtectedRoutes(protected)
 	portalRoutes.RegisterRoutes(protected)
+	openvpnRoutes.SetRouterGroup(protected)
 	if openvpnRoutes.Enabled() {
 		openvpnRoutes.RegisterRoutes(protected)
 	}

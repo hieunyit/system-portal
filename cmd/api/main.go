@@ -97,35 +97,9 @@ func main() {
 	}
 
 	// Load service connection configs from database
+	// Repositories for connection configs
 	ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
 	ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
-	var xmlrpcClient *xmlrpc.Client
-	var ldapClient *ldap.Client
-	if ovCfg, _ := ovRepo.Get(context.Background()); ovCfg != nil {
-		xmlrpcClient = xmlrpc.NewClient(xmlrpc.Config{
-			Host:     ovCfg.Host,
-			Username: ovCfg.Username,
-			Password: ovCfg.Password,
-			Port:     ovCfg.Port,
-		})
-	}
-	if ldapCfg, _ := ldapRepo.Get(context.Background()); ldapCfg != nil {
-		ldapClient = ldap.NewClient(ldap.Config{
-			Host:         ldapCfg.Host,
-			Port:         ldapCfg.Port,
-			BindDN:       ldapCfg.BindDN,
-			BindPassword: ldapCfg.BindPassword,
-			BaseDN:       ldapCfg.BaseDN,
-		})
-	}
-
-	// Verify external service connections when configs are present
-	if err := checkConnections(db, ldapClient, xmlrpcClient); err != nil {
-		log.Println("connectivity check failed:", err)
-		// Disable OpenVPN routes if connections fail
-		xmlrpcClient = nil
-		ldapClient = nil
-	}
 
 	// Initialize middleware
 	authMiddleware := middleware.NewAuthMiddleware(jwtService)
@@ -133,7 +107,7 @@ func main() {
 	validationMiddleware := middleware.NewValidationMiddleware()
 
 	// Initialize domain handlers and routes
-	auditUC, userRepo, groupRepo := initializeDomainRoutes(cfg, db, jwtService, xmlrpcClient, ldapClient)
+	auditUC, userRepo, groupRepo := initializeDomainRoutes(cfg, db, jwtService)
 
 	auditMiddleware := middleware.NewAuditMiddleware(auditUC, userRepo, groupRepo)
 
@@ -162,7 +136,7 @@ func main() {
 	}
 }
 
-func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService, xmlrpcClient *xmlrpc.Client, ldapClient *ldap.Client) (portalUsecases.AuditUsecase, portalRepo.UserRepository, portalRepo.GroupRepository) {
+func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *jwt.RSAService) (portalUsecases.AuditUsecase, portalRepo.UserRepository, portalRepo.GroupRepository) {
 	// Portal domain using PostgreSQL repositories
 	userRepo := portalRepoImpl.NewUserRepositoryPG(db.DB)
 	groupRepo := portalRepoImpl.NewGroupRepositoryPG(db.DB)
@@ -189,42 +163,12 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 	ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
 	ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
 	configUC := portalUsecases.NewConfigUsecase(ovRepo, ldapRepo)
-	configHandler := portalHandlers.NewConfigHandler(configUC)
+	reloadOpenVPN := configureOpenVPN(db, permRepo, groupRepo)
+	configHandler := portalHandlers.NewConfigHandler(configUC, reloadOpenVPN)
 	portalRoutes.Initialize(userHandler, groupHandler, permHandler, auditHandler, dashboardHandler, configHandler)
 
-	// OpenVPN domain initialization only when configs are present
-	if xmlrpcClient != nil && ldapClient != nil {
-		userRepoOV := openvpnRepo.NewUserRepository(xmlrpcClient)
-		groupRepoOV := openvpnRepo.NewGroupRepository(xmlrpcClient)
-		disconnectRepo := openvpnRepo.NewDisconnectRepository(xmlrpcClient)
-		vpnStatusRepo := openvpnRepo.NewVPNStatusRepository(xmlrpcClient)
-		configRepoOV := openvpnRepo.NewConfigRepository(xmlrpcClient)
-
-		userUCOV := openvpnUsecases.NewUserUsecase(userRepoOV, groupRepoOV, ldapClient)
-		groupUCOV := openvpnUsecases.NewGroupUsecase(groupRepoOV, configRepoOV)
-		bulkUCOV := openvpnUsecases.NewBulkUsecase(userRepoOV, groupRepoOV, ldapClient)
-		disconnectUC := openvpnUsecases.NewDisconnectUsecase(userRepoOV, disconnectRepo, vpnStatusRepo)
-		configUCOV := openvpnUsecases.NewConfigUsecase(configRepoOV)
-		vpnStatusUC := openvpnUsecases.NewVPNStatusUsecase(vpnStatusRepo)
-
-		userHandlerOV := openvpnHandlers.NewUserHandler(userUCOV, xmlrpcClient)
-		groupHandlerOV := openvpnHandlers.NewGroupHandler(groupUCOV, configUCOV, xmlrpcClient)
-		bulkHandlerOV := openvpnHandlers.NewBulkHandler(bulkUCOV, xmlrpcClient)
-		configHandlerOV := openvpnHandlers.NewConfigHandler(configUCOV)
-		vpnStatusHandlerOV := openvpnHandlers.NewVPNStatusHandler(vpnStatusUC)
-		disconnectHandlerOV := openvpnHandlers.NewDisconnectHandler(disconnectUC)
-		permMiddleware := middleware.NewPermissionMiddleware(permRepo, groupRepo)
-
-		openvpnRoutes.Initialize(
-			userHandlerOV,
-			groupHandlerOV,
-			bulkHandlerOV,
-			configHandlerOV,
-			vpnStatusHandlerOV,
-			disconnectHandlerOV,
-			permMiddleware,
-		)
-	}
+	// Initialize OpenVPN routes based on existing configs
+	reloadOpenVPN()
 
 	return auditUC, userRepo, groupRepo
 }
@@ -294,4 +238,64 @@ func logDatabaseVersion(db *sql.DB) {
 		return
 	}
 	logger.Log.WithField("version", version).Info("postgres version")
+}
+
+func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepository, groupRepo portalRepo.GroupRepository) func() {
+	return func() {
+		ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
+		ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
+		ovCfg, _ := ovRepo.Get(context.Background())
+		ldapCfg, _ := ldapRepo.Get(context.Background())
+		if ovCfg == nil || ldapCfg == nil {
+			return
+		}
+		xmlrpcClient := xmlrpc.NewClient(xmlrpc.Config{
+			Host:     ovCfg.Host,
+			Username: ovCfg.Username,
+			Password: ovCfg.Password,
+			Port:     ovCfg.Port,
+		})
+		ldapClient := ldap.NewClient(ldap.Config{
+			Host:         ldapCfg.Host,
+			Port:         ldapCfg.Port,
+			BindDN:       ldapCfg.BindDN,
+			BindPassword: ldapCfg.BindPassword,
+			BaseDN:       ldapCfg.BaseDN,
+		})
+		if err := checkConnections(db, ldapClient, xmlrpcClient); err != nil {
+			log.Println("connectivity check failed:", err)
+			return
+		}
+
+		userRepoOV := openvpnRepo.NewUserRepository(xmlrpcClient)
+		groupRepoOV := openvpnRepo.NewGroupRepository(xmlrpcClient)
+		disconnectRepo := openvpnRepo.NewDisconnectRepository(xmlrpcClient)
+		vpnStatusRepo := openvpnRepo.NewVPNStatusRepository(xmlrpcClient)
+		configRepoOV := openvpnRepo.NewConfigRepository(xmlrpcClient)
+
+		userUCOV := openvpnUsecases.NewUserUsecase(userRepoOV, groupRepoOV, ldapClient)
+		groupUCOV := openvpnUsecases.NewGroupUsecase(groupRepoOV, configRepoOV)
+		bulkUCOV := openvpnUsecases.NewBulkUsecase(userRepoOV, groupRepoOV, ldapClient)
+		disconnectUC := openvpnUsecases.NewDisconnectUsecase(userRepoOV, disconnectRepo, vpnStatusRepo)
+		configUCOV := openvpnUsecases.NewConfigUsecase(configRepoOV)
+		vpnStatusUC := openvpnUsecases.NewVPNStatusUsecase(vpnStatusRepo)
+
+		userHandlerOV := openvpnHandlers.NewUserHandler(userUCOV, xmlrpcClient)
+		groupHandlerOV := openvpnHandlers.NewGroupHandler(groupUCOV, configUCOV, xmlrpcClient)
+		bulkHandlerOV := openvpnHandlers.NewBulkHandler(bulkUCOV, xmlrpcClient)
+		configHandlerOV := openvpnHandlers.NewConfigHandler(configUCOV)
+		vpnStatusHandlerOV := openvpnHandlers.NewVPNStatusHandler(vpnStatusUC)
+		disconnectHandlerOV := openvpnHandlers.NewDisconnectHandler(disconnectUC)
+		permMiddleware := middleware.NewPermissionMiddleware(permRepo, groupRepo)
+
+		openvpnRoutes.Initialize(
+			userHandlerOV,
+			groupHandlerOV,
+			bulkHandlerOV,
+			configHandlerOV,
+			vpnStatusHandlerOV,
+			disconnectHandlerOV,
+			permMiddleware,
+		)
+	}
 }
