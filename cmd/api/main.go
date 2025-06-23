@@ -96,11 +96,6 @@ func main() {
 		log.Println(refreshPEM)
 	}
 
-	// Load service connection configs from database
-	// Repositories for connection configs
-	ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB)
-	ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
-
 	// Initialize middleware
 	authMiddleware := middleware.NewAuthMiddleware(jwtService)
 	corsMiddleware := middleware.NewCorsMiddleware(cfg.Security.CORS)
