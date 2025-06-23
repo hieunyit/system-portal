@@ -240,7 +240,7 @@ func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepos
 		ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB)
 		ovCfg, _ := ovRepo.Get(context.Background())
 		ldapCfg, _ := ldapRepo.Get(context.Background())
-		if ovCfg == nil || ldapCfg == nil {
+		if ovCfg == nil {
 			openvpnRoutes.Disable()
 			return
 		}
@@ -250,17 +250,21 @@ func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepos
 			Password: ovCfg.Password,
 			Port:     ovCfg.Port,
 		})
-		ldapClient := ldap.NewClient(ldap.Config{
-			Host:         ldapCfg.Host,
-			Port:         ldapCfg.Port,
-			BindDN:       ldapCfg.BindDN,
-			BindPassword: ldapCfg.BindPassword,
-			BaseDN:       ldapCfg.BaseDN,
-		})
+		var ldapClient *ldap.Client
+		if ldapCfg != nil {
+			ldapClient = ldap.NewClient(ldap.Config{
+				Host:         ldapCfg.Host,
+				Port:         ldapCfg.Port,
+				BindDN:       ldapCfg.BindDN,
+				BindPassword: ldapCfg.BindPassword,
+				BaseDN:       ldapCfg.BaseDN,
+			})
+		} else {
+			ldapClient = ldap.NewClient(ldap.Config{})
+		}
+		// Connectivity issues should not disable the API; log them for visibility
 		if err := checkConnections(db, ldapClient, xmlrpcClient); err != nil {
 			log.Println("connectivity check failed:", err)
-			openvpnRoutes.Disable()
-			return
 		}
 
 		userRepoOV := openvpnRepo.NewUserRepository(xmlrpcClient)
