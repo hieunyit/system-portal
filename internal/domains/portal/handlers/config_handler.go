@@ -39,6 +39,30 @@ func (h *ConfigHandler) GetOpenVPNConfig(c *gin.Context) {
 	httpresp.RespondWithSuccess(c, nethttp.StatusOK, cfg)
 }
 
+// TestOpenVPN godoc
+// @Summary Test OpenVPN connection
+// @Tags Connections
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body dto.OpenVPNConfigRequest true "OpenVPN config"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/connections/openvpn/test [post]
+func (h *ConfigHandler) TestOpenVPN(c *gin.Context) {
+	var req dto.OpenVPNConfigRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httpresp.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+	cfg := &entities.OpenVPNConfig{Host: req.Host, Username: req.Username, Password: req.Password, Port: req.Port}
+	if err := h.uc.TestOpenVPN(c.Request.Context(), cfg); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "ok")
+}
+
 // CreateOpenVPNConfig godoc
 // @Summary Create OpenVPN connection
 // @Tags Connections
@@ -158,6 +182,30 @@ func (h *ConfigHandler) GetLDAPConfig(c *gin.Context) {
 		return
 	}
 	httpresp.RespondWithSuccess(c, nethttp.StatusOK, cfg)
+}
+
+// TestLDAP godoc
+// @Summary Test LDAP connection
+// @Tags Connections
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body dto.LDAPConfigRequest true "LDAP config"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/portal/connections/ldap/test [post]
+func (h *ConfigHandler) TestLDAP(c *gin.Context) {
+	var req dto.LDAPConfigRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httpresp.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+	cfg := &entities.LDAPConfig{Host: req.Host, Port: req.Port, BindDN: req.BindDN, BindPassword: req.BindPassword, BaseDN: req.BaseDN}
+	if err := h.uc.TestLDAP(c.Request.Context(), cfg); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "ok")
 }
 
 // CreateLDAPConfig godoc

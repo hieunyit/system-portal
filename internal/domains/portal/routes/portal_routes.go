@@ -124,9 +124,11 @@ func registerConfigRoutes(portal *gin.RouterGroup) {
 		conn.POST("/openvpn", configHandler.CreateOpenVPNConfig)
 		conn.PUT("/openvpn", configHandler.UpdateOpenVPNConfig)
 		conn.DELETE("/openvpn", configHandler.DeleteOpenVPNConfig)
+		conn.POST("/openvpn/test", configHandler.TestOpenVPN)
 		conn.GET("/ldap", configHandler.GetLDAPConfig)
 		conn.POST("/ldap", configHandler.CreateLDAPConfig)
 		conn.PUT("/ldap", configHandler.UpdateLDAPConfig)
 		conn.DELETE("/ldap", configHandler.DeleteLDAPConfig)
+		conn.POST("/ldap/test", configHandler.TestLDAP)
 	}
 }

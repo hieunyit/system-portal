@@ -25,8 +25,11 @@ func NewDashboardHandler(u repositories.UserRepository, a repositories.AuditRepo
 // @Success 200 {object} response.SuccessResponse{data=dto.StatsResponse}
 // @Router /api/portal/dashboard/stats [get]
 func (h *DashboardHandler) GetDashboardStats(c *gin.Context) {
-	users, _ := h.userRepo.List(c.Request.Context())
-	http.RespondWithSuccess(c, 200, dto.StatsResponse{Users: len(users)})
+	users, total, _ := h.userRepo.List(c.Request.Context(), &entities.UserFilter{})
+	if total == 0 {
+		total = len(users)
+	}
+	http.RespondWithSuccess(c, 200, dto.StatsResponse{Users: total})
 }
 
 // GetRecentActivities godoc

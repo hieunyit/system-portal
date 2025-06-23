@@ -3,6 +3,9 @@ package impl
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"system-portal/internal/domains/portal/entities"
@@ -79,22 +82,56 @@ func (r *pgUserRepo) GetByEmail(ctx context.Context, email string) (*entities.Po
 	return &u, nil
 }
 
-func (r *pgUserRepo) List(ctx context.Context) ([]*entities.PortalUser, error) {
-	rows, err := r.db.QueryContext(ctx,
-		`SELECT id, username, email, full_name, group_id, is_active, created_at, updated_at FROM users`)
+func (r *pgUserRepo) List(ctx context.Context, f *entities.UserFilter) ([]*entities.PortalUser, int, error) {
+	if f == nil {
+		f = &entities.UserFilter{}
+	}
+	f.SetDefaults()
+
+	base := `SELECT id, username, email, full_name, group_id, is_active, created_at, updated_at FROM users`
+	countBase := `SELECT COUNT(1) FROM users`
+	clauses := []string{}
+	args := []interface{}{}
+	idx := 1
+	if f.Username != "" {
+		clauses = append(clauses, "username ILIKE $"+strconv.Itoa(idx))
+		args = append(args, "%"+f.Username+"%")
+		idx++
+	}
+	if f.Email != "" {
+		clauses = append(clauses, "email ILIKE $"+strconv.Itoa(idx))
+		args = append(args, "%"+f.Email+"%")
+		idx++
+	}
+	if f.GroupID != uuid.Nil {
+		clauses = append(clauses, "group_id=$"+strconv.Itoa(idx))
+		args = append(args, f.GroupID)
+		idx++
+	}
+	where := ""
+	if len(clauses) > 0 {
+		where = " WHERE " + strings.Join(clauses, " AND ")
+	}
+	query := base + where + fmt.Sprintf(" ORDER BY created_at DESC LIMIT %d OFFSET %d", f.Limit, f.Offset)
+	rows, err := r.db.QueryContext(ctx, query, args...)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	defer rows.Close()
 	var users []*entities.PortalUser
 	for rows.Next() {
 		var u entities.PortalUser
 		if err := rows.Scan(&u.ID, &u.Username, &u.Email, &u.FullName, &u.GroupID, &u.IsActive, &u.CreatedAt, &u.UpdatedAt); err != nil {
-			return nil, err
+			return nil, 0, err
 		}
 		users = append(users, &u)
 	}
-	return users, nil
+	countQuery := countBase + where
+	var total int
+	if err := r.db.QueryRowContext(ctx, countQuery, args...).Scan(&total); err != nil {
+		return nil, 0, err
+	}
+	return users, total, nil
 }
 
 func (r *pgUserRepo) Update(ctx context.Context, u *entities.PortalUser) error {

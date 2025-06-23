@@ -30,10 +30,10 @@ func (g *groupUsecaseImpl) Create(ctx context.Context, gr *entities.PortalGroup)
 	return g.repo.Create(ctx, gr)
 }
 
-func (g *groupUsecaseImpl) List(ctx context.Context) ([]*entities.PortalGroup, error) {
-	groups, err := g.repo.List(ctx)
+func (g *groupUsecaseImpl) List(ctx context.Context, filter *entities.GroupFilter) ([]*entities.PortalGroup, int, error) {
+	groups, total, err := g.repo.List(ctx, filter)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	if g.permRepo != nil {
 		for _, grp := range groups {
@@ -41,7 +41,7 @@ func (g *groupUsecaseImpl) List(ctx context.Context) ([]*entities.PortalGroup, e
 			grp.Permissions = perms
 		}
 	}
-	return groups, nil
+	return groups, total, nil
 }
 
 func (g *groupUsecaseImpl) Get(ctx context.Context, id uuid.UUID) (*entities.PortalGroup, error) {

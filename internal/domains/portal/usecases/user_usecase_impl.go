@@ -40,8 +40,8 @@ func (u *userUsecaseImpl) Create(ctx context.Context, user *entities.PortalUser)
 	return u.repo.Create(ctx, user)
 }
 
-func (u *userUsecaseImpl) List(ctx context.Context) ([]*entities.PortalUser, error) {
-	return u.repo.List(ctx)
+func (u *userUsecaseImpl) List(ctx context.Context, filter *entities.UserFilter) ([]*entities.PortalUser, int, error) {
+	return u.repo.List(ctx, filter)
 }
 
 func (u *userUsecaseImpl) Get(ctx context.Context, id uuid.UUID) (*entities.PortalUser, error) {

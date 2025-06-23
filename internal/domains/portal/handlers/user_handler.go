@@ -27,8 +27,19 @@ func NewUserHandler(u usecases.UserUsecase) *UserHandler { return &UserHandler{u
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=[]dto.PortalUserResponse}
 // @Router /api/portal/users [get]
+type userQuery struct {
+	Username string    `form:"username"`
+	Email    string    `form:"email"`
+	GroupID  uuid.UUID `form:"groupId"`
+	Page     int       `form:"page,default=1"`
+	Limit    int       `form:"limit,default=20"`
+}
+
 func (h *UserHandler) ListUsers(c *gin.Context) {
-	users, _ := h.uc.List(c.Request.Context())
+	var q userQuery
+	_ = c.ShouldBindQuery(&q)
+	filter := &entities.UserFilter{Username: q.Username, Email: q.Email, GroupID: q.GroupID, Page: q.Page, Limit: q.Limit}
+	users, total, _ := h.uc.List(c.Request.Context(), filter)
 	resp := make([]dto.PortalUserResponse, 0, len(users))
 	for _, u := range users {
 		resp = append(resp, dto.PortalUserResponse{
@@ -40,7 +51,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 			IsActive: u.IsActive,
 		})
 	}
-	http.RespondWithSuccess(c, nethttp.StatusOK, resp)
+	http.RespondWithSuccess(c, nethttp.StatusOK, gin.H{"users": resp, "total": total, "page": filter.Page, "limit": filter.Limit})
 }
 
 // CreateUser godoc

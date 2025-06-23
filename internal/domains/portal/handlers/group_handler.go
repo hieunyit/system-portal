@@ -22,9 +22,18 @@ func NewGroupHandler(u usecases.GroupUsecase) *GroupHandler { return &GroupHandl
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=[]entities.PortalGroup}
 // @Router /api/portal/groups [get]
+type groupQuery struct {
+	Name  string `form:"name"`
+	Page  int    `form:"page,default=1"`
+	Limit int    `form:"limit,default=20"`
+}
+
 func (h *GroupHandler) ListGroups(c *gin.Context) {
-	groups, _ := h.uc.List(c.Request.Context())
-	http.RespondWithSuccess(c, nethttp.StatusOK, groups)
+	var q groupQuery
+	_ = c.ShouldBindQuery(&q)
+	filter := &entities.GroupFilter{Name: q.Name, Page: q.Page, Limit: q.Limit}
+	groups, total, _ := h.uc.List(c.Request.Context(), filter)
+	http.RespondWithSuccess(c, nethttp.StatusOK, gin.H{"groups": groups, "total": total, "page": filter.Page, "limit": filter.Limit})
 }
 
 // GetGroup godoc
