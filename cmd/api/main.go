@@ -122,6 +122,9 @@ func main() {
 	// Verify external service connections when configs are present
 	if err := checkConnections(db, ldapClient, xmlrpcClient); err != nil {
 		log.Println("connectivity check failed:", err)
+		// Disable OpenVPN routes if connections fail
+		xmlrpcClient = nil
+		ldapClient = nil
 	}
 
 	// Initialize middleware
