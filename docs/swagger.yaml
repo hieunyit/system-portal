@@ -265,6 +265,15 @@ definitions:
     - email
     - username
     type: object
+  dto.PortalUserUpdateRequest:
+    properties:
+      fullName:
+        type: string
+      groupId:
+        type: string
+      password:
+        type: string
+    type: object
   dto.PortalUserResponse:
     properties:
       email:
@@ -1155,17 +1164,25 @@ definitions:
     type: object
   entities.AuditLog:
     properties:
-      action:
-        type: string
-      createdAt:
-        type: string
       id:
         type: string
-      resource:
+      userID:
+        type: string
+      username:
+        type: string
+      userGroup:
+        type: string
+      action:
+        type: string
+      resourceType:
+        type: string
+      resourceName:
+        type: string
+      ipAddress:
         type: string
       success:
         type: boolean
-      userID:
+      createdAt:
         type: string
     type: object
   entities.Permission:
@@ -2213,6 +2230,31 @@ paths:
       - VPN Status
   /api/portal/audit/logs:
     get:
+      parameters:
+      - in: query
+        name: username
+        type: string
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: ip
+        type: string
+      - in: query
+        name: resource
+        type: string
+      - in: query
+        name: from
+        type: string
+      - in: query
+        name: to
+        type: string
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
@@ -2229,6 +2271,25 @@ paths:
       - Audit
   /api/portal/audit/logs/export:
     get:
+      parameters:
+      - in: query
+        name: username
+        type: string
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: ip
+        type: string
+      - in: query
+        name: resource
+        type: string
+      - in: query
+        name: from
+        type: string
+      - in: query
+        name: to
+        type: string
       produces:
       - application/json
       responses:
@@ -2243,6 +2304,25 @@ paths:
       - Audit
   /api/portal/audit/stats:
     get:
+      parameters:
+      - in: query
+        name: username
+        type: string
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: ip
+        type: string
+      - in: query
+        name: resource
+        type: string
+      - in: query
+        name: from
+        type: string
+      - in: query
+        name: to
+        type: string
       produces:
       - application/json
       responses:
@@ -2356,7 +2436,7 @@ paths:
       - BearerAuth: []
       summary: Create portal group
       tags:
-      - Portal Groups
+  - Portal Groups
   /api/portal/groups/{id}:
     get:
       parameters:
@@ -2385,6 +2465,161 @@ paths:
       summary: Get portal group
       tags:
       - Portal Groups
+  /api/portal/groups/{id}/permissions:
+    get:
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/entities.Permission'
+      security:
+      - BearerAuth: []
+      summary: Get permissions for a group
+      tags:
+      - Permissions
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Permission IDs
+        in: body
+        name: request
+        required: true
+        schema:
+          type: object
+          properties:
+            permission_ids:
+              type: array
+              items:
+                type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update group permissions
+      tags:
+      - Permissions
+  /api/portal/permissions:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Permission'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: List permissions
+      tags:
+      - Permissions
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Permission data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Permission'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create permission
+      tags:
+      - Permissions
+  /api/portal/permissions/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Permission ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Permission data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Permission'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update permission
+      tags:
+      - Permissions
+    delete:
+      parameters:
+      - description: Permission ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete permission
+      tags:
+      - Permissions
   /api/portal/users:
     get:
       description: Retrieve all portal users
@@ -2497,7 +2732,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/dto.PortalUserRequest'
+          $ref: '#/definitions/dto.PortalUserUpdateRequest'
       produces:
       - application/json
       responses:

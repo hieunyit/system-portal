@@ -7,15 +7,11 @@ import (
 
 	"github.com/spf13/viper"
 
-	ldapCfg "system-portal/internal/shared/infrastructure/ldap"
-	xmlrpcCfg "system-portal/internal/shared/infrastructure/xmlrpc"
 	"system-portal/pkg/logger"
 )
 
 type Config struct {
 	Server   ServerConfig   `mapstructure:"server"`
-	OpenVPN  OpenVPNConfig  `mapstructure:"openvpn"`
-	LDAP     LDAPConfig     `mapstructure:"ldap"`
 	Database DatabaseConfig `mapstructure:"database"`
 	Logger   LoggerConfig   `mapstructure:"logger"`
 	JWT      JWTConfig      `mapstructure:"jwt"`
@@ -28,10 +24,6 @@ type ServerConfig struct {
 	Mode    string `mapstructure:"mode"`
 	Timeout int    `mapstructure:"timeout"`
 }
-
-type OpenVPNConfig = xmlrpcCfg.Config
-
-type LDAPConfig = ldapCfg.Config
 
 // Database connection settings
 type DatabaseConfig struct {
@@ -58,8 +50,8 @@ type JWTConfig struct {
 
 	// RSA configuration (recommended)
 	UseRSA                     bool          `mapstructure:"useRSA"`
-	AccessPrivateKey           string        `mapstructure:"accessPrivateKey"`
-	RefreshPrivateKey          string        `mapstructure:"refreshPrivateKey"`
+	AccessPrivateKeyPath       string        `mapstructure:"accessPrivateKeyPath"`
+	RefreshPrivateKeyPath      string        `mapstructure:"refreshPrivateKeyPath"`
 	AccessTokenExpireDuration  time.Duration `mapstructure:"accessTokenExpireDuration"`
 	RefreshTokenExpireDuration time.Duration `mapstructure:"refreshTokenExpireDuration"`
 }
@@ -79,6 +71,7 @@ type RedisConfig struct {
 type SecurityConfig struct {
 	EnableSecurityHeaders bool       `mapstructure:"enableSecurityHeaders"`
 	CORS                  CORSConfig `mapstructure:"cors"`
+	EncryptionKey         string     `mapstructure:"encryptionKey"`
 }
 
 type CORSConfig struct {
@@ -130,18 +123,14 @@ func setDefaults() {
 	viper.SetDefault("server.mode", "debug")
 	viper.SetDefault("server.timeout", 30)
 
-	// OpenVPN defaults
-	viper.SetDefault("openvpn.port", 943)
-
-	// LDAP defaults
-	viper.SetDefault("ldap.port", 389)
-
 	// Logger defaults
 	viper.SetDefault("logger.level", "info")
 	viper.SetDefault("logger.format", "json")
 
 	// JWT defaults
 	viper.SetDefault("jwt.useRSA", true)
+	viper.SetDefault("jwt.accessPrivateKeyPath", "")
+	viper.SetDefault("jwt.refreshPrivateKeyPath", "")
 	viper.SetDefault("jwt.accessTokenExpireDuration", time.Hour)
 	viper.SetDefault("jwt.refreshTokenExpireDuration", 24*time.Hour)
 
@@ -172,4 +161,5 @@ func setDefaults() {
 	viper.SetDefault("security.cors.allowedMethods", []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"})
 	viper.SetDefault("security.cors.allowedHeaders", []string{"Authorization", "Content-Type"})
 	viper.SetDefault("security.cors.allowCredentials", true)
+	viper.SetDefault("security.encryptionKey", "")
 }

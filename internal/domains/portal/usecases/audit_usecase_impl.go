@@ -18,8 +18,8 @@ func (a *auditUsecaseImpl) Add(ctx context.Context, l *entities.AuditLog) error 
 	return a.repo.Add(ctx, l)
 }
 
-func (a *auditUsecaseImpl) List(ctx context.Context) ([]*entities.AuditLog, error) {
-	return a.repo.List(ctx)
+func (a *auditUsecaseImpl) List(ctx context.Context, f *entities.AuditFilter) ([]*entities.AuditLog, int, error) {
+	return a.repo.List(ctx, f)
 }
 
 func (a *auditUsecaseImpl) Get(ctx context.Context, id uuid.UUID) (*entities.AuditLog, error) {

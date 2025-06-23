@@ -173,6 +173,38 @@ const docTemplate = `{
         },
         "/api/openvpn/bulk/groups/template": {
             "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "username"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "group"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "ip"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "resource"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "from"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "to"
+                    }
+                ],
                 "security": [
                     {
                         "BearerAuth": []
@@ -1570,6 +1602,48 @@ const docTemplate = `{
         },
         "/api/portal/audit/logs": {
             "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "username"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "group"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "ip"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "resource"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "from"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "to"
+                    },
+                    {
+                        "type": "integer",
+                        "in": "query",
+                        "name": "page"
+                    },
+                    {
+                        "type": "integer",
+                        "in": "query",
+                        "name": "limit"
+                    }
+                ],
                 "security": [
                     {
                         "BearerAuth": []
@@ -1597,6 +1671,38 @@ const docTemplate = `{
         },
         "/api/portal/audit/logs/export": {
             "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "username"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "group"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "ip"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "resource"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "from"
+                    },
+                    {
+                        "type": "string",
+                        "in": "query",
+                        "name": "to"
+                    }
+                ],
                 "security": [
                     {
                         "BearerAuth": []
@@ -1858,6 +1964,65 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/portal/groups/{id}/permissions": {
+            "get": {
+                "security": [
+                    {"BearerAuth": []}
+                ],
+                "produces": ["application/json"],
+                "tags": ["Permissions"],
+                "summary": "Get permissions for a group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {"type": "array", "items": {"$ref": "#/definitions/entities.Permission"}}
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {"BearerAuth": []}
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "tags": ["Permissions"],
+                "summary": "Update group permissions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Permission IDs",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "permission_ids": {"type": "array", "items": {"type": "string"}}
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}},
+                    "400": {"description": "Bad Request", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
+                }
+            }
+        },
         "/api/portal/users": {
             "get": {
                 "security": [
@@ -1909,7 +2074,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.PortalUserRequest"
+                            "$ref": "#/definitions/dto.PortalUserUpdateRequest"
                         }
                     }
                 ],
@@ -2005,7 +2170,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.PortalUserRequest"
+                            "$ref": "#/definitions/dto.PortalUserUpdateRequest"
                         }
                     }
                 ],
@@ -2669,7 +2834,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.PortalUserRequest": {
+                "dto.PortalUserRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -2689,6 +2854,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.PortalUserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "fullName": {
+                    "type": "string"
+                },
+                "groupId": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }
@@ -3940,29 +4119,41 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.AuditLog": {
-            "type": "object",
-            "properties": {
-                "action": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "resource": {
-                    "type": "string"
-                },
-                "success": {
-                    "type": "boolean"
-                },
-                "userID": {
-                    "type": "string"
-                }
-            }
-        },
+       "entities.AuditLog": {
+           "type": "object",
+           "properties": {
+               "id": {
+                   "type": "string"
+               },
+               "userID": {
+                   "type": "string"
+               },
+               "username": {
+                   "type": "string"
+               },
+               "userGroup": {
+                   "type": "string"
+               },
+               "action": {
+                   "type": "string"
+               },
+               "resourceType": {
+                   "type": "string"
+               },
+               "resourceName": {
+                   "type": "string"
+               },
+               "ipAddress": {
+                   "type": "string"
+               },
+               "success": {
+                   "type": "boolean"
+               },
+               "createdAt": {
+                   "type": "string"
+               }
+           }
+       },
         "entities.Permission": {
             "type": "object",
             "properties": {

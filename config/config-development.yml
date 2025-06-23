@@ -1,20 +1,8 @@
+# Server configuration
 server:
   port: "8080"
   mode: "debug"
   timeout: 30
-
-openvpn:
-  host: "localhost"
-  username: "openvpn"
-  password: "Asim#2023"
-  port: 943
-
-ldap:
-  host: "localhost"
-  port: 389
-  bindDN: "cn=admin,dc=hieuny,dc=com"
-  bindPassword: "Jisai@11?22"
-  baseDN: "ou=Users,dc=hieuny,dc=com"
 
 # PostgreSQL connection
 database:
@@ -36,11 +24,11 @@ jwt:
   accessTokenExpireDuration: "1h"
   refreshTokenExpireDuration: "24h"
   
-  # RSA Private Keys (Base64 encoded PEM format)
-  # Leave empty to auto-generate keys on startup
-  # For production, generate your own keys and store securely
-  accessPrivateKey: ""
-  refreshPrivateKey: ""
+  # RSA Private Key file paths (PEM format)
+  # Provide paths to PEM files containing the private keys. If left empty,
+  # new keys are generated on every start which invalidates existing tokens.
+  accessPrivateKeyPath: "./config/access_private.pem"
+  refreshPrivateKeyPath: "./config/refresh_private.pem"
   
   # Legacy HMAC Configuration (Deprecated - only for backward compatibility)
   # Only used when useRSA: false
@@ -60,6 +48,8 @@ redis:
 security:
   # Enable additional security headers
   enableSecurityHeaders: true
+  # Encryption key for sensitive configuration fields (32 bytes)
+  encryptionKey: "0123456789abcdef0123456789abcdef"
   
   # CORS Configuration - CẬP NHẬT QUAN TRỌNG
   cors:

@@ -1,5 +1,7 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Enable pgcrypto for crypt() function used in seed data
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- Groups table
 CREATE TABLE IF NOT EXISTS groups (
@@ -32,8 +34,8 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS user_sessions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    token_hash VARCHAR(255) NOT NULL,
-    refresh_token_hash VARCHAR(255),
+    token_hash TEXT NOT NULL,
+    refresh_token_hash TEXT,
     expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
     refresh_expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
@@ -51,15 +53,9 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     user_group VARCHAR(50),
     action VARCHAR(100) NOT NULL,
     resource_type VARCHAR(50) NOT NULL,
-    resource_id VARCHAR(100),
     resource_name VARCHAR(200),
-    old_values JSONB,
-    new_values JSONB,
     ip_address INET,
-    user_agent TEXT,
     success BOOLEAN DEFAULT TRUE,
-    error_message TEXT,
-    duration_ms INTEGER,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
