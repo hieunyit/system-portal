@@ -18,6 +18,27 @@ func NewConfigHandler(u usecases.ConfigUsecase, reload func()) *ConfigHandler {
 	return &ConfigHandler{uc: u, reload: reload}
 }
 
+// GetOpenVPNConfig godoc
+// @Summary Get OpenVPN connection
+// @Tags Connections
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} response.SuccessResponse{data=entities.OpenVPNConfig}
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/portal/connections/openvpn [get]
+func (h *ConfigHandler) GetOpenVPNConfig(c *gin.Context) {
+	cfg, err := h.uc.GetOpenVPN(c.Request.Context())
+	if err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	if cfg == nil {
+		httpresp.RespondWithNotFound(c, "not found")
+		return
+	}
+	httpresp.RespondWithSuccess(c, nethttp.StatusOK, cfg)
+}
+
 // CreateOpenVPNConfig godoc
 // @Summary Set OpenVPN connection
 // @Tags Connections
@@ -78,6 +99,27 @@ func (h *ConfigHandler) DeleteOpenVPNConfig(c *gin.Context) {
 		h.reload()
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "deleted")
+}
+
+// GetLDAPConfig godoc
+// @Summary Get LDAP connection
+// @Tags Connections
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} response.SuccessResponse{data=entities.LDAPConfig}
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/portal/connections/ldap [get]
+func (h *ConfigHandler) GetLDAPConfig(c *gin.Context) {
+	cfg, err := h.uc.GetLDAP(c.Request.Context())
+	if err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	if cfg == nil {
+		httpresp.RespondWithNotFound(c, "not found")
+		return
+	}
+	httpresp.RespondWithSuccess(c, nethttp.StatusOK, cfg)
 }
 
 // CreateLDAPConfig godoc
