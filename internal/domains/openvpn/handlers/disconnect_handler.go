@@ -28,7 +28,7 @@ func NewDisconnectHandler(disconnectUsecase usecases.DisconnectUsecase) *Disconn
 // BulkDisconnectUsers godoc
 // @Summary Bulk disconnect multiple VPN users
 // @Description Disconnect multiple users from VPN with business logic validation (user exists and is connected)
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -95,7 +95,7 @@ func (h *DisconnectHandler) BulkDisconnectUsers(c *gin.Context) {
 // DisconnectUser godoc
 // @Summary Disconnect a single VPN user
 // @Description Disconnect a specific user from VPN with business logic validation (user exists and is connected)
-// @Tags Users
+// @Tags VPN Users
 // @Security BearerAuth
 // @Accept json
 // @Produce json

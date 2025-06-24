@@ -24,7 +24,7 @@ func NewConfigHandler(configUsecase usecases.ConfigUsecase) *ConfigHandler {
 // GetServerInfo godoc
 // @Summary Get server information
 // @Description Get basic server information including node type, ports, and cluster configuration
-// @Tags Configuration
+// @Tags VPN Configuration
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=dto.VpnServerInfoResponse} "Server information retrieved successfully"
@@ -67,7 +67,7 @@ func (h *ConfigHandler) GetServerInfo(c *gin.Context) {
 // GetNetworkConfig godoc
 // @Summary Get network configuration
 // @Description Get comprehensive network configuration including client networks, VPN daemon settings, routing, and NAT configuration
-// @Tags Configuration
+// @Tags VPN Configuration
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=dto.VpnNetworkConfigResponse} "Network configuration retrieved successfully"

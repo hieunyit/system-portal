@@ -3,11 +3,12 @@ package handlers
 import (
 	nethttp "net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/usecases"
 	httpresp "system-portal/internal/shared/response"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type PermissionHandler struct{ uc usecases.PermissionUsecase }
@@ -21,7 +22,7 @@ func NewPermissionHandler(u usecases.PermissionUsecase) *PermissionHandler {
 // @Tags Permissions
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
+// @Success 200 {object} response.SuccessResponse
 // @Router /api/portal/permissions [get]
 func (h *PermissionHandler) ListPermissions(c *gin.Context) {
 	perms, err := h.uc.List(c.Request.Context())

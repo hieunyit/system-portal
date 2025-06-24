@@ -33,7 +33,7 @@ func NewGroupHandler(groupUsecase usecases.GroupUsecase, configUsecase usecases.
 // CreateGroup godoc
 // @Summary Create a new group
 // @Description Create a new VPN user group
-// @Tags Groups
+// @Tags VPN Groups
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -122,7 +122,7 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 // GetGroup godoc
 // @Summary Get group by name
 // @Description Get group information by name
-// @Tags Groups
+// @Tags VPN Groups
 // @Security BearerAuth
 // @Produce json
 // @Param groupName path string true "Group name"
@@ -164,7 +164,7 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 // UpdateGroup godoc
 // @Summary Update group
 // @Description Update group information
-// @Tags Groups
+// @Tags VPN Groups
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -250,7 +250,7 @@ func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 // DeleteGroup godoc
 // @Summary Delete group
 // @Description Delete group by name
-// @Tags Groups
+// @Tags VPN Groups
 // @Security BearerAuth
 // @Produce json
 // @Param groupName path string true "Group name"
@@ -285,7 +285,7 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 // ListGroups godoc
 // @Summary List groups
 // @Description List groups with pagination and filtering
-// @Tags Groups
+// @Tags VPN Groups
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -356,7 +356,7 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 // GroupAction godoc
 // @Summary Perform action on group
 // @Description Enable or disable a group
-// @Tags Groups
+// @Tags VPN Groups
 // @Security BearerAuth
 // @Accept json
 // @Produce json

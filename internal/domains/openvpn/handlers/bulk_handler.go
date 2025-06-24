@@ -31,7 +31,7 @@ func NewBulkHandler(bulkUsecase usecases.BulkUsecase, xmlrpcClient *xmlrpc.Clien
 // BulkCreateUsers godoc
 // @Summary Bulk create users
 // @Description Create multiple users at once
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -85,7 +85,7 @@ func (h *BulkHandler) BulkCreateUsers(c *gin.Context) {
 // BulkUserActions godoc
 // @Summary Bulk user actions
 // @Description Perform actions on multiple users (enable/disable/reset-otp)
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -141,7 +141,7 @@ func (h *BulkHandler) BulkUserActions(c *gin.Context) {
 // BulkExtendUsers godoc
 // @Summary Bulk extend user expiration
 // @Description Extend expiration date for multiple users
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -196,7 +196,7 @@ func (h *BulkHandler) BulkExtendUsers(c *gin.Context) {
 // ImportUsers godoc
 // @Summary Import users from file
 // @Description Import users from CSV, JSON, or XLSX file
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Accept multipart/form-data
 // @Produce json
@@ -279,7 +279,7 @@ func (h *BulkHandler) ImportUsers(c *gin.Context) {
 // BulkCreateGroups godoc
 // @Summary Bulk create groups
 // @Description Create multiple groups at once
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -332,7 +332,7 @@ func (h *BulkHandler) BulkCreateGroups(c *gin.Context) {
 // BulkGroupActions godoc
 // @Summary Bulk group actions
 // @Description Perform actions on multiple groups (enable/disable)
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -388,7 +388,7 @@ func (h *BulkHandler) BulkGroupActions(c *gin.Context) {
 // ImportGroups godoc
 // @Summary Import groups from file
 // @Description Import groups from CSV, JSON, or XLSX file
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Accept multipart/form-data
 // @Produce json
@@ -470,7 +470,7 @@ func (h *BulkHandler) ImportGroups(c *gin.Context) {
 // ExportUserTemplate godoc
 // @Summary Export user template
 // @Description Download template file for user import
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Produce application/octet-stream
 // @Param format query string false "Template format" Enums(csv, xlsx) default(csv)
@@ -497,7 +497,7 @@ func (h *BulkHandler) ExportUserTemplate(c *gin.Context) {
 // ExportGroupTemplate godoc
 // @Summary Export group template
 // @Description Download template file for group import
-// @Tags Bulk Operations
+// @Tags VPN Bulk Operations
 // @Security BearerAuth
 // @Produce application/octet-stream
 // @Param format query string false "Template format" Enums(csv, xlsx) default(csv)

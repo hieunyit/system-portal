@@ -35,7 +35,7 @@ func NewUserHandler(userUsecase usecases.UserUsecase, xmlrpcClient *xmlrpc.Clien
 // CreateUser godoc
 // @Summary Create a new user
 // @Description Create a new VPN user (local or LDAP authentication)
-// @Tags Users
+// @Tags VPN Users
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -113,7 +113,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // GetUser godoc
 // @Summary Get user by username
 // @Description Get detailed information about a user
-// @Tags Users
+// @Tags VPN Users
 // @Security BearerAuth
 // @Produce json
 // @Param username path string true "Username"
@@ -146,7 +146,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // UpdateUser godoc
 // @Summary Update user
 // @Description Update user information
-// @Tags Users
+// @Tags VPN Users
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -228,7 +228,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 // DeleteUser godoc
 // @Summary Delete user
 // @Description Delete a user and associated resources
-// @Tags Users
+// @Tags VPN Users
 // @Security BearerAuth
 // @Param username path string true "Username"
 // @Success 200 {object} response.SuccessResponse
@@ -261,7 +261,7 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 // UserAction godoc
 // @Summary Perform user action
 // @Description Perform actions like enable, disable, reset-otp, change-password
-// @Tags Users
+// @Tags VPN Users
 // @Security BearerAuth
 // @Accept json
 // @Produce json
@@ -385,7 +385,7 @@ func (h *UserHandler) UserAction(c *gin.Context) {
 // ListUsers godoc
 // @Summary List users with enhanced filtering
 // @Description Get a paginated list of users with comprehensive filtering options
-// @Tags Users
+// @Tags VPN Users
 // @Security BearerAuth
 // @Produce json
 // @Param username query string false "Filter by username (supports partial match)"
@@ -477,7 +477,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 // GetUserExpirations godoc
 // @Summary Get expiring users with full information
 // @Description Get users that will expire in the specified number of days with complete user details
-// @Tags Users
+// @Tags VPN Users
 // @Security BearerAuth
 // @Produce json
 // @Param days query int false "Number of days to check for expiration" default(7)
