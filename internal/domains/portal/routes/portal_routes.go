@@ -130,5 +130,13 @@ func registerConfigRoutes(portal *gin.RouterGroup) {
 		conn.PUT("/ldap", configHandler.UpdateLDAPConfig)
 		conn.DELETE("/ldap", configHandler.DeleteLDAPConfig)
 		conn.POST("/ldap/test", configHandler.TestLDAP)
+
+		conn.GET("/smtp", configHandler.GetSMTPConfig)
+		conn.POST("/smtp", configHandler.CreateSMTPConfig)
+		conn.PUT("/smtp", configHandler.UpdateSMTPConfig)
+		conn.DELETE("/smtp", configHandler.DeleteSMTPConfig)
+
+		conn.GET("/templates/:action", configHandler.GetEmailTemplate)
+		conn.PUT("/templates/:action", configHandler.UpdateEmailTemplate)
 	}
 }

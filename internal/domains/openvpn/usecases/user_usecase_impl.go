@@ -9,6 +9,7 @@ import (
 	openvpndto "system-portal/internal/domains/openvpn/dto"
 	"system-portal/internal/domains/openvpn/entities"
 	"system-portal/internal/domains/openvpn/repositories"
+	emailservice "system-portal/internal/services/email"
 	"system-portal/internal/shared/errors"
 	"system-portal/internal/shared/infrastructure/ldap"
 	"system-portal/pkg/logger"
@@ -20,13 +21,15 @@ type userUsecaseImpl struct {
 	userRepo   repositories.UserRepository
 	groupRepo  repositories.GroupRepository
 	ldapClient *ldap.Client // CRITICAL FIX: Re-added LDAP client
+	emailSvc   *emailservice.Service
 }
 
-func NewUserUsecase(userRepo repositories.UserRepository, groupRepo repositories.GroupRepository, ldapClient *ldap.Client) UserUsecase {
+func NewUserUsecase(userRepo repositories.UserRepository, groupRepo repositories.GroupRepository, ldapClient *ldap.Client, emailSvc *emailservice.Service) UserUsecase {
 	return &userUsecaseImpl{
 		userRepo:   userRepo,
 		groupRepo:  groupRepo,
-		ldapClient: ldapClient, // CRITICAL FIX: Initialize LDAP client
+		ldapClient: ldapClient,
+		emailSvc:   emailSvc,
 	}
 }
 
@@ -113,6 +116,17 @@ func (u *userUsecaseImpl) CreateUser(ctx context.Context, user *entities.User) e
 	logger.Log.WithField("username", user.Username).
 		WithField("authMethod", user.AuthMethod).
 		Info("User created successfully")
+
+	if u.emailSvc != nil && user.Email != "" {
+		action := "create_user_" + user.AuthMethod
+		data := map[string]interface{}{"Username": user.Username}
+		if user.IsLocalAuth() {
+			data["Password"] = user.Password
+		}
+		if err := u.emailSvc.Send(ctx, action, user.Email, data); err != nil {
+			logger.Log.WithError(err).Warn("failed to send creation email")
+		}
+	}
 	return nil
 }
 
@@ -547,6 +561,13 @@ func (u *userUsecaseImpl) EnableUser(ctx context.Context, username string) error
 	}
 
 	logger.Log.WithField("username", username).Info("User enabled successfully")
+
+	if u.emailSvc != nil && user.Email != "" {
+		data := map[string]interface{}{"Username": username}
+		if err := u.emailSvc.Send(ctx, "enable_user", user.Email, data); err != nil {
+			logger.Log.WithError(err).Warn("failed to send enable email")
+		}
+	}
 	return nil
 }
 
@@ -585,6 +606,13 @@ func (u *userUsecaseImpl) DisableUser(ctx context.Context, username string) erro
 	}
 
 	logger.Log.WithField("username", username).Info("User disabled successfully")
+
+	if u.emailSvc != nil && user.Email != "" {
+		data := map[string]interface{}{"Username": username}
+		if err := u.emailSvc.Send(ctx, "disable_user", user.Email, data); err != nil {
+			logger.Log.WithError(err).Warn("failed to send disable email")
+		}
+	}
 	return nil
 }
 
@@ -840,4 +868,25 @@ func ipInRanges(ip net.IP, ranges []ipRange) bool {
 		}
 	}
 	return false
+}
+
+func (u *userUsecaseImpl) NotifyExpiringUsers(ctx context.Context) error {
+	if u.emailSvc == nil {
+		return nil
+	}
+	daysList := []int{7, 3, 1}
+	for _, d := range daysList {
+		emails, err := u.GetExpiringUsers(ctx, d)
+		if err != nil {
+			logger.Log.WithError(err).Warn("failed to get expiring users")
+			continue
+		}
+		for _, em := range emails {
+			data := map[string]interface{}{"Days": d}
+			if err := u.emailSvc.Send(ctx, "expiration", em, data); err != nil {
+				logger.Log.WithError(err).Warn("failed to send expiration email")
+			}
+		}
+	}
+	return nil
 }

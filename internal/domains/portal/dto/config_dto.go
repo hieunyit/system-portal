@@ -16,3 +16,19 @@ type LDAPConfigRequest struct {
 	BindPassword string `json:"bindPassword" binding:"required"`
 	BaseDN       string `json:"baseDN" binding:"required"`
 }
+
+// SMTPConfigRequest represents payload to set SMTP connection details
+type SMTPConfigRequest struct {
+	Host     string `json:"host" binding:"required"`
+	Port     int    `json:"port" binding:"required"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	From     string `json:"from" binding:"required"`
+	TLS      bool   `json:"tls"`
+}
+
+// EmailTemplateRequest represents payload to set email template
+type EmailTemplateRequest struct {
+	Subject string `json:"subject" binding:"required"`
+	Body    string `json:"body" binding:"required"`
+}

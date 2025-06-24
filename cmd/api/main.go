@@ -24,6 +24,7 @@ import (
 	portalRepoImpl "system-portal/internal/domains/portal/repositories/impl"
 	portalRoutes "system-portal/internal/domains/portal/routes"
 	portalUsecases "system-portal/internal/domains/portal/usecases"
+	"system-portal/internal/services/email"
 	"system-portal/internal/shared/config"
 	"system-portal/internal/shared/database"
 	serverHttp "system-portal/internal/shared/infrastructure/http"
@@ -154,8 +155,10 @@ func initializeDomainRoutes(cfg *config.Config, db *database.Postgres, jwtSvc *j
 
 	ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB, cfg.Security.EncryptionKey)
 	ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB, cfg.Security.EncryptionKey)
-	configUC := portalUsecases.NewConfigUsecase(ovRepo, ldapRepo)
-	reloadOpenVPN := configureOpenVPN(db, permRepo, groupRepo, cfg.Security.EncryptionKey)
+	smtpRepo := portalRepoImpl.NewSMTPConfigRepositoryPG(db.DB, cfg.Security.EncryptionKey)
+	tplRepo := portalRepoImpl.NewEmailTemplateRepositoryPG(db.DB)
+	configUC := portalUsecases.NewConfigUsecase(ovRepo, ldapRepo, smtpRepo, tplRepo)
+	reloadOpenVPN := configureOpenVPN(db, permRepo, groupRepo, cfg)
 	configHandler := portalHandlers.NewConfigHandler(configUC, reloadOpenVPN)
 	portalRoutes.Initialize(userHandler, groupHandler, permHandler, auditHandler, dashboardHandler, configHandler)
 
@@ -203,10 +206,13 @@ func checkConnections(db *database.Postgres, ldapClient *ldap.Client, xmlClient 
 	return nil
 }
 
-func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepository, groupRepo portalRepo.GroupRepository, encKey string) func() {
+func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepository, groupRepo portalRepo.GroupRepository, cfg *config.Config) func() {
 	return func() {
+		encKey := cfg.Security.EncryptionKey
 		ovRepo := portalRepoImpl.NewOpenVPNConfigRepositoryPG(db.DB, encKey)
 		ldapRepo := portalRepoImpl.NewLDAPConfigRepositoryPG(db.DB, encKey)
+		smtpRepo := portalRepoImpl.NewSMTPConfigRepositoryPG(db.DB, encKey)
+		tplRepo := portalRepoImpl.NewEmailTemplateRepositoryPG(db.DB)
 		ovCfg, _ := ovRepo.Get(context.Background())
 		ldapCfg, _ := ldapRepo.Get(context.Background())
 		if ovCfg == nil {
@@ -236,13 +242,15 @@ func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepos
 			logger.Log.WithError(err).Warn("connectivity check failed")
 		}
 
+		emailSvc := email.NewService(smtpRepo, tplRepo)
+
 		userRepoOV := openvpnRepo.NewUserRepository(xmlrpcClient)
 		groupRepoOV := openvpnRepo.NewGroupRepository(xmlrpcClient)
 		disconnectRepo := openvpnRepo.NewDisconnectRepository(xmlrpcClient)
 		vpnStatusRepo := openvpnRepo.NewVPNStatusRepository(xmlrpcClient)
 		configRepoOV := openvpnRepo.NewConfigRepository(xmlrpcClient)
 
-		userUCOV := openvpnUsecases.NewUserUsecase(userRepoOV, groupRepoOV, ldapClient)
+		userUCOV := openvpnUsecases.NewUserUsecase(userRepoOV, groupRepoOV, ldapClient, emailSvc)
 		groupUCOV := openvpnUsecases.NewGroupUsecase(groupRepoOV, configRepoOV)
 		bulkUCOV := openvpnUsecases.NewBulkUsecase(userRepoOV, groupRepoOV, ldapClient)
 		disconnectUC := openvpnUsecases.NewDisconnectUsecase(userRepoOV, disconnectRepo, vpnStatusRepo)
@@ -266,5 +274,16 @@ func configureOpenVPN(db *database.Postgres, permRepo portalRepo.PermissionRepos
 			disconnectHandlerOV,
 			permMiddleware,
 		)
+
+		go func() {
+			ticker := time.NewTicker(24 * time.Hour)
+			defer ticker.Stop()
+			for {
+				if err := userUCOV.NotifyExpiringUsers(context.Background()); err != nil {
+					logger.Log.WithError(err).Warn("notify expiring users failed")
+				}
+				<-ticker.C
+			}
+		}()
 	}
 }

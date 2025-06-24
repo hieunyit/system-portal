@@ -309,3 +309,147 @@ func (h *ConfigHandler) DeleteLDAPConfig(c *gin.Context) {
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "deleted")
 }
+
+// GetSMTPConfig godoc
+// @Summary Get SMTP configuration
+// @Tags Connections
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} response.SuccessResponse{data=entities.SMTPConfig}
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/portal/connections/smtp [get]
+func (h *ConfigHandler) GetSMTPConfig(c *gin.Context) {
+	cfg, err := h.uc.GetSMTP(c.Request.Context())
+	if err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	if cfg == nil {
+		httpresp.RespondWithNotFound(c, "not found")
+		return
+	}
+	httpresp.RespondWithSuccess(c, nethttp.StatusOK, cfg)
+}
+
+// CreateSMTPConfig godoc
+// @Summary Create SMTP configuration
+// @Tags Connections
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body dto.SMTPConfigRequest true "SMTP config"
+// @Success 201 {object} response.SuccessResponse
+// @Router /api/portal/connections/smtp [post]
+func (h *ConfigHandler) CreateSMTPConfig(c *gin.Context) {
+	var req dto.SMTPConfigRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httpresp.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+	if existing, err := h.uc.GetSMTP(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	} else if existing != nil {
+		httpresp.RespondWithBadRequest(c, "configuration already exists")
+		return
+	}
+	cfg := &entities.SMTPConfig{Host: req.Host, Port: req.Port, Username: req.Username, Password: req.Password, From: req.From, TLS: req.TLS}
+	if err := h.uc.SetSMTP(c.Request.Context(), cfg); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusCreated, "saved")
+}
+
+// UpdateSMTPConfig godoc
+// @Summary Update SMTP configuration
+// @Tags Connections
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body dto.SMTPConfigRequest true "SMTP config"
+// @Success 200 {object} response.SuccessResponse
+// @Router /api/portal/connections/smtp [put]
+func (h *ConfigHandler) UpdateSMTPConfig(c *gin.Context) {
+	var req dto.SMTPConfigRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httpresp.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+	if existing, err := h.uc.GetSMTP(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	} else if existing == nil {
+		httpresp.RespondWithNotFound(c, "not found")
+		return
+	}
+	cfg := &entities.SMTPConfig{Host: req.Host, Port: req.Port, Username: req.Username, Password: req.Password, From: req.From, TLS: req.TLS}
+	if err := h.uc.SetSMTP(c.Request.Context(), cfg); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "saved")
+}
+
+// DeleteSMTPConfig godoc
+// @Summary Delete SMTP configuration
+// @Tags Connections
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} response.SuccessResponse
+// @Router /api/portal/connections/smtp [delete]
+func (h *ConfigHandler) DeleteSMTPConfig(c *gin.Context) {
+	if err := h.uc.DeleteSMTP(c.Request.Context()); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "deleted")
+}
+
+// GetEmailTemplate godoc
+// @Summary Get email template by action
+// @Tags Connections
+// @Security BearerAuth
+// @Produce json
+// @Param action path string true "action"
+// @Success 200 {object} response.SuccessResponse{data=entities.EmailTemplate}
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/portal/connections/templates/{action} [get]
+func (h *ConfigHandler) GetEmailTemplate(c *gin.Context) {
+	action := c.Param("action")
+	tpl, err := h.uc.GetTemplate(c.Request.Context(), action)
+	if err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	if tpl == nil {
+		httpresp.RespondWithNotFound(c, "not found")
+		return
+	}
+	httpresp.RespondWithSuccess(c, nethttp.StatusOK, tpl)
+}
+
+// UpdateEmailTemplate godoc
+// @Summary Update email template
+// @Tags Connections
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param action path string true "action"
+// @Param request body dto.EmailTemplateRequest true "template"
+// @Success 200 {object} response.SuccessResponse
+// @Router /api/portal/connections/templates/{action} [put]
+func (h *ConfigHandler) UpdateEmailTemplate(c *gin.Context) {
+	action := c.Param("action")
+	var req dto.EmailTemplateRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httpresp.RespondWithBadRequest(c, "invalid request")
+		return
+	}
+	tpl := &entities.EmailTemplate{Action: action, Subject: req.Subject, Body: req.Body}
+	if err := h.uc.SetTemplate(c.Request.Context(), tpl); err != nil {
+		httpresp.RespondWithBadRequest(c, err.Error())
+		return
+	}
+	httpresp.RespondWithMessage(c, nethttp.StatusOK, "saved")
+}

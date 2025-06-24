@@ -12,12 +12,14 @@ import (
 )
 
 type configUsecaseImpl struct {
-	ovRepo   repositories.OpenVPNConfigRepository
-	ldapRepo repositories.LDAPConfigRepository
+	ovRepo       repositories.OpenVPNConfigRepository
+	ldapRepo     repositories.LDAPConfigRepository
+	smtpRepo     repositories.SMTPConfigRepository
+	templateRepo repositories.EmailTemplateRepository
 }
 
-func NewConfigUsecase(ov repositories.OpenVPNConfigRepository, ldap repositories.LDAPConfigRepository) ConfigUsecase {
-	return &configUsecaseImpl{ovRepo: ov, ldapRepo: ldap}
+func NewConfigUsecase(ov repositories.OpenVPNConfigRepository, ldap repositories.LDAPConfigRepository, smtp repositories.SMTPConfigRepository, tpl repositories.EmailTemplateRepository) ConfigUsecase {
+	return &configUsecaseImpl{ovRepo: ov, ldapRepo: ldap, smtpRepo: smtp, templateRepo: tpl}
 }
 
 func (u *configUsecaseImpl) GetOpenVPN(ctx context.Context) (*entities.OpenVPNConfig, error) {
@@ -107,4 +109,62 @@ func (u *configUsecaseImpl) TestLDAP(ctx context.Context, cfg *entities.LDAPConf
 	}
 	conn.Close()
 	return nil
+}
+
+func (u *configUsecaseImpl) GetSMTP(ctx context.Context) (*entities.SMTPConfig, error) {
+	if u.smtpRepo == nil {
+		return nil, nil
+	}
+	return u.smtpRepo.Get(ctx)
+}
+
+func (u *configUsecaseImpl) SetSMTP(ctx context.Context, cfg *entities.SMTPConfig) error {
+	if u.smtpRepo == nil {
+		return nil
+	}
+	existing, err := u.smtpRepo.Get(ctx)
+	if err != nil {
+		return err
+	}
+	now := time.Now()
+	if existing == nil {
+		if cfg.ID == uuid.Nil {
+			cfg.ID = uuid.New()
+		}
+		cfg.CreatedAt = now
+		cfg.UpdatedAt = now
+		return u.smtpRepo.Create(ctx, cfg)
+	}
+	cfg.ID = existing.ID
+	cfg.CreatedAt = existing.CreatedAt
+	cfg.UpdatedAt = now
+	return u.smtpRepo.Update(ctx, cfg)
+}
+
+func (u *configUsecaseImpl) DeleteSMTP(ctx context.Context) error {
+	if u.smtpRepo == nil {
+		return nil
+	}
+	return u.smtpRepo.Delete(ctx)
+}
+
+func (u *configUsecaseImpl) GetTemplate(ctx context.Context, action string) (*entities.EmailTemplate, error) {
+	if u.templateRepo == nil {
+		return nil, nil
+	}
+	return u.templateRepo.GetByAction(ctx, action)
+}
+
+func (u *configUsecaseImpl) SetTemplate(ctx context.Context, tpl *entities.EmailTemplate) error {
+	if u.templateRepo == nil {
+		return nil
+	}
+	if tpl.ID == uuid.Nil {
+		tpl.ID = uuid.New()
+	}
+	tpl.UpdatedAt = time.Now()
+	if tpl.CreatedAt.IsZero() {
+		tpl.CreatedAt = tpl.UpdatedAt
+	}
+	return u.templateRepo.Upsert(ctx, tpl)
 }
