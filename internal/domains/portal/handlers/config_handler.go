@@ -6,6 +6,7 @@ import (
 	"system-portal/internal/domains/portal/dto"
 	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/usecases"
+	"system-portal/internal/shared/errors"
 	httpresp "system-portal/internal/shared/response"
 )
 
@@ -29,11 +30,11 @@ func NewConfigHandler(u usecases.ConfigUsecase, reload func()) *ConfigHandler {
 func (h *ConfigHandler) GetOpenVPNConfig(c *gin.Context) {
 	cfg, err := h.uc.GetOpenVPN(c.Request.Context())
 	if err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if cfg == nil {
-		httpresp.RespondWithNotFound(c, "not found")
+		httpresp.RespondWithError(c, errors.NotFound("not found", nil))
 		return
 	}
 	httpresp.RespondWithSuccess(c, nethttp.StatusOK, cfg)
@@ -52,12 +53,12 @@ func (h *ConfigHandler) GetOpenVPNConfig(c *gin.Context) {
 func (h *ConfigHandler) TestOpenVPN(c *gin.Context) {
 	var req dto.OpenVPNConfigRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 	cfg := &entities.OpenVPNConfig{Host: req.Host, Username: req.Username, Password: req.Password, Port: req.Port}
 	if err := h.uc.TestOpenVPN(c.Request.Context(), cfg); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "ok")
@@ -75,16 +76,16 @@ func (h *ConfigHandler) TestOpenVPN(c *gin.Context) {
 func (h *ConfigHandler) CreateOpenVPNConfig(c *gin.Context) {
 	var req dto.OpenVPNConfigRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 
 	// ensure only one configuration exists
 	if existing, err := h.uc.GetOpenVPN(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	} else if existing != nil {
-		httpresp.RespondWithBadRequest(c, "configuration already exists")
+		httpresp.RespondWithError(c, errors.Conflict("configuration already exists", nil))
 		return
 	}
 
@@ -95,7 +96,7 @@ func (h *ConfigHandler) CreateOpenVPNConfig(c *gin.Context) {
 		Port:     req.Port,
 	}
 	if err := h.uc.SetOpenVPN(c.Request.Context(), cfg); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if h.reload != nil {
@@ -116,16 +117,16 @@ func (h *ConfigHandler) CreateOpenVPNConfig(c *gin.Context) {
 func (h *ConfigHandler) UpdateOpenVPNConfig(c *gin.Context) {
 	var req dto.OpenVPNConfigRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 
 	// ensure configuration exists before updating
 	if existing, err := h.uc.GetOpenVPN(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	} else if existing == nil {
-		httpresp.RespondWithNotFound(c, "not found")
+		httpresp.RespondWithError(c, errors.NotFound("not found", nil))
 		return
 	}
 
@@ -136,7 +137,7 @@ func (h *ConfigHandler) UpdateOpenVPNConfig(c *gin.Context) {
 		Port:     req.Port,
 	}
 	if err := h.uc.SetOpenVPN(c.Request.Context(), cfg); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if h.reload != nil {
@@ -154,7 +155,7 @@ func (h *ConfigHandler) UpdateOpenVPNConfig(c *gin.Context) {
 // @Router /api/portal/connections/openvpn [delete]
 func (h *ConfigHandler) DeleteOpenVPNConfig(c *gin.Context) {
 	if err := h.uc.DeleteOpenVPN(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if h.reload != nil {
@@ -174,11 +175,11 @@ func (h *ConfigHandler) DeleteOpenVPNConfig(c *gin.Context) {
 func (h *ConfigHandler) GetLDAPConfig(c *gin.Context) {
 	cfg, err := h.uc.GetLDAP(c.Request.Context())
 	if err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if cfg == nil {
-		httpresp.RespondWithNotFound(c, "not found")
+		httpresp.RespondWithError(c, errors.NotFound("not found", nil))
 		return
 	}
 	httpresp.RespondWithSuccess(c, nethttp.StatusOK, cfg)
@@ -197,12 +198,12 @@ func (h *ConfigHandler) GetLDAPConfig(c *gin.Context) {
 func (h *ConfigHandler) TestLDAP(c *gin.Context) {
 	var req dto.LDAPConfigRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 	cfg := &entities.LDAPConfig{Host: req.Host, Port: req.Port, BindDN: req.BindDN, BindPassword: req.BindPassword, BaseDN: req.BaseDN}
 	if err := h.uc.TestLDAP(c.Request.Context(), cfg); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "ok")
@@ -220,16 +221,16 @@ func (h *ConfigHandler) TestLDAP(c *gin.Context) {
 func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 	var req dto.LDAPConfigRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 
 	// ensure only one configuration exists
 	if existing, err := h.uc.GetLDAP(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	} else if existing != nil {
-		httpresp.RespondWithBadRequest(c, "configuration already exists")
+		httpresp.RespondWithError(c, errors.Conflict("configuration already exists", nil))
 		return
 	}
 
@@ -241,7 +242,7 @@ func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 		BaseDN:       req.BaseDN,
 	}
 	if err := h.uc.SetLDAP(c.Request.Context(), cfg); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if h.reload != nil {
@@ -262,16 +263,16 @@ func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 func (h *ConfigHandler) UpdateLDAPConfig(c *gin.Context) {
 	var req dto.LDAPConfigRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 
 	// ensure configuration exists before updating
 	if existing, err := h.uc.GetLDAP(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	} else if existing == nil {
-		httpresp.RespondWithNotFound(c, "not found")
+		httpresp.RespondWithError(c, errors.NotFound("not found", nil))
 		return
 	}
 
@@ -283,7 +284,7 @@ func (h *ConfigHandler) UpdateLDAPConfig(c *gin.Context) {
 		BaseDN:       req.BaseDN,
 	}
 	if err := h.uc.SetLDAP(c.Request.Context(), cfg); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if h.reload != nil {
@@ -301,7 +302,7 @@ func (h *ConfigHandler) UpdateLDAPConfig(c *gin.Context) {
 // @Router /api/portal/connections/ldap [delete]
 func (h *ConfigHandler) DeleteLDAPConfig(c *gin.Context) {
 	if err := h.uc.DeleteLDAP(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if h.reload != nil {
@@ -321,11 +322,11 @@ func (h *ConfigHandler) DeleteLDAPConfig(c *gin.Context) {
 func (h *ConfigHandler) GetSMTPConfig(c *gin.Context) {
 	cfg, err := h.uc.GetSMTP(c.Request.Context())
 	if err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if cfg == nil {
-		httpresp.RespondWithNotFound(c, "not found")
+		httpresp.RespondWithError(c, errors.NotFound("not found", nil))
 		return
 	}
 	httpresp.RespondWithSuccess(c, nethttp.StatusOK, cfg)
@@ -343,19 +344,19 @@ func (h *ConfigHandler) GetSMTPConfig(c *gin.Context) {
 func (h *ConfigHandler) CreateSMTPConfig(c *gin.Context) {
 	var req dto.SMTPConfigRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 	if existing, err := h.uc.GetSMTP(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	} else if existing != nil {
-		httpresp.RespondWithBadRequest(c, "configuration already exists")
+		httpresp.RespondWithError(c, errors.Conflict("configuration already exists", nil))
 		return
 	}
 	cfg := &entities.SMTPConfig{Host: req.Host, Port: req.Port, Username: req.Username, Password: req.Password, From: req.From, TLS: req.TLS}
 	if err := h.uc.SetSMTP(c.Request.Context(), cfg); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusCreated, "saved")
@@ -373,19 +374,19 @@ func (h *ConfigHandler) CreateSMTPConfig(c *gin.Context) {
 func (h *ConfigHandler) UpdateSMTPConfig(c *gin.Context) {
 	var req dto.SMTPConfigRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 	if existing, err := h.uc.GetSMTP(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	} else if existing == nil {
-		httpresp.RespondWithNotFound(c, "not found")
+		httpresp.RespondWithError(c, errors.NotFound("not found", nil))
 		return
 	}
 	cfg := &entities.SMTPConfig{Host: req.Host, Port: req.Port, Username: req.Username, Password: req.Password, From: req.From, TLS: req.TLS}
 	if err := h.uc.SetSMTP(c.Request.Context(), cfg); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "saved")
@@ -400,7 +401,7 @@ func (h *ConfigHandler) UpdateSMTPConfig(c *gin.Context) {
 // @Router /api/portal/connections/smtp [delete]
 func (h *ConfigHandler) DeleteSMTPConfig(c *gin.Context) {
 	if err := h.uc.DeleteSMTP(c.Request.Context()); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "deleted")
@@ -419,11 +420,11 @@ func (h *ConfigHandler) GetEmailTemplate(c *gin.Context) {
 	action := c.Param("action")
 	tpl, err := h.uc.GetTemplate(c.Request.Context(), action)
 	if err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	if tpl == nil {
-		httpresp.RespondWithNotFound(c, "not found")
+		httpresp.RespondWithError(c, errors.NotFound("not found", nil))
 		return
 	}
 	httpresp.RespondWithSuccess(c, nethttp.StatusOK, tpl)
@@ -443,12 +444,12 @@ func (h *ConfigHandler) UpdateEmailTemplate(c *gin.Context) {
 	action := c.Param("action")
 	var req dto.EmailTemplateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		httpresp.RespondWithBadRequest(c, "invalid request")
+		httpresp.RespondWithError(c, errors.BadRequest("invalid request", nil))
 		return
 	}
 	tpl := &entities.EmailTemplate{Action: action, Subject: req.Subject, Body: req.Body}
 	if err := h.uc.SetTemplate(c.Request.Context(), tpl); err != nil {
-		httpresp.RespondWithBadRequest(c, err.Error())
+		httpresp.RespondWithError(c, errors.BadRequest(err.Error(), err))
 		return
 	}
 	httpresp.RespondWithMessage(c, nethttp.StatusOK, "saved")

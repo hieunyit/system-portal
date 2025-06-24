@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"system-portal/internal/domains/portal/entities"
 	"system-portal/internal/domains/portal/repositories"
@@ -41,6 +42,13 @@ func (r *pgSMTPConfigRepo) Get(ctx context.Context) (*entities.SMTPConfig, error
 }
 
 func (r *pgSMTPConfigRepo) Create(ctx context.Context, cfg *entities.SMTPConfig) error {
+	var count int
+	if err := r.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM smtp_configs`).Scan(&count); err != nil {
+		return err
+	}
+	if count > 0 {
+		return fmt.Errorf("smtp configuration already exists")
+	}
 	pass := cfg.Password
 	if r.key != "" {
 		if enc, err := utils.EncryptString(cfg.Password, r.key); err == nil {
