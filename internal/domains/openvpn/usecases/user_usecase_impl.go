@@ -652,6 +652,14 @@ func (u *userUsecaseImpl) ChangePassword(ctx context.Context, username, password
 	}
 
 	logger.Log.WithField("username", username).Info("Password changed successfully")
+
+	if u.emailSvc != nil && user.Email != "" {
+		data := map[string]interface{}{"Username": username}
+		if err := u.emailSvc.Send(ctx, "change_password", user.Email, data); err != nil {
+			logger.Log.WithError(err).Warn("failed to send change password email")
+		}
+	}
+
 	return nil
 }
 
@@ -664,7 +672,7 @@ func (u *userUsecaseImpl) RegenerateTOTP(ctx context.Context, username string) e
 	}
 
 	// Check if user exists
-	_, err := u.userRepo.GetByUsername(ctx, username)
+	user, err := u.userRepo.GetByUsername(ctx, username)
 	if err != nil {
 		return err
 	}
@@ -674,6 +682,13 @@ func (u *userUsecaseImpl) RegenerateTOTP(ctx context.Context, username string) e
 	}
 
 	logger.Log.WithField("username", username).Info("TOTP regenerated successfully")
+
+	if u.emailSvc != nil && user.Email != "" {
+		data := map[string]interface{}{"Username": username}
+		if err := u.emailSvc.Send(ctx, "reset_otp", user.Email, data); err != nil {
+			logger.Log.WithError(err).Warn("failed to send OTP reset email")
+		}
+	}
 	return nil
 }
 
