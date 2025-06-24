@@ -1212,8 +1212,73 @@ definitions:
         items:
           $ref: '#/definitions/entities.Permission'
         type: array
+    updatedAt:
+      type: string
+    type: object
+  entities.SMTPConfig:
+    properties:
+      id:
+        type: string
+      host:
+        type: string
+      port:
+        type: integer
+      username:
+        type: string
+      password:
+        type: string
+      from:
+        type: string
+      tls:
+        type: boolean
+      createdAt:
+        type: string
       updatedAt:
         type: string
+    type: object
+  dto.SMTPConfigRequest:
+    properties:
+      host:
+        type: string
+      port:
+        type: integer
+      username:
+        type: string
+      password:
+        type: string
+      from:
+        type: string
+      tls:
+        type: boolean
+    required:
+    - host
+    - port
+    - from
+    type: object
+  entities.EmailTemplate:
+    properties:
+      id:
+        type: string
+      action:
+        type: string
+      subject:
+        type: string
+      body:
+        type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  dto.EmailTemplateRequest:
+    properties:
+      subject:
+        type: string
+      body:
+        type: string
+    required:
+    - subject
+    - body
     type: object
   response.ErrorResponse:
     properties:
@@ -2620,6 +2685,132 @@ paths:
       summary: Delete permission
       tags:
       - Permissions
+  /api/portal/connections/smtp:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.SMTPConfig'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get SMTP configuration
+      tags:
+      - Connections
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: SMTP config
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SMTPConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: created
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+      security:
+      - BearerAuth: []
+      summary: Create SMTP configuration
+      tags:
+      - Connections
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: SMTP config
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SMTPConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+      security:
+      - BearerAuth: []
+      summary: Update SMTP configuration
+      tags:
+      - Connections
+    delete:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete SMTP configuration
+      tags:
+      - Connections
+  /api/portal/connections/templates/{action}:
+    get:
+      parameters:
+      - description: action
+        in: path
+        name: action
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.EmailTemplate'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get email template by action
+      tags:
+      - Connections
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: action
+        in: path
+        name: action
+        required: true
+        type: string
+      - description: template
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.EmailTemplateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+      security:
+      - BearerAuth: []
+      summary: Update email template
+      tags:
+      - Connections
   /api/portal/users:
     get:
       description: Retrieve all portal users
