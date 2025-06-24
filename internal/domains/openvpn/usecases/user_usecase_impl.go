@@ -119,7 +119,12 @@ func (u *userUsecaseImpl) CreateUser(ctx context.Context, user *entities.User) e
 
 	if u.emailSvc != nil && user.Email != "" {
 		action := "create_user_" + user.AuthMethod
-		data := map[string]interface{}{"Username": user.Username}
+		data := map[string]interface{}{
+			"Username":      user.Username,
+			"AccessControl": strings.Join(user.AccessControl, ", "),
+			"MACAddress":    strings.Join(user.MacAddresses, ", "),
+			"Expiration":    user.UserExpiration,
+		}
 		if user.IsLocalAuth() {
 			data["Password"] = user.Password
 		}
