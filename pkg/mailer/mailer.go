@@ -28,6 +28,8 @@ func (m *SMTPMailer) Send(to, subject, body string) error {
 	msg := []byte("From: " + m.cfg.From + "\r\n" +
 		"To: " + to + "\r\n" +
 		"Subject: " + subject + "\r\n" +
+		"MIME-Version: 1.0\r\n" +
+		"Content-Type: text/html; charset=\"UTF-8\"\r\n" +
 		"\r\n" + body + "\r\n")
 
 	auth := smtp.PlainAuth("", m.cfg.Username, m.cfg.Password, m.cfg.Host)

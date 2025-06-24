@@ -1276,6 +1276,7 @@ definitions:
         type: string
       body:
         type: string
+        description: HTML content template
     required:
     - subject
     - body

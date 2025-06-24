@@ -3,7 +3,7 @@ package email
 import (
 	"bytes"
 	"context"
-	"text/template"
+	"html/template"
 
 	portalRepo "system-portal/internal/domains/portal/repositories"
 	"system-portal/internal/shared/config"
