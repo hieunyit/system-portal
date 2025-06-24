@@ -21,11 +21,14 @@ func NewConfigHandler(u usecases.ConfigUsecase, reload func()) *ConfigHandler {
 
 // GetOpenVPNConfig godoc
 // @Summary Get OpenVPN connection
+// @Description Retrieve OpenVPN connection settings
 // @Tags Connections
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=entities.OpenVPNConfig}
 // @Failure 404 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/openvpn [get]
 func (h *ConfigHandler) GetOpenVPNConfig(c *gin.Context) {
 	cfg, err := h.uc.GetOpenVPN(c.Request.Context())
@@ -42,6 +45,7 @@ func (h *ConfigHandler) GetOpenVPNConfig(c *gin.Context) {
 
 // TestOpenVPN godoc
 // @Summary Test OpenVPN connection
+// @Description Test connectivity to the OpenVPN server
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
@@ -49,6 +53,8 @@ func (h *ConfigHandler) GetOpenVPNConfig(c *gin.Context) {
 // @Param request body dto.OpenVPNConfigRequest true "OpenVPN config"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/openvpn/test [post]
 func (h *ConfigHandler) TestOpenVPN(c *gin.Context) {
 	var req dto.OpenVPNConfigRequest
@@ -66,12 +72,17 @@ func (h *ConfigHandler) TestOpenVPN(c *gin.Context) {
 
 // CreateOpenVPNConfig godoc
 // @Summary Create OpenVPN connection
+// @Description Create OpenVPN connection settings
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param request body dto.OpenVPNConfigRequest true "OpenVPN config"
 // @Success 201 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 409 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/openvpn [post]
 func (h *ConfigHandler) CreateOpenVPNConfig(c *gin.Context) {
 	var req dto.OpenVPNConfigRequest
@@ -107,12 +118,17 @@ func (h *ConfigHandler) CreateOpenVPNConfig(c *gin.Context) {
 
 // UpdateOpenVPNConfig godoc
 // @Summary Update OpenVPN connection
+// @Description Update existing OpenVPN connection settings
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param request body dto.OpenVPNConfigRequest true "OpenVPN config"
 // @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/openvpn [put]
 func (h *ConfigHandler) UpdateOpenVPNConfig(c *gin.Context) {
 	var req dto.OpenVPNConfigRequest
@@ -148,10 +164,13 @@ func (h *ConfigHandler) UpdateOpenVPNConfig(c *gin.Context) {
 
 // DeleteOpenVPNConfig godoc
 // @Summary Delete OpenVPN connection
+// @Description Remove OpenVPN connection settings
 // @Tags Connections
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/openvpn [delete]
 func (h *ConfigHandler) DeleteOpenVPNConfig(c *gin.Context) {
 	if err := h.uc.DeleteOpenVPN(c.Request.Context()); err != nil {
@@ -166,11 +185,14 @@ func (h *ConfigHandler) DeleteOpenVPNConfig(c *gin.Context) {
 
 // GetLDAPConfig godoc
 // @Summary Get LDAP connection
+// @Description Retrieve LDAP connection settings
 // @Tags Connections
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=entities.LDAPConfig}
 // @Failure 404 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/ldap [get]
 func (h *ConfigHandler) GetLDAPConfig(c *gin.Context) {
 	cfg, err := h.uc.GetLDAP(c.Request.Context())
@@ -187,6 +209,7 @@ func (h *ConfigHandler) GetLDAPConfig(c *gin.Context) {
 
 // TestLDAP godoc
 // @Summary Test LDAP connection
+// @Description Test connectivity to the LDAP server
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
@@ -194,6 +217,8 @@ func (h *ConfigHandler) GetLDAPConfig(c *gin.Context) {
 // @Param request body dto.LDAPConfigRequest true "LDAP config"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/ldap/test [post]
 func (h *ConfigHandler) TestLDAP(c *gin.Context) {
 	var req dto.LDAPConfigRequest
@@ -211,12 +236,17 @@ func (h *ConfigHandler) TestLDAP(c *gin.Context) {
 
 // CreateLDAPConfig godoc
 // @Summary Create LDAP connection
+// @Description Create LDAP connection settings
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param request body dto.LDAPConfigRequest true "LDAP config"
 // @Success 201 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 409 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/ldap [post]
 func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 	var req dto.LDAPConfigRequest
@@ -253,12 +283,17 @@ func (h *ConfigHandler) CreateLDAPConfig(c *gin.Context) {
 
 // UpdateLDAPConfig godoc
 // @Summary Update LDAP connection
+// @Description Update existing LDAP connection settings
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param request body dto.LDAPConfigRequest true "LDAP config"
 // @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/ldap [put]
 func (h *ConfigHandler) UpdateLDAPConfig(c *gin.Context) {
 	var req dto.LDAPConfigRequest
@@ -295,10 +330,13 @@ func (h *ConfigHandler) UpdateLDAPConfig(c *gin.Context) {
 
 // DeleteLDAPConfig godoc
 // @Summary Delete LDAP connection
+// @Description Remove LDAP connection settings
 // @Tags Connections
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/ldap [delete]
 func (h *ConfigHandler) DeleteLDAPConfig(c *gin.Context) {
 	if err := h.uc.DeleteLDAP(c.Request.Context()); err != nil {
@@ -313,11 +351,14 @@ func (h *ConfigHandler) DeleteLDAPConfig(c *gin.Context) {
 
 // GetSMTPConfig godoc
 // @Summary Get SMTP configuration
+// @Description Retrieve SMTP server settings
 // @Tags Connections
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=entities.SMTPConfig}
 // @Failure 404 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/smtp [get]
 func (h *ConfigHandler) GetSMTPConfig(c *gin.Context) {
 	cfg, err := h.uc.GetSMTP(c.Request.Context())
@@ -334,12 +375,17 @@ func (h *ConfigHandler) GetSMTPConfig(c *gin.Context) {
 
 // CreateSMTPConfig godoc
 // @Summary Create SMTP configuration
+// @Description Create SMTP server configuration in database
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param request body dto.SMTPConfigRequest true "SMTP config"
 // @Success 201 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 409 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/smtp [post]
 func (h *ConfigHandler) CreateSMTPConfig(c *gin.Context) {
 	var req dto.SMTPConfigRequest
@@ -364,12 +410,17 @@ func (h *ConfigHandler) CreateSMTPConfig(c *gin.Context) {
 
 // UpdateSMTPConfig godoc
 // @Summary Update SMTP configuration
+// @Description Update SMTP server configuration
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param request body dto.SMTPConfigRequest true "SMTP config"
 // @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/smtp [put]
 func (h *ConfigHandler) UpdateSMTPConfig(c *gin.Context) {
 	var req dto.SMTPConfigRequest
@@ -394,10 +445,13 @@ func (h *ConfigHandler) UpdateSMTPConfig(c *gin.Context) {
 
 // DeleteSMTPConfig godoc
 // @Summary Delete SMTP configuration
+// @Description Remove SMTP configuration from database
 // @Tags Connections
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/smtp [delete]
 func (h *ConfigHandler) DeleteSMTPConfig(c *gin.Context) {
 	if err := h.uc.DeleteSMTP(c.Request.Context()); err != nil {
@@ -409,12 +463,15 @@ func (h *ConfigHandler) DeleteSMTPConfig(c *gin.Context) {
 
 // GetEmailTemplate godoc
 // @Summary Get email template by action
+// @Description Retrieve an email template for the given action
 // @Tags Connections
 // @Security BearerAuth
 // @Produce json
 // @Param action path string true "action"
 // @Success 200 {object} response.SuccessResponse{data=entities.EmailTemplate}
 // @Failure 404 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/templates/{action} [get]
 func (h *ConfigHandler) GetEmailTemplate(c *gin.Context) {
 	action := c.Param("action")
@@ -432,6 +489,7 @@ func (h *ConfigHandler) GetEmailTemplate(c *gin.Context) {
 
 // UpdateEmailTemplate godoc
 // @Summary Update email template
+// @Description Update subject or body of a template
 // @Tags Connections
 // @Security BearerAuth
 // @Accept json
@@ -439,6 +497,9 @@ func (h *ConfigHandler) GetEmailTemplate(c *gin.Context) {
 // @Param action path string true "action"
 // @Param request body dto.EmailTemplateRequest true "template"
 // @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/connections/templates/{action} [put]
 func (h *ConfigHandler) UpdateEmailTemplate(c *gin.Context) {
 	action := c.Param("action")

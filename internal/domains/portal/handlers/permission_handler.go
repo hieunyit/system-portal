@@ -19,10 +19,13 @@ func NewPermissionHandler(u usecases.PermissionUsecase) *PermissionHandler {
 
 // ListPermissions godoc
 // @Summary List permissions
+// @Description Retrieve all permissions
 // @Tags Permissions
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/permissions [get]
 func (h *PermissionHandler) ListPermissions(c *gin.Context) {
 	perms, err := h.uc.List(c.Request.Context())
@@ -35,6 +38,7 @@ func (h *PermissionHandler) ListPermissions(c *gin.Context) {
 
 // CreatePermission godoc
 // @Summary Create permission
+// @Description Create a new permission
 // @Tags Permissions
 // @Security BearerAuth
 // @Accept json
@@ -42,6 +46,8 @@ func (h *PermissionHandler) ListPermissions(c *gin.Context) {
 // @Param request body entities.Permission true "Permission data"
 // @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/permissions [post]
 func (h *PermissionHandler) CreatePermission(c *gin.Context) {
 	var p entities.Permission
@@ -59,6 +65,7 @@ func (h *PermissionHandler) CreatePermission(c *gin.Context) {
 
 // UpdatePermission godoc
 // @Summary Update permission
+// @Description Update an existing permission
 // @Tags Permissions
 // @Security BearerAuth
 // @Accept json
@@ -67,6 +74,9 @@ func (h *PermissionHandler) CreatePermission(c *gin.Context) {
 // @Param request body entities.Permission true "Permission data"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/permissions/{id} [put]
 func (h *PermissionHandler) UpdatePermission(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
@@ -89,12 +99,16 @@ func (h *PermissionHandler) UpdatePermission(c *gin.Context) {
 
 // DeletePermission godoc
 // @Summary Delete permission
+// @Description Remove a permission by ID
 // @Tags Permissions
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "Permission ID"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/permissions/{id} [delete]
 func (h *PermissionHandler) DeletePermission(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))

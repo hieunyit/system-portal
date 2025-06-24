@@ -21,11 +21,18 @@ func NewUserHandler(u usecases.UserUsecase) *UserHandler { return &UserHandler{u
 
 // ListUsers godoc
 // @Summary List portal users
-// @Description Retrieve all portal users
+// @Description Retrieve all portal users with optional filters
 // @Tags Portal Users
 // @Security BearerAuth
 // @Produce json
+// @Param username query string false "Filter by username"
+// @Param email query string false "Filter by email"
+// @Param groupId query string false "Filter by group ID"
+// @Param page query int false "Page number" default(1)
+// @Param limit query int false "Items per page" default(20)
 // @Success 200 {object} response.SuccessResponse{data=[]dto.PortalUserResponse}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/users [get]
 type userQuery struct {
 	Username string    `form:"username"`
@@ -64,6 +71,8 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 // @Param request body dto.PortalUserRequest true "User data"
 // @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req dto.PortalUserRequest
@@ -99,6 +108,8 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Success 200 {object} response.SuccessResponse{data=dto.PortalUserResponse}
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/users/{id} [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
@@ -132,6 +143,9 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Param request body dto.PortalUserRequest true "User data"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/users/{id} [put]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
@@ -168,6 +182,9 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 // @Param id path string true "User ID"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/users/{id} [delete]
 func (h *UserHandler) DeleteUser(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
@@ -184,30 +201,42 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 
 // ActivateUser godoc
 // @Summary Activate portal user
+// @Description Activate a portal user account
 // @Tags Portal Users
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
 // @Success 200 {object} response.SuccessResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/users/{id}/activate [put]
 func (h *UserHandler) ActivateUser(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }
 
 // DeactivateUser godoc
 // @Summary Deactivate portal user
+// @Description Disable a portal user account
 // @Tags Portal Users
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
 // @Success 200 {object} response.SuccessResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/users/{id}/deactivate [put]
 func (h *UserHandler) DeactivateUser(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }
 
 // ResetPassword godoc
 // @Summary Reset portal user password
+// @Description Reset the password of a portal user
 // @Tags Portal Users
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID"
 // @Success 200 {object} response.SuccessResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/users/{id}/reset-password [put]
 func (h *UserHandler) ResetPassword(c *gin.Context) { http.RespondWithMessage(c, 200, "ok") }

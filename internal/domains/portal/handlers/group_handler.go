@@ -17,10 +17,13 @@ func NewGroupHandler(u usecases.GroupUsecase) *GroupHandler { return &GroupHandl
 
 // ListGroups godoc
 // @Summary List portal groups
+// @Description Retrieve portal groups with pagination
 // @Tags Portal Groups
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=[]entities.PortalGroup}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/groups [get]
 type groupQuery struct {
 	Name  string `form:"name"`
@@ -38,6 +41,7 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 
 // GetGroup godoc
 // @Summary Get portal group
+// @Description Get portal group by ID
 // @Tags Portal Groups
 // @Security BearerAuth
 // @Produce json
@@ -45,6 +49,8 @@ func (h *GroupHandler) ListGroups(c *gin.Context) {
 // @Success 200 {object} response.SuccessResponse{data=entities.PortalGroup}
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/groups/{id} [get]
 func (h *GroupHandler) GetGroup(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
@@ -62,6 +68,7 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 
 // CreateGroup godoc
 // @Summary Create portal group
+// @Description Create a new portal group
 // @Tags Portal Groups
 // @Security BearerAuth
 // @Accept json
@@ -69,6 +76,8 @@ func (h *GroupHandler) GetGroup(c *gin.Context) {
 // @Param request body entities.PortalGroup true "Group data"
 // @Success 201 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/groups [post]
 func (h *GroupHandler) CreateGroup(c *gin.Context) {
 	var g entities.PortalGroup
@@ -88,6 +97,7 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 
 // UpdateGroup godoc
 // @Summary Update portal group
+// @Description Update information for a portal group
 // @Tags Portal Groups
 // @Security BearerAuth
 // @Accept json
@@ -96,6 +106,9 @@ func (h *GroupHandler) CreateGroup(c *gin.Context) {
 // @Param request body entities.PortalGroup true "Group data"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/groups/{id} [put]
 func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
@@ -119,12 +132,16 @@ func (h *GroupHandler) UpdateGroup(c *gin.Context) {
 
 // DeleteGroup godoc
 // @Summary Delete portal group
+// @Description Remove a portal group
 // @Tags Portal Groups
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "Group ID"
 // @Success 200 {object} response.SuccessResponse
 // @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/groups/{id} [delete]
 func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
@@ -141,10 +158,13 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 
 // ListPermissions godoc
 // @Summary List permissions
+// @Description Retrieve all available permissions
 // @Tags Permissions
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/permissions [get]
 func (h *GroupHandler) ListPermissions(c *gin.Context) {
 	perms, _ := h.uc.ListPermissions(c.Request.Context())
@@ -153,11 +173,15 @@ func (h *GroupHandler) ListPermissions(c *gin.Context) {
 
 // GetGroupPermissions godoc
 // @Summary Get permissions for a group
+// @Description Retrieve permissions assigned to a specific group
 // @Tags Permissions
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "Group ID"
 // @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/groups/{id}/permissions [get]
 func (h *GroupHandler) GetGroupPermissions(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
@@ -175,6 +199,7 @@ type updatePermsRequest struct {
 
 // UpdateGroupPermissions godoc
 // @Summary Update group permissions
+// @Description Update the set of permissions assigned to a group
 // @Tags Permissions
 // @Security BearerAuth
 // @Accept json
@@ -182,6 +207,10 @@ type updatePermsRequest struct {
 // @Param id path string true "Group ID"
 // @Param request body updatePermsRequest true "Permission IDs"
 // @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/groups/{id}/permissions [put]
 func (h *GroupHandler) UpdateGroupPermissions(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
