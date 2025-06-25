@@ -20,6 +20,7 @@ func NewAuditHandler(u usecases.AuditUsecase) *AuditHandler { return &AuditHandl
 
 // GetAuditLogs godoc
 // @Summary List audit logs
+// @Description Retrieve audit logs with filtering and pagination
 // @Tags Audit
 // @Security BearerAuth
 // @Produce json
@@ -31,6 +32,8 @@ func NewAuditHandler(u usecases.AuditUsecase) *AuditHandler { return &AuditHandl
 // @Param page query int false "Page number" default(1)
 // @Param limit query int false "Items per page" default(20)
 // @Success 200 {object} response.SuccessResponse{data=[]entities.AuditLog}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/audit/logs [get]
 type auditQuery struct {
 	Username string     `form:"username"`
@@ -62,6 +65,7 @@ func (h *AuditHandler) GetAuditLogs(c *gin.Context) {
 
 // ExportAuditLogs godoc
 // @Summary Export audit logs
+// @Description Export audit logs as CSV file
 // @Tags Audit
 // @Security BearerAuth
 // @Produce text/csv
@@ -71,6 +75,8 @@ func (h *AuditHandler) GetAuditLogs(c *gin.Context) {
 // @Param from query string false "Start date" Format(date)
 // @Param to query string false "End date" Format(date)
 // @Success 200 {string} string "CSV file"
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/audit/logs/export [get]
 func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 	var q auditQuery
@@ -109,6 +115,7 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 
 // GetAuditStats godoc
 // @Summary Audit statistics
+// @Description Statistics summary of audit logs
 // @Tags Audit
 // @Security BearerAuth
 // @Produce json
@@ -118,6 +125,8 @@ func (h *AuditHandler) ExportAuditLogs(c *gin.Context) {
 // @Param from query string false "Start date" Format(date)
 // @Param to query string false "End date" Format(date)
 // @Success 200 {object} response.SuccessResponse{data=map[string]int}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/audit/stats [get]
 func (h *AuditHandler) GetAuditStats(c *gin.Context) {
 	var q auditQuery

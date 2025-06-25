@@ -24,4 +24,5 @@ type UserUsecase interface {
 	// Expiration operations
 	GetExpiringUsers(ctx context.Context, days int) ([]string, error)
 	GetUserExpirations(ctx context.Context, days int) (*openvpndto.UserExpirationsResponse, error)
+	NotifyExpiringUsers(ctx context.Context) error
 }

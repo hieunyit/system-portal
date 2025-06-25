@@ -81,6 +81,15 @@ type CORSConfig struct {
 	AllowCredentials bool     `mapstructure:"allowCredentials"`
 }
 
+type SMTPConfig struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
+	From     string `mapstructure:"from"`
+	TLS      bool   `mapstructure:"tls"`
+}
+
 func Load() (*Config, error) {
 	var cfg Config
 
@@ -162,4 +171,5 @@ func setDefaults() {
 	viper.SetDefault("security.cors.allowedHeaders", []string{"Authorization", "Content-Type"})
 	viper.SetDefault("security.cors.allowCredentials", true)
 	viper.SetDefault("security.encryptionKey", "")
+
 }

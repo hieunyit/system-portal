@@ -19,10 +19,13 @@ func NewDashboardHandler(u repositories.UserRepository, a repositories.AuditRepo
 
 // GetDashboardStats godoc
 // @Summary Dashboard statistics
+// @Description Overall portal statistics
 // @Tags Dashboard
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=dto.StatsResponse}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/dashboard/stats [get]
 func (h *DashboardHandler) GetDashboardStats(c *gin.Context) {
 	users, total, _ := h.userRepo.List(c.Request.Context(), &entities.UserFilter{})
@@ -34,10 +37,13 @@ func (h *DashboardHandler) GetDashboardStats(c *gin.Context) {
 
 // GetRecentActivities godoc
 // @Summary Recent activities
+// @Description Latest portal activities
 // @Tags Dashboard
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=[]dto.AuditResponse}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/dashboard/activities [get]
 func (h *DashboardHandler) GetRecentActivities(c *gin.Context) {
 	filter := &entities.AuditFilter{Page: 1, Limit: 10}
@@ -58,10 +64,13 @@ func (h *DashboardHandler) GetRecentActivities(c *gin.Context) {
 
 // GetUserChartData godoc
 // @Summary User chart data
+// @Description Chart statistics of user registrations
 // @Tags Dashboard
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=map[string]interface{}}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/dashboard/charts/users [get]
 func (h *DashboardHandler) GetUserChartData(c *gin.Context) {
 	http.RespondWithSuccess(c, 200, gin.H{})
@@ -69,10 +78,13 @@ func (h *DashboardHandler) GetUserChartData(c *gin.Context) {
 
 // GetActivityChartData godoc
 // @Summary Activity chart data
+// @Description Chart statistics of portal activities
 // @Tags Dashboard
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} response.SuccessResponse{data=map[string]interface{}}
+// @Failure 401 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/dashboard/charts/activities [get]
 func (h *DashboardHandler) GetActivityChartData(c *gin.Context) {
 	http.RespondWithSuccess(c, 200, gin.H{})
