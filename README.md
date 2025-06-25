@@ -1,6 +1,6 @@
 # System Portal
 
-This repository contains the Go backend API and a simple Next.js frontend to interact with it.
+This repository contains the Go backend API and a Next.js based web frontend to interact with it.
 
 ## Backend
 
@@ -15,7 +15,7 @@ make build
 
 ## Frontend
 
-The `frontend` directory contains a minimal [Next.js](https://nextjs.org/) application.
+The `frontend` directory contains a [Next.js](https://nextjs.org/) 14 application built with Tailwind CSS.
 
 ### Install dependencies
 
@@ -31,3 +31,4 @@ npm run dev
 ```
 
 The app will be available at `http://localhost:3000` and expects the Go API to be running on the same host.
+You can configure the backend URL via `NEXT_PUBLIC_API_BASE_URL` in a `.env.local` file.
