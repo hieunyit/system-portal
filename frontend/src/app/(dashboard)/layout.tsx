@@ -26,6 +26,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useMobile } from "@/hooks/use-mobile"
 import { getUser, logout } from "@/lib/auth"
 import { cn } from "@/lib/utils"
+import AuthGuard from "@/components/auth/AuthGuard"
 import {
   LayoutDashboard,
   Users,
@@ -240,6 +241,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
 
   return (
+    <AuthGuard>
     <div className="flex min-h-screen w-full bg-muted/40">
       {isMobile ? (
         <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
@@ -315,5 +317,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </main>
       </div>
     </div>
+    </AuthGuard>
   )
 }

@@ -1,7 +1,8 @@
 'use client';
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import * as authAPI from '@/lib/api/auth';
 import tokenStorage from './storage';
+import { getUser } from '@/lib/auth';
 import type { User } from '@/types/auth';
 
 export interface AuthContextValue {
@@ -24,6 +25,13 @@ export function useAuthContext() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const stored = getUser();
+    if (stored) {
+      setUser(stored as unknown as User);
+    }
+  }, []);
 
   const login = async (cred: { username: string; password: string }) => {
     setLoading(true);
