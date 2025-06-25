@@ -86,7 +86,8 @@ func (r *pgAuditRepo) List(ctx context.Context, f *entities.AuditFilter) ([]*ent
 	}
 
 	query := base + where + " ORDER BY created_at DESC" +
-		fmt.Sprintf(" LIMIT %d OFFSET %d", f.Limit, f.Offset)
+		fmt.Sprintf(" LIMIT $%d OFFSET $%d", idx, idx+1)
+	args = append(args, f.Limit, f.Offset)
 	rows, err := r.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, 0, err

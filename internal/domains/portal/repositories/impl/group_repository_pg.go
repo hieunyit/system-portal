@@ -75,7 +75,8 @@ func (r *pgGroupRepo) List(ctx context.Context, f *entities.GroupFilter) ([]*ent
 	if len(clauses) > 0 {
 		where = " WHERE " + strings.Join(clauses, " AND ")
 	}
-	query := base + where + fmt.Sprintf(" ORDER BY created_at DESC LIMIT %d OFFSET %d", f.Limit, f.Offset)
+	query := base + where + fmt.Sprintf(" ORDER BY created_at DESC LIMIT $%d OFFSET $%d", idx, idx+1)
+	args = append(args, f.Limit, f.Offset)
 	rows, err := r.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, 0, err
