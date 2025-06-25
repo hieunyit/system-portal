@@ -22,24 +22,36 @@ export default function LoginPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded shadow w-80">
-      <h1 className="text-xl font-semibold text-center">Login</h1>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        className="border p-2 w-full"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="border p-2 w-full"
-      />
-      <button type="submit" className="bg-blue-600 text-white p-2 w-full">Login</button>
-    </form>
+    <div className="w-full max-w-md">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 rounded-lg border bg-card p-8 shadow-lg"
+      >
+        <h1 className="text-2xl font-bold text-center text-primary">
+          System Portal Login
+        </h1>
+        {error && <p className="text-destructive text-sm">{error}</p>}
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full rounded border border-input bg-background p-2 focus:ring focus:ring-primary"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full rounded border border-input bg-background p-2 focus:ring focus:ring-primary"
+        />
+        <button
+          type="submit"
+          className="w-full rounded bg-primary p-2 font-medium text-primary-foreground hover:bg-primary/90"
+        >
+          Login
+        </button>
+      </form>
+    </div>
   );
 }
