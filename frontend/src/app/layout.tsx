@@ -1,5 +1,6 @@
 import './globals.css';
 import type { ReactNode } from 'react';
+import { AuthProvider } from '@/lib/auth/context';
 
 export const metadata = {
   title: 'System Portal',
@@ -15,7 +16,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-gray-50 font-sans">{children}</body>
+      <body className="min-h-screen bg-gray-50 font-sans">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

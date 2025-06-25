@@ -1,11 +1,11 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api/client';
-import tokenStorage from '@/lib/auth/storage';
+import useAuth from '@/lib/hooks/useAuth';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,9 +14,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     try {
-      const res = await api.post('/auth/login', { username, password });
-      const { access_token, refresh_token } = res.data;
-      tokenStorage.setTokens(access_token, refresh_token);
+      await login({ username, password });
       router.push('/dashboard');
     } catch (err) {
       setError('Login failed');
