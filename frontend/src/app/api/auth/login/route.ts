@@ -8,16 +8,7 @@ export async function POST(req: NextRequest) {
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
       data,
     );
-    const body = res.data;
-    if (body?.success?.data) {
-      const { accessToken, refreshToken, user } = body.success.data;
-      return NextResponse.json({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-        user,
-      });
-    }
-    return NextResponse.json(body);
+    return NextResponse.json(res.data);
   } catch (err) {
     console.error(err);
     return new NextResponse('Failed to login', { status: 500 });

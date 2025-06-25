@@ -8,7 +8,12 @@ export interface User {
 }
 
 export interface LoginResponse {
-  access_token: string;
-  refresh_token: string;
-  user: User;
+  success: {
+    status: number;
+    data: {
+      accessToken: string;
+      refreshToken: string;
+      user: User;
+    };
+  };
 }

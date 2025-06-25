@@ -29,8 +29,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       const res = await authAPI.login(cred);
-      tokenStorage.setTokens(res.data.access_token, res.data.refresh_token);
-      setUser(res.data.user);
+      const body: any = res.data;
+      if (body?.success?.data) {
+        const { accessToken, refreshToken, user } = body.success.data;
+        tokenStorage.setTokens(accessToken, refreshToken);
+        setUser(user);
+      } else if (body.access_token && body.refresh_token) {
+        tokenStorage.setTokens(body.access_token, body.refresh_token);
+        setUser(body.user);
+      }
     } finally {
       setLoading(false);
     }
