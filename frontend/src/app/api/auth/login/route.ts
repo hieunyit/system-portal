@@ -7,8 +7,12 @@ export async function POST(req: NextRequest) {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
       data,
+      { validateStatus: () => true },
     );
-    return NextResponse.json(res.data);
+    return new NextResponse(JSON.stringify(res.data), {
+      status: res.status,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (err) {
     console.error(err);
     return new NextResponse('Failed to login', { status: 500 });
