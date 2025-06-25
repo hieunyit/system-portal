@@ -1,0 +1,7 @@
+{
+  "extends": "next",
+  "plugins": ["@typescript-eslint"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}
