@@ -7,6 +7,8 @@ definitions:
         type: string
       resource:
         type: string
+      resourceName:
+        type: string
       success:
         type: boolean
       userId:
@@ -175,6 +177,16 @@ definitions:
     - userExpiration
     - username
     type: object
+  dto.EmailTemplateRequest:
+    properties:
+      body:
+        type: string
+      subject:
+        type: string
+    required:
+    - body
+    - subject
+    type: object
   dto.FilterMetadata:
     properties:
       appliedFilters:
@@ -239,6 +251,25 @@ definitions:
         example: invalid-email
         type: string
     type: object
+  dto.LDAPConfigRequest:
+    properties:
+      baseDN:
+        type: string
+      bindDN:
+        type: string
+      bindPassword:
+        type: string
+      host:
+        type: string
+      port:
+        type: integer
+    required:
+    - baseDN
+    - bindDN
+    - bindPassword
+    - host
+    - port
+    type: object
   dto.LoginRequest:
     properties:
       password:
@@ -247,6 +278,22 @@ definitions:
         type: string
     required:
     - password
+    - username
+    type: object
+  dto.OpenVPNConfigRequest:
+    properties:
+      host:
+        type: string
+      password:
+        type: string
+      port:
+        type: integer
+      username:
+        type: string
+    required:
+    - host
+    - password
+    - port
     - username
     type: object
   dto.PortalUserRequest:
@@ -264,15 +311,6 @@ definitions:
     required:
     - email
     - username
-    type: object
-  dto.PortalUserUpdateRequest:
-    properties:
-      fullName:
-        type: string
-      groupId:
-        type: string
-      password:
-        type: string
     type: object
   dto.PortalUserResponse:
     properties:
@@ -295,6 +333,25 @@ definitions:
         type: string
     required:
     - refreshToken
+    type: object
+  dto.SMTPConfigRequest:
+    properties:
+      from:
+        type: string
+      host:
+        type: string
+      password:
+        type: string
+      port:
+        type: integer
+      tls:
+        type: boolean
+      username:
+        type: string
+    required:
+    - from
+    - host
+    - port
     type: object
   dto.StatsResponse:
     properties:
@@ -1162,27 +1219,55 @@ definitions:
         example: testuser
         type: string
     type: object
-  entities.AuditLog:
+  entities.EmailTemplate:
     properties:
-      id:
-        type: string
-      userID:
-        type: string
-      username:
-        type: string
-      userGroup:
-        type: string
       action:
         type: string
-      resourceType:
+      body:
         type: string
-      resourceName:
-        type: string
-      ipAddress:
-        type: string
-      success:
-        type: boolean
       createdAt:
+        type: string
+      id:
+        type: string
+      subject:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  entities.LDAPConfig:
+    properties:
+      baseDN:
+        type: string
+      bindDN:
+        type: string
+      bindPassword:
+        type: string
+      createdAt:
+        type: string
+      host:
+        type: string
+      id:
+        type: string
+      port:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  entities.OpenVPNConfig:
+    properties:
+      createdAt:
+        type: string
+      host:
+        type: string
+      id:
+        type: string
+      password:
+        type: string
+      port:
+        type: integer
+      updatedAt:
+        type: string
+      username:
         type: string
     type: object
   entities.Permission:
@@ -1212,74 +1297,36 @@ definitions:
         items:
           $ref: '#/definitions/entities.Permission'
         type: array
-    updatedAt:
-      type: string
+      updatedAt:
+        type: string
     type: object
   entities.SMTPConfig:
     properties:
-      id:
-        type: string
-      host:
-        type: string
-      port:
-        type: integer
-      username:
-        type: string
-      password:
+      createdAt:
         type: string
       from:
         type: string
-      tls:
-        type: boolean
-      createdAt:
-        type: string
-      updatedAt:
-        type: string
-    type: object
-  dto.SMTPConfigRequest:
-    properties:
       host:
         type: string
-      port:
-        type: integer
-      username:
+      id:
         type: string
       password:
         type: string
-      from:
-        type: string
+      port:
+        type: integer
       tls:
         type: boolean
-    required:
-    - host
-    - port
-    - from
-    type: object
-  entities.EmailTemplate:
-    properties:
-      id:
-        type: string
-      action:
-        type: string
-      subject:
-        type: string
-      body:
-        type: string
-      createdAt:
-        type: string
       updatedAt:
         type: string
+      username:
+        type: string
     type: object
-  dto.EmailTemplateRequest:
+  handlers.updatePermsRequest:
     properties:
-      subject:
-        type: string
-      body:
-        type: string
-        description: HTML content template
-    required:
-    - subject
-    - body
+      permission_ids:
+        items:
+          type: string
+        type: array
     type: object
   response.ErrorResponse:
     properties:
@@ -1339,7 +1386,7 @@ paths:
       - BearerAuth: []
       summary: Bulk group actions
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/groups/create:
     post:
       consumes:
@@ -1367,7 +1414,7 @@ paths:
       - BearerAuth: []
       summary: Bulk create groups
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/groups/import:
     post:
       consumes:
@@ -1410,7 +1457,7 @@ paths:
       - BearerAuth: []
       summary: Import groups from file
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/groups/template:
     get:
       description: Download template file for group import
@@ -1434,7 +1481,7 @@ paths:
       - BearerAuth: []
       summary: Export group template
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/users/actions:
     post:
       consumes:
@@ -1462,7 +1509,7 @@ paths:
       - BearerAuth: []
       summary: Bulk user actions
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/users/create:
     post:
       consumes:
@@ -1494,7 +1541,7 @@ paths:
       - BearerAuth: []
       summary: Bulk create users
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/users/disconnect:
     post:
       consumes:
@@ -1536,7 +1583,7 @@ paths:
       - BearerAuth: []
       summary: Bulk disconnect multiple VPN users
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/users/extend:
     post:
       consumes:
@@ -1564,7 +1611,7 @@ paths:
       - BearerAuth: []
       summary: Bulk extend user expiration
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/users/import:
     post:
       consumes:
@@ -1611,7 +1658,7 @@ paths:
       - BearerAuth: []
       summary: Import users from file
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/bulk/users/template:
     get:
       description: Download template file for user import
@@ -1635,7 +1682,7 @@ paths:
       - BearerAuth: []
       summary: Export user template
       tags:
-      - Bulk Operations
+      - VPN Bulk Operations
   /api/openvpn/config/network:
     get:
       description: Get comprehensive network configuration including client networks,
@@ -1664,7 +1711,7 @@ paths:
       - BearerAuth: []
       summary: Get network configuration
       tags:
-      - Configuration
+      - VPN Configuration
   /api/openvpn/config/server/info:
     get:
       description: Get basic server information including node type, ports, and cluster
@@ -1693,7 +1740,7 @@ paths:
       - BearerAuth: []
       summary: Get server information
       tags:
-      - Configuration
+      - VPN Configuration
   /api/openvpn/groups:
     get:
       consumes:
@@ -1738,7 +1785,7 @@ paths:
       - BearerAuth: []
       summary: List groups
       tags:
-      - Groups
+      - VPN Groups
     post:
       consumes:
       - application/json
@@ -1769,7 +1816,7 @@ paths:
       - BearerAuth: []
       summary: Create a new group
       tags:
-      - Groups
+      - VPN Groups
   /api/openvpn/groups/{groupName}:
     delete:
       description: Delete group by name
@@ -1794,7 +1841,7 @@ paths:
       - BearerAuth: []
       summary: Delete group
       tags:
-      - Groups
+      - VPN Groups
     get:
       description: Get group information by name
       parameters:
@@ -1823,7 +1870,7 @@ paths:
       - BearerAuth: []
       summary: Get group by name
       tags:
-      - Groups
+      - VPN Groups
     put:
       consumes:
       - application/json
@@ -1859,7 +1906,7 @@ paths:
       - BearerAuth: []
       summary: Update group
       tags:
-      - Groups
+      - VPN Groups
   /api/openvpn/groups/{groupName}/{action}:
     put:
       consumes:
@@ -1895,7 +1942,7 @@ paths:
       - BearerAuth: []
       summary: Perform action on group
       tags:
-      - Groups
+      - VPN Groups
   /api/openvpn/users:
     get:
       description: Get a paginated list of users with comprehensive filtering options
@@ -2026,7 +2073,7 @@ paths:
       - BearerAuth: []
       summary: List users with enhanced filtering
       tags:
-      - Users
+      - VPN Users
     post:
       consumes:
       - application/json
@@ -2057,7 +2104,7 @@ paths:
       - BearerAuth: []
       summary: Create a new user
       tags:
-      - Users
+      - VPN Users
   /api/openvpn/users/{username}:
     delete:
       description: Delete a user and associated resources
@@ -2080,7 +2127,7 @@ paths:
       - BearerAuth: []
       summary: Delete user
       tags:
-      - Users
+      - VPN Users
     get:
       description: Get detailed information about a user
       parameters:
@@ -2104,7 +2151,7 @@ paths:
       - BearerAuth: []
       summary: Get user by username
       tags:
-      - Users
+      - VPN Users
     put:
       consumes:
       - application/json
@@ -2140,7 +2187,7 @@ paths:
       - BearerAuth: []
       summary: Update user
       tags:
-      - Users
+      - VPN Users
   /api/openvpn/users/{username}/{action}:
     put:
       consumes:
@@ -2182,7 +2229,7 @@ paths:
       - BearerAuth: []
       summary: Perform user action
       tags:
-      - Users
+      - VPN Users
   /api/openvpn/users/{username}/disconnect:
     post:
       consumes:
@@ -2233,7 +2280,7 @@ paths:
       - BearerAuth: []
       summary: Disconnect a single VPN user
       tags:
-      - Users
+      - VPN Users
   /api/openvpn/users/expirations:
     get:
       description: Get users that will expire in the specified number of days with
@@ -2264,7 +2311,7 @@ paths:
       - BearerAuth: []
       summary: Get expiring users with full information
       tags:
-      - Users
+      - VPN Users
   /api/openvpn/vpn/status:
     get:
       description: Get detailed VPN server status including all connected users with
@@ -2294,75 +2341,47 @@ paths:
       summary: Get comprehensive VPN server status
       tags:
       - VPN Status
-  /api/portal/audit/logs:
-    get:
-      parameters:
-      - in: query
-        name: username
-        type: string
-      - in: query
-        name: group
-        type: string
-      - in: query
-        name: ip
-        type: string
-      - in: query
-        name: resource
-        type: string
-      - in: query
-        name: from
-        type: string
-      - in: query
-        name: to
-        type: string
-      - in: query
-        name: page
-        type: integer
-      - in: query
-        name: limit
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.AuditLog'
-            type: array
-      security:
-      - BearerAuth: []
-      summary: List audit logs
-      tags:
-      - Audit
   /api/portal/audit/logs/export:
     get:
+      description: Export audit logs as CSV file
       parameters:
-      - in: query
+      - description: Filter by username
+        in: query
         name: username
         type: string
-      - in: query
+      - description: Filter by group
+        in: query
         name: group
         type: string
-      - in: query
+      - description: Filter by IP address
+        in: query
         name: ip
         type: string
-      - in: query
-        name: resource
-        type: string
-      - in: query
+      - description: Start date
+        format: date
+        in: query
         name: from
         type: string
-      - in: query
+      - description: End date
+        format: date
+        in: query
         name: to
         type: string
       produces:
-      - application/json
+      - text/csv
       responses:
         "200":
-          description: not implemented
+          description: CSV file
           schema:
             type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Export audit logs
@@ -2370,209 +2389,60 @@ paths:
       - Audit
   /api/portal/audit/stats:
     get:
+      description: Statistics summary of audit logs
       parameters:
-      - in: query
+      - description: Filter by username
+        in: query
         name: username
         type: string
-      - in: query
+      - description: Filter by group
+        in: query
         name: group
         type: string
-      - in: query
+      - description: Filter by IP address
+        in: query
         name: ip
         type: string
-      - in: query
-        name: resource
-        type: string
-      - in: query
+      - description: Start date
+        format: date
+        in: query
         name: from
         type: string
-      - in: query
+      - description: End date
+        format: date
+        in: query
         name: to
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: not implemented
+          description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: integer
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Audit statistics
       tags:
       - Audit
-  /api/portal/dashboard/activities:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/dto.AuditResponse'
-            type: array
-      security:
-      - BearerAuth: []
-      summary: Recent activities
-      tags:
-      - Dashboard
-  /api/portal/dashboard/charts/activities:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - BearerAuth: []
-      summary: Activity chart data
-      tags:
-      - Dashboard
-  /api/portal/dashboard/charts/users:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - BearerAuth: []
-      summary: User chart data
-      tags:
-      - Dashboard
-  /api/portal/dashboard/stats:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.StatsResponse'
-      security:
-      - BearerAuth: []
-      summary: Dashboard statistics
-      tags:
-      - Dashboard
-  /api/portal/groups:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.PortalGroup'
-            type: array
-      security:
-      - BearerAuth: []
-      summary: List portal groups
-      tags:
-      - Portal Groups
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Group data
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/entities.PortalGroup'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: created
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Create portal group
-      tags:
-  - Portal Groups
-  /api/portal/groups/{id}:
-    get:
-      parameters:
-      - description: Group ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.PortalGroup'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Get portal group
-      tags:
-      - Portal Groups
-  /api/portal/groups/{id}/permissions:
-    get:
-      parameters:
-      - description: Group ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/entities.Permission'
-      security:
-      - BearerAuth: []
-      summary: Get permissions for a group
-      tags:
-      - Permissions
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: Group ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Permission IDs
-        in: body
-        name: request
-        required: true
-        schema:
-          type: object
-          properties:
-            permission_ids:
-              type: array
-              items:
-                type: string
+  /api/portal/connections/ldap:
+    delete:
+      description: Remove LDAP connection settings
       produces:
       - application/json
       responses:
@@ -2580,41 +2450,61 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.SuccessResponse'
-        "400":
-          description: Bad Request
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Update group permissions
+      summary: Delete LDAP connection
       tags:
-      - Permissions
-  /api/portal/permissions:
+      - Connections
     get:
+      description: Retrieve LDAP connection settings
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/entities.Permission'
-            type: array
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entities.LDAPConfig'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: List permissions
+      summary: Get LDAP connection
       tags:
-      - Permissions
+      - Connections
     post:
       consumes:
       - application/json
+      description: Create LDAP connection settings
       parameters:
-      - description: Permission data
+      - description: LDAP config
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entities.Permission'
+          $ref: '#/definitions/dto.LDAPConfigRequest'
       produces:
       - application/json
       responses:
@@ -2626,27 +2516,34 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Create permission
+      summary: Create LDAP connection
       tags:
-      - Permissions
-  /api/portal/permissions/{id}:
+      - Connections
     put:
       consumes:
       - application/json
+      description: Update existing LDAP connection settings
       parameters:
-      - description: Permission ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Permission data
+      - description: LDAP config
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entities.Permission'
+          $ref: '#/definitions/dto.LDAPConfigRequest'
       produces:
       - application/json
       responses:
@@ -2658,45 +2555,274 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Update permission
-      tags:
-      - Permissions
-    delete:
-      parameters:
-      - description: Permission ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.SuccessResponse'
-        "400":
-          description: Bad Request
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: Delete permission
-      tags:
-      - Permissions
-  /api/portal/connections/smtp:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.SMTPConfig'
         "404":
           description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update LDAP connection
+      tags:
+      - Connections
+  /api/portal/connections/ldap/test:
+    post:
+      consumes:
+      - application/json
+      description: Test connectivity to the LDAP server
+      parameters:
+      - description: LDAP config
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LDAPConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Test LDAP connection
+      tags:
+      - Connections
+  /api/portal/connections/openvpn:
+    delete:
+      description: Remove OpenVPN connection settings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete OpenVPN connection
+      tags:
+      - Connections
+    get:
+      description: Retrieve OpenVPN connection settings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entities.OpenVPNConfig'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get OpenVPN connection
+      tags:
+      - Connections
+    post:
+      consumes:
+      - application/json
+      description: Create OpenVPN connection settings
+      parameters:
+      - description: OpenVPN config
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.OpenVPNConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create OpenVPN connection
+      tags:
+      - Connections
+    put:
+      consumes:
+      - application/json
+      description: Update existing OpenVPN connection settings
+      parameters:
+      - description: OpenVPN config
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.OpenVPNConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update OpenVPN connection
+      tags:
+      - Connections
+  /api/portal/connections/openvpn/test:
+    post:
+      consumes:
+      - application/json
+      description: Test connectivity to the OpenVPN server
+      parameters:
+      - description: OpenVPN config
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.OpenVPNConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Test OpenVPN connection
+      tags:
+      - Connections
+  /api/portal/connections/smtp:
+    delete:
+      description: Remove SMTP configuration from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete SMTP configuration
+      tags:
+      - Connections
+    get:
+      description: Retrieve SMTP server settings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entities.SMTPConfig'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       security:
@@ -2707,6 +2833,7 @@ paths:
     post:
       consumes:
       - application/json
+      description: Create SMTP server configuration in database
       parameters:
       - description: SMTP config
         in: body
@@ -2718,9 +2845,25 @@ paths:
       - application/json
       responses:
         "201":
-          description: created
+          description: Created
           schema:
             $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create SMTP configuration
@@ -2729,6 +2872,7 @@ paths:
     put:
       consumes:
       - application/json
+      description: Update SMTP server configuration
       parameters:
       - description: SMTP config
         in: body
@@ -2743,26 +2887,30 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update SMTP configuration
       tags:
       - Connections
-    delete:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.SuccessResponse'
-      security:
-      - BearerAuth: []
-      summary: Delete SMTP configuration
-      tags:
-      - Connections
   /api/portal/connections/templates/{action}:
     get:
+      description: Retrieve an email template for the given action
       parameters:
       - description: action
         in: path
@@ -2775,9 +2923,22 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.EmailTemplate'
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entities.EmailTemplate'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
         "404":
           description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       security:
@@ -2788,6 +2949,7 @@ paths:
     put:
       consumes:
       - application/json
+      description: Update subject or body of a template
       parameters:
       - description: action
         in: path
@@ -2807,28 +2969,514 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update email template
       tags:
       - Connections
-  /api/portal/users:
+  /api/portal/dashboard/activities:
     get:
-      description: Retrieve all portal users
+      description: Latest portal activities
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/dto.PortalUserResponse'
-            type: array
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.AuditResponse'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: List portal users
+      summary: Recent activities
       tags:
-      - Portal Users
+      - Dashboard
+  /api/portal/dashboard/charts/activities:
+    get:
+      description: Chart statistics of portal activities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Activity chart data
+      tags:
+      - Dashboard
+  /api/portal/dashboard/charts/users:
+    get:
+      description: Chart statistics of user registrations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: User chart data
+      tags:
+      - Dashboard
+  /api/portal/dashboard/stats:
+    get:
+      description: Overall portal statistics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.StatsResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Dashboard statistics
+      tags:
+      - Dashboard
+  /api/portal/groups:
+    post:
+      consumes:
+      - application/json
+      description: Create a new portal group
+      parameters:
+      - description: Group data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.PortalGroup'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create portal group
+      tags:
+      - Portal Groups
+  /api/portal/groups/{id}:
+    delete:
+      description: Remove a portal group
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete portal group
+      tags:
+      - Portal Groups
+    get:
+      description: Get portal group by ID
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entities.PortalGroup'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get portal group
+      tags:
+      - Portal Groups
+    put:
+      consumes:
+      - application/json
+      description: Update information for a portal group
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Group data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.PortalGroup'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update portal group
+      tags:
+      - Portal Groups
+  /api/portal/groups/{id}/permissions:
+    get:
+      description: Retrieve permissions assigned to a specific group
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get permissions for a group
+      tags:
+      - Permissions
+    put:
+      consumes:
+      - application/json
+      description: Update the set of permissions assigned to a group
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Permission IDs
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.updatePermsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update group permissions
+      tags:
+      - Permissions
+  /api/portal/permissions:
+    get:
+      description: Retrieve all permissions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List permissions
+      tags:
+      - Permissions
+    post:
+      consumes:
+      - application/json
+      description: Create a new permission
+      parameters:
+      - description: Permission data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Permission'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create permission
+      tags:
+      - Permissions
+  /api/portal/permissions/{id}:
+    delete:
+      description: Remove a permission by ID
+      parameters:
+      - description: Permission ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete permission
+      tags:
+      - Permissions
+    put:
+      consumes:
+      - application/json
+      description: Update an existing permission
+      parameters:
+      - description: Permission ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Permission data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Permission'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update permission
+      tags:
+      - Permissions
+  /api/portal/users:
     post:
       consumes:
       - application/json
@@ -2844,11 +3492,19 @@ paths:
       - application/json
       responses:
         "201":
-          description: created
+          description: Created
           schema:
-            type: string
+            $ref: '#/definitions/response.SuccessResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       security:
@@ -2869,11 +3525,23 @@ paths:
       - application/json
       responses:
         "200":
-          description: deleted
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/response.SuccessResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       security:
@@ -2895,13 +3563,26 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.PortalUserResponse'
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PortalUserResponse'
+              type: object
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
         "404":
           description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       security:
@@ -2924,16 +3605,28 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/dto.PortalUserUpdateRequest'
+          $ref: '#/definitions/dto.PortalUserRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: updated
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/response.SuccessResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       security:
@@ -2943,6 +3636,7 @@ paths:
       - Portal Users
   /api/portal/users/{id}/activate:
     put:
+      description: Activate a portal user account
       parameters:
       - description: User ID
         in: path
@@ -2953,9 +3647,21 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/response.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Activate portal user
@@ -2963,6 +3669,7 @@ paths:
       - Portal Users
   /api/portal/users/{id}/deactivate:
     put:
+      description: Disable a portal user account
       parameters:
       - description: User ID
         in: path
@@ -2973,9 +3680,21 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/response.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Deactivate portal user
@@ -2983,6 +3702,7 @@ paths:
       - Portal Users
   /api/portal/users/{id}/reset-password:
     put:
+      description: Reset the password of a portal user
       parameters:
       - description: User ID
         in: path
@@ -2993,9 +3713,21 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/response.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Reset portal user password
