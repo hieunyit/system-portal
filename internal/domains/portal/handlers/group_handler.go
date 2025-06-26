@@ -21,7 +21,7 @@ func NewGroupHandler(u usecases.GroupUsecase) *GroupHandler { return &GroupHandl
 // @Tags Portal Groups
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} response.SuccessResponse{data=[]entities.PortalGroup}
+// @Success 200 {object} response.SuccessResponse
 // @Failure 401 {object} response.ErrorResponse
 // @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/groups [get]
@@ -162,7 +162,7 @@ func (h *GroupHandler) DeleteGroup(c *gin.Context) {
 // @Tags Permissions
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
+// @Success 200 {object} response.SuccessResponse
 // @Failure 401 {object} response.ErrorResponse
 // @Failure 500 {object} response.ErrorResponse
 // @Router /api/portal/permissions [get]
@@ -178,7 +178,7 @@ func (h *GroupHandler) ListPermissions(c *gin.Context) {
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "Group ID"
-// @Success 200 {object} response.SuccessResponse{data=[]*entities.Permission}
+// @Success 200 {object} response.SuccessResponse
 // @Failure 401 {object} response.ErrorResponse
 // @Failure 404 {object} response.ErrorResponse
 // @Failure 500 {object} response.ErrorResponse

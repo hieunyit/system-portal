@@ -23,7 +23,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Bulk group actions",
                 "parameters": [
@@ -68,7 +68,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Bulk create groups",
                 "parameters": [
@@ -113,7 +113,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Import groups from file",
                 "parameters": [
@@ -176,7 +176,7 @@
                     "application/octet-stream"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Export group template",
                 "parameters": [
@@ -217,7 +217,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Bulk user actions",
                 "parameters": [
@@ -262,7 +262,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Bulk create users",
                 "parameters": [
@@ -313,7 +313,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Bulk disconnect multiple VPN users",
                 "parameters": [
@@ -382,7 +382,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Bulk extend user expiration",
                 "parameters": [
@@ -427,7 +427,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Import users from file",
                 "parameters": [
@@ -496,7 +496,7 @@
                     "application/octet-stream"
                 ],
                 "tags": [
-                    "Bulk Operations"
+                    "VPN Bulk Operations"
                 ],
                 "summary": "Export user template",
                 "parameters": [
@@ -534,7 +534,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Configuration"
+                    "VPN Configuration"
                 ],
                 "summary": "Get network configuration",
                 "responses": {
@@ -583,7 +583,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Configuration"
+                    "VPN Configuration"
                 ],
                 "summary": "Get server information",
                 "responses": {
@@ -635,7 +635,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Groups"
+                    "VPN Groups"
                 ],
                 "summary": "List groups",
                 "parameters": [
@@ -709,7 +709,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Groups"
+                    "VPN Groups"
                 ],
                 "summary": "Create a new group",
                 "parameters": [
@@ -757,7 +757,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Groups"
+                    "VPN Groups"
                 ],
                 "summary": "Get group by name",
                 "parameters": [
@@ -810,7 +810,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Groups"
+                    "VPN Groups"
                 ],
                 "summary": "Update group",
                 "parameters": [
@@ -863,7 +863,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Groups"
+                    "VPN Groups"
                 ],
                 "summary": "Delete group",
                 "parameters": [
@@ -906,7 +906,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Groups"
+                    "VPN Groups"
                 ],
                 "summary": "Perform action on group",
                 "parameters": [
@@ -959,7 +959,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "VPN Users"
                 ],
                 "summary": "List users with enhanced filtering",
                 "parameters": [
@@ -1152,7 +1152,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "VPN Users"
                 ],
                 "summary": "Create a new user",
                 "parameters": [
@@ -1200,7 +1200,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "VPN Users"
                 ],
                 "summary": "Get expiring users with full information",
                 "parameters": [
@@ -1247,7 +1247,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "VPN Users"
                 ],
                 "summary": "Get user by username",
                 "parameters": [
@@ -1288,7 +1288,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "VPN Users"
                 ],
                 "summary": "Update user",
                 "parameters": [
@@ -1338,7 +1338,7 @@
                 ],
                 "description": "Delete a user and associated resources",
                 "tags": [
-                    "Users"
+                    "VPN Users"
                 ],
                 "summary": "Delete user",
                 "parameters": [
@@ -1381,7 +1381,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "VPN Users"
                 ],
                 "summary": "Disconnect a single VPN user",
                 "parameters": [
@@ -1463,7 +1463,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "VPN Users"
                 ],
                 "summary": "Perform user action",
                 "parameters": [
@@ -1561,70 +1561,72 @@
                 }
             }
         },
-        "/api/portal/audit/logs": {
-            "get": {
-                "parameters": [
-                    {"type": "string", "in": "query", "name": "username"},
-                    {"type": "string", "in": "query", "name": "group"},
-                    {"type": "string", "in": "query", "name": "ip"},
-                    {"type": "string", "in": "query", "name": "resource"},
-                    {"type": "string", "in": "query", "name": "from"},
-                    {"type": "string", "in": "query", "name": "to"},
-                    {"type": "integer", "in": "query", "name": "page"},
-                    {"type": "integer", "in": "query", "name": "limit"}
-                ],
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Audit"
-                ],
-                "summary": "List audit logs",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.AuditLog"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/portal/audit/logs/export": {
             "get": {
-                "parameters": [
-                    {"type": "string", "in": "query", "name": "username"},
-                    {"type": "string", "in": "query", "name": "group"},
-                    {"type": "string", "in": "query", "name": "ip"},
-                    {"type": "string", "in": "query", "name": "resource"},
-                    {"type": "string", "in": "query", "name": "from"},
-                    {"type": "string", "in": "query", "name": "to"}
-                ],
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
+                "description": "Export audit logs as CSV file",
                 "produces": [
-                    "application/json"
+                    "text/csv"
                 ],
                 "tags": [
                     "Audit"
                 ],
                 "summary": "Export audit logs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filter by username",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by group",
+                        "name": "group",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by IP address",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Start date",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "End date",
+                        "name": "to",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "not implemented",
+                        "description": "CSV file",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -1632,19 +1634,12 @@
         },
         "/api/portal/audit/stats": {
             "get": {
-                "parameters": [
-                    {"type": "string", "in": "query", "name": "username"},
-                    {"type": "string", "in": "query", "name": "group"},
-                    {"type": "string", "in": "query", "name": "ip"},
-                    {"type": "string", "in": "query", "name": "resource"},
-                    {"type": "string", "in": "query", "name": "from"},
-                    {"type": "string", "in": "query", "name": "to"}
-                ],
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
+                "description": "Statistics summary of audit logs",
                 "produces": [
                     "application/json"
                 ],
@@ -1652,11 +1647,948 @@
                     "Audit"
                 ],
                 "summary": "Audit statistics",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filter by username",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by group",
+                        "name": "group",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by IP address",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Start date",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "End date",
+                        "name": "to",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "not implemented",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/portal/connections/ldap": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve LDAP connection settings",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Get LDAP connection",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/entities.LDAPConfig"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update existing LDAP connection settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Update LDAP connection",
+                "parameters": [
+                    {
+                        "description": "LDAP config",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LDAPConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create LDAP connection settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Create LDAP connection",
+                "parameters": [
+                    {
+                        "description": "LDAP config",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LDAPConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove LDAP connection settings",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Delete LDAP connection",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/portal/connections/ldap/test": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Test connectivity to the LDAP server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Test LDAP connection",
+                "parameters": [
+                    {
+                        "description": "LDAP config",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LDAPConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/portal/connections/openvpn": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve OpenVPN connection settings",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Get OpenVPN connection",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/entities.OpenVPNConfig"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update existing OpenVPN connection settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Update OpenVPN connection",
+                "parameters": [
+                    {
+                        "description": "OpenVPN config",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.OpenVPNConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create OpenVPN connection settings",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Create OpenVPN connection",
+                "parameters": [
+                    {
+                        "description": "OpenVPN config",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.OpenVPNConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove OpenVPN connection settings",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Delete OpenVPN connection",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/portal/connections/openvpn/test": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Test connectivity to the OpenVPN server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Test OpenVPN connection",
+                "parameters": [
+                    {
+                        "description": "OpenVPN config",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.OpenVPNConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/portal/connections/smtp": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve SMTP server settings",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Get SMTP configuration",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/entities.SMTPConfig"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update SMTP server configuration",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Update SMTP configuration",
+                "parameters": [
+                    {
+                        "description": "SMTP config",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SMTPConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create SMTP server configuration in database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Create SMTP configuration",
+                "parameters": [
+                    {
+                        "description": "SMTP config",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SMTPConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove SMTP configuration from database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Delete SMTP configuration",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/portal/connections/templates/{action}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve an email template for the given action",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Get email template by action",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "action",
+                        "name": "action",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/entities.EmailTemplate"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update subject or body of a template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Connections"
+                ],
+                "summary": "Update email template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "action",
+                        "name": "action",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "template",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.EmailTemplateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -1669,6 +2601,7 @@
                         "BearerAuth": []
                     }
                 ],
+                "description": "Latest portal activities",
                 "produces": [
                     "application/json"
                 ],
@@ -1680,10 +2613,34 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dto.AuditResponse"
-                            }
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.AuditResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -1696,6 +2653,7 @@
                         "BearerAuth": []
                     }
                 ],
+                "description": "Chart statistics of portal activities",
                 "produces": [
                     "application/json"
                 ],
@@ -1707,8 +2665,32 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -1721,6 +2703,7 @@
                         "BearerAuth": []
                     }
                 ],
+                "description": "Chart statistics of user registrations",
                 "produces": [
                     "application/json"
                 ],
@@ -1732,8 +2715,32 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -1746,6 +2753,7 @@
                         "BearerAuth": []
                     }
                 ],
+                "description": "Overall portal statistics",
                 "produces": [
                     "application/json"
                 ],
@@ -1757,44 +2765,44 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.StatsResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.StatsResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
             }
         },
         "/api/portal/groups": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Portal Groups"
-                ],
-                "summary": "List portal groups",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.PortalGroup"
-                            }
-                        }
-                    }
-                }
-            },
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
+                "description": "Create a new portal group",
                 "consumes": [
                     "application/json"
                 ],
@@ -1818,13 +2826,25 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "created",
+                        "description": "Created",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1839,6 +2859,7 @@
                         "BearerAuth": []
                     }
                 ],
+                "description": "Get portal group by ID",
                 "produces": [
                     "application/json"
                 ],
@@ -1859,7 +2880,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.PortalGroup"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/entities.PortalGroup"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1868,8 +2901,144 @@
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update information for a portal group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Portal Groups"
+                ],
+                "summary": "Update portal group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Group data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.PortalGroup"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove a portal group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Portal Groups"
+                ],
+                "summary": "Delete portal group",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Group ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1880,10 +3049,17 @@
         "/api/portal/groups/{id}/permissions": {
             "get": {
                 "security": [
-                    {"BearerAuth": []}
+                    {
+                        "BearerAuth": []
+                    }
                 ],
-                "produces": ["application/json"],
-                "tags": ["Permissions"],
+                "description": "Retrieve permissions assigned to a specific group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permissions"
+                ],
                 "summary": "Get permissions for a group",
                 "parameters": [
                     {
@@ -1897,17 +3073,46 @@
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {"type": "array", "items": {"$ref": "#/definitions/entities.Permission"}}
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
                     }
                 }
             },
             "put": {
                 "security": [
-                    {"BearerAuth": []}
+                    {
+                        "BearerAuth": []
+                    }
                 ],
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["Permissions"],
+                "description": "Update the set of permissions assigned to a group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permissions"
+                ],
                 "summary": "Update group permissions",
                 "parameters": [
                     {
@@ -1923,47 +3128,96 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "properties": {
-                                "permission_ids": {
-                                    "type": "array",
-                                    "items": {"type": "string"}
-                                }
-                            }
+                            "$ref": "#/definitions/handlers.updatePermsRequest"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}},
-                    "400": {"description": "Bad Request", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
                 }
             }
         },
         "/api/portal/permissions": {
             "get": {
                 "security": [
-                    {"BearerAuth": []}
+                    {
+                        "BearerAuth": []
+                    }
                 ],
-                "produces": ["application/json"],
-                "tags": ["Permissions"],
+                "description": "Retrieve all permissions",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permissions"
+                ],
                 "summary": "List permissions",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {"$ref": "#/definitions/entities.Permission"}
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
             },
             "post": {
                 "security": [
-                    {"BearerAuth": []}
+                    {
+                        "BearerAuth": []
+                    }
                 ],
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["Permissions"],
+                "description": "Create a new permission",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permissions"
+                ],
                 "summary": "Create permission",
                 "parameters": [
                     {
@@ -1971,17 +3225,35 @@
                         "name": "request",
                         "in": "body",
                         "required": true,
-                        "schema": {"$ref": "#/definitions/entities.Permission"}
+                        "schema": {
+                            "$ref": "#/definitions/entities.Permission"
+                        }
                     }
                 ],
                 "responses": {
                     "201": {
                         "description": "Created",
-                        "schema": {"$ref": "#/definitions/response.SuccessResponse"}
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {"$ref": "#/definitions/response.ErrorResponse"}
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
                     }
                 }
             }
@@ -1989,140 +3261,130 @@
         "/api/portal/permissions/{id}": {
             "put": {
                 "security": [
-                    {"BearerAuth": []}
+                    {
+                        "BearerAuth": []
+                    }
                 ],
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["Permissions"],
+                "description": "Update an existing permission",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permissions"
+                ],
                 "summary": "Update permission",
                 "parameters": [
-                    {"type": "string", "description": "Permission ID", "name": "id", "in": "path", "required": true},
-                    {"description": "Permission data", "name": "request", "in": "body", "required": true, "schema": {"$ref": "#/definitions/entities.Permission"}}
+                    {
+                        "type": "string",
+                        "description": "Permission ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Permission data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.Permission"
+                        }
+                    }
                 ],
                 "responses": {
-                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}},
-                    "400": {"description": "Bad Request", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
                 }
             },
             "delete": {
-                "security": [
-                    {"BearerAuth": []}
-                ],
-                "produces": ["application/json"],
-                "tags": ["Permissions"],
-                "summary": "Delete permission",
-                "parameters": [
-                    {"type": "string", "description": "Permission ID", "name": "id", "in": "path", "required": true}
-                ],
-                "responses": {
-                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}},
-                    "400": {"description": "Bad Request", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
-                }
-            }
-        },
-        "/api/portal/connections/smtp": {
-            "get": {
-                "security": [{"BearerAuth": []}],
-                "produces": ["application/json"],
-                "tags": ["Connections"],
-                "summary": "Get SMTP configuration",
-                "responses": {
-                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/entities.SMTPConfig"}},
-                    "404": {"description": "Not Found", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
-                }
-            },
-            "post": {
-                "security": [{"BearerAuth": []}],
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["Connections"],
-                "summary": "Create SMTP configuration",
-                "parameters": [
-                    {"description": "SMTP config", "name": "request", "in": "body", "required": true, "schema": {"$ref": "#/definitions/dto.SMTPConfigRequest"}}
-                ],
-                "responses": {
-                    "201": {"description": "created", "schema": {"$ref": "#/definitions/response.SuccessResponse"}}
-                }
-            },
-            "put": {
-                "security": [{"BearerAuth": []}],
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["Connections"],
-                "summary": "Update SMTP configuration",
-                "parameters": [
-                    {"description": "SMTP config", "name": "request", "in": "body", "required": true, "schema": {"$ref": "#/definitions/dto.SMTPConfigRequest"}}
-                ],
-                "responses": {
-                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}}
-                }
-            },
-            "delete": {
-                "security": [{"BearerAuth": []}],
-                "produces": ["application/json"],
-                "tags": ["Connections"],
-                "summary": "Delete SMTP configuration",
-                "responses": {
-                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}}
-                }
-            }
-        },
-        "/api/portal/connections/templates/{action}": {
-            "get": {
-                "security": [{"BearerAuth": []}],
-                "produces": ["application/json"],
-                "tags": ["Connections"],
-                "summary": "Get email template by action",
-                "parameters": [
-                    {"type": "string", "description": "action", "name": "action", "in": "path", "required": true}
-                ],
-                "responses": {
-                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/entities.EmailTemplate"}},
-                    "404": {"description": "Not Found", "schema": {"$ref": "#/definitions/response.ErrorResponse"}}
-                }
-            },
-            "put": {
-                "security": [{"BearerAuth": []}],
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["Connections"],
-                "summary": "Update email template",
-                "parameters": [
-                    {"type": "string", "description": "action", "name": "action", "in": "path", "required": true},
-                    {"description": "template", "name": "request", "in": "body", "required": true, "schema": {"$ref": "#/definitions/dto.EmailTemplateRequest"}}
-                ],
-                "responses": {
-                    "200": {"description": "OK", "schema": {"$ref": "#/definitions/response.SuccessResponse"}}
-                }
-            }
-        },
-        "/api/portal/users": {
-            "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retrieve all portal users",
+                "description": "Remove a permission by ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Portal Users"
+                    "Permissions"
                 ],
-                "summary": "List portal users",
+                "summary": "Delete permission",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Permission ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dto.PortalUserResponse"
-                            }
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/portal/users": {
             "post": {
                 "security": [
                     {
@@ -2153,13 +3415,25 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "created",
+                        "description": "Created",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -2195,7 +3469,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.PortalUserResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.PortalUserResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -2204,8 +3490,20 @@
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -2243,19 +3541,37 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.PortalUserUpdateRequest"
+                            "$ref": "#/definitions/dto.PortalUserRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "updated",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -2287,13 +3603,31 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "deleted",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -2308,6 +3642,7 @@
                         "BearerAuth": []
                     }
                 ],
+                "description": "Activate a portal user account",
                 "produces": [
                     "application/json"
                 ],
@@ -2326,9 +3661,27 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -2341,6 +3694,7 @@
                         "BearerAuth": []
                     }
                 ],
+                "description": "Disable a portal user account",
                 "produces": [
                     "application/json"
                 ],
@@ -2359,9 +3713,27 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -2374,6 +3746,7 @@
                         "BearerAuth": []
                     }
                 ],
+                "description": "Reset the password of a portal user",
                 "produces": [
                     "application/json"
                 ],
@@ -2392,9 +3765,27 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -2566,6 +3957,9 @@
                     "type": "string"
                 },
                 "resource": {
+                    "type": "string"
+                },
+                "resourceName": {
                     "type": "string"
                 },
                 "success": {
@@ -2801,6 +4195,21 @@
                 }
             }
         },
+        "dto.EmailTemplateRequest": {
+            "type": "object",
+            "required": [
+                "body",
+                "subject"
+            ],
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.FilterMetadata": {
             "type": "object",
             "properties": {
@@ -2892,6 +4301,33 @@
                 }
             }
         },
+        "dto.LDAPConfigRequest": {
+            "type": "object",
+            "required": [
+                "baseDN",
+                "bindDN",
+                "bindPassword",
+                "host",
+                "port"
+            ],
+            "properties": {
+                "baseDN": {
+                    "type": "string"
+                },
+                "bindDN": {
+                    "type": "string"
+                },
+                "bindPassword": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.LoginRequest": {
             "type": "object",
             "required": [
@@ -2901,6 +4337,29 @@
             "properties": {
                 "password": {
                     "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.OpenVPNConfigRequest": {
+            "type": "object",
+            "required": [
+                "host",
+                "password",
+                "port",
+                "username"
+            ],
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
                 },
                 "username": {
                     "type": "string"
@@ -2927,20 +4386,6 @@
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.PortalUserUpdateRequest": {
-            "type": "object",
-            "properties": {
-                "fullName": {
-                    "type": "string"
-                },
-                "groupId": {
-                    "type": "string"
-                },
-                "password": {
                     "type": "string"
                 }
             }
@@ -2975,6 +4420,34 @@
             ],
             "properties": {
                 "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SMTPConfigRequest": {
+            "type": "object",
+            "required": [
+                "from",
+                "host",
+                "port"
+            ],
+            "properties": {
+                "from": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "tls": {
+                    "type": "boolean"
+                },
+                "username": {
                     "type": "string"
                 }
             }
@@ -4192,37 +5665,80 @@
                 }
             }
         },
-        "entities.AuditLog": {
+        "entities.EmailTemplate": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "userID": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                },
-                "userGroup": {
-                    "type": "string"
-                },
                 "action": {
                     "type": "string"
                 },
-                "resourceType": {
+                "body": {
                     "type": "string"
-                },
-                "resourceName": {
-                    "type": "string"
-                },
-                "ipAddress": {
-                    "type": "string"
-                },
-                "success": {
-                    "type": "boolean"
                 },
                 "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.LDAPConfig": {
+            "type": "object",
+            "properties": {
+                "baseDN": {
+                    "type": "string"
+                },
+                "bindDN": {
+                    "type": "string"
+                },
+                "bindPassword": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.OpenVPNConfig": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
@@ -4276,47 +5792,45 @@
         "entities.SMTPConfig": {
             "type": "object",
             "properties": {
-                "id": {"type": "string"},
-                "host": {"type": "string"},
-                "port": {"type": "integer"},
-                "username": {"type": "string"},
-                "password": {"type": "string"},
-                "from": {"type": "string"},
-                "tls": {"type": "boolean"},
-                "createdAt": {"type": "string"},
-                "updatedAt": {"type": "string"}
+                "createdAt": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "tls": {
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
             }
         },
-        "dto.SMTPConfigRequest": {
+        "handlers.updatePermsRequest": {
             "type": "object",
             "properties": {
-                "host": {"type": "string"},
-                "port": {"type": "integer"},
-                "username": {"type": "string"},
-                "password": {"type": "string"},
-                "from": {"type": "string"},
-                "tls": {"type": "boolean"}
-            },
-            "required": ["host", "port", "from"]
-        },
-        "entities.EmailTemplate": {
-            "type": "object",
-            "properties": {
-                "id": {"type": "string"},
-                "action": {"type": "string"},
-                "subject": {"type": "string"},
-                "body": {"type": "string"},
-                "createdAt": {"type": "string"},
-                "updatedAt": {"type": "string"}
+                "permission_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
             }
-        },
-        "dto.EmailTemplateRequest": {
-            "type": "object",
-            "properties": {
-                "subject": {"type": "string"},
-                "body": {"type": "string", "description": "HTML content template"}
-            },
-            "required": ["subject", "body"]
         },
         "response.ErrorResponse": {
             "type": "object",
